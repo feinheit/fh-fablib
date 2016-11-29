@@ -44,6 +44,7 @@ def deploy():
         run('venv/bin/python manage.py collectstatic --noinput')
 
     step('\nRestarting server process...')
-    run('sctl restart %(box_domain)s:*')
+    for line in env['box_restart']:
+        run(line)
 
     execute('git.fetch_remote')

@@ -176,7 +176,8 @@ def copy_data_from(environment=None):
 
     with cd(env.box_domain):
         run('cp -al ~/%(source_domain)s/media/* media/')
-        run('sctl restart %(box_domain)s:*')
+    for line in env['box_restart']:
+        run(line)
 
 
 @task
