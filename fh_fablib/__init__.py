@@ -79,8 +79,7 @@ def init(fabfile):
     if pwd.getpwuid(getuid())[0] == 'www-data':
         abort(red('Stop fab-ing on the server.', bold=True))
 
-
-    # Multi-env support ---------------------------------------------------------
+    # Multi-env support ------------------------------------------------------
 
     def _create_setup_task_for_env(environment):
         def _setup():
@@ -92,12 +91,12 @@ def init(fabfile):
         _setup.__doc__ = 'Set environment to %s' % environment
         return _setup
 
-
     if env.get('box_hardwired_environment'):
         _create_setup_task_for_env(env.box_hardwired_environment)()
 
     else:
-        # Create a task for all environments, and use the first character as alias
+        # Create a task for all environments, and use the first
+        # character as alias
         for environment in env.box_environments:
             t = _create_setup_task_for_env(environment)
             shortcut = env.box_environments[environment].get('shortcut')
@@ -105,8 +104,7 @@ def init(fabfile):
             fabfile[environment] = task(aliases=aliases)(t)
             fabfile['__all__'] += (environment,)
 
-
-    # Fabric commands with environment interpolation ----------------------------
+    # Fabric commands with environment interpolation -------------------------
 
     def interpolate_with_env(fn):
         """Wrapper which extends a few Fabric API commands to fill in values from
@@ -122,8 +120,7 @@ def init(fabfile):
     g['run_local'] = interpolate_with_env(run_local)
     g['confirm'] = interpolate_with_env(confirm)
 
-
-    # Git pre-commit hook which always runs "fab check" -------------------------
+    # Git pre-commit hook which always runs "fab check" ----------------------
 
     def ensure_pre_commit_hook_installed():
         """
@@ -147,7 +144,6 @@ def init(fabfile):
     fab check
     ''')
             chmod(pre_commit_hook_path, 0o755)
-
 
     # Run this each time the fabfile is loaded
     ensure_pre_commit_hook_installed()
