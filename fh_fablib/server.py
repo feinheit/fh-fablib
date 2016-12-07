@@ -175,7 +175,7 @@ def copy_data_from(environment=None):
         ' TO %(box_database)s"')
 
     with cd(env.box_domain):
-        run('cp -al ~/%(source_domain)s/media/* media/')
+        run('cp -aln ~/%(source_domain)s/media/* media/')
     for line in env['box_restart']:
         run(line)
 
