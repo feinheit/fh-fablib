@@ -38,7 +38,7 @@ def dev(host='127.0.0.1', port=8000):
     elif os.path.exists('server.js'):
         jobs.append(lambda: run_local('HOST=%s node server' % host))
     elif os.path.exists('postcss.config.js'):  # Just a marker...
-        jobs.append(lambda: run_local('npm run dev'))
+        jobs.append(lambda: run_local('HOST=%s npm run dev' % host))
 
     jobs = [Process(target=j) for j in jobs]
     [j.start() for j in jobs]
