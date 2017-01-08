@@ -24,7 +24,7 @@ def check():
     run_local('PYTHONWARNINGS=ignore venv/bin/flake8 .')
 
     step('Checking Javascript code...')
-    run_local('./node_modules/.bin/eslint %(box_static_src)s/js/ webpack*js')
+    run_local('./node_modules/.bin/eslint %(box_static_src)s webpack*js')
 
     step('Invoking Django\'s systems check framework...')
     run_local('venv/bin/python manage.py check')

@@ -1,5 +1,7 @@
 from __future__ import unicode_literals
 
+import os
+
 from fabric.api import env, execute, put, task
 from fabric.contrib.project import rsync_project
 
@@ -13,9 +15,16 @@ def deploy():
     did not report any problems"""
     execute('check.deploy')
 
+    webpack2 = os.path.exists('postcss.config.js')
+
     step('\nCompiling static sources...')
-    run_local('rm -rf %(box_static_src)s/dist' % env)
-    run_local('./node_modules/.bin/webpack --config webpack.prod.config.js')
+
+    if webpack2:
+        run_local('npm run prod')
+    else:
+        run_local('rm -rf %(box_static_src)s/dist' % env)
+        run_local(
+            './node_modules/.bin/webpack --config webpack.prod.config.js')
 
     step('\nPushing changes...')
     run_local('git push origin %(box_branch)s')
@@ -29,15 +38,21 @@ def deploy():
         run('venv/bin/python manage.py migrate --noinput')
 
     step('\nUploading static files...')
-    rsync_project(
-        local_dir='%(box_static_src)s/dist' % env,
-        remote_dir='%(box_domain)s/%(box_staticfiles)s/' % env,
-        delete=True,
-    )
-    put(
-        'tmp/webpack*json',
-        '%(box_domain)s/tmp/' % env,
-    )
+    if webpack2:
+        rsync_project(
+            local_dir='static/',
+            remote_dir='%(box_domain)s/static/',
+        )
+    else:
+        rsync_project(
+            local_dir='%(box_static_src)s/dist' % env,
+            remote_dir='%(box_domain)s/%(box_staticfiles)s/' % env,
+            delete=True,
+        )
+        put(
+            'tmp/webpack*json',
+            '%(box_domain)s/tmp/' % env,
+        )
 
     step('\nCollecting static files...')
     with cd('%(box_domain)s'):

@@ -22,7 +22,6 @@ def dev(host='127.0.0.1', port=8000):
                 port,
             ),
         ),
-        lambda: run_local('HOST=%s node server' % host),
     ]
     if os.path.exists('gulpfile.js'):
         jobs.append(lambda: run_local('./node_modules/.bin/gulp'))
@@ -36,6 +35,10 @@ def dev(host='127.0.0.1', port=8000):
             lambda: run_local(
                 './node_modules/.bin/webpack -d --watch'
                 ' --config %(box_staticfiles)s/webpack.config.js'))
+    elif os.path.exists('server.js'):
+        jobs.append(lambda: run_local('HOST=%s node server' % host))
+    elif os.path.exists('postcss.config.js'):  # Just a marker...
+        jobs.append(lambda: run_local('npm run dev'))
 
     jobs = [Process(target=j) for j in jobs]
     [j.start() for j in jobs]
