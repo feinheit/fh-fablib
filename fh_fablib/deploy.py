@@ -41,7 +41,7 @@ def deploy():
     if webpack2:
         rsync_project(
             local_dir='static/',
-            remote_dir='%(box_domain)s/static/',
+            remote_dir='%(box_domain)s/static/' % env,
         )
     else:
         rsync_project(
