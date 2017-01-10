@@ -65,7 +65,15 @@ def step(str):
     puts(cyan('\n%s' % str, bold=True))
 
 
-def init(fabfile):
+def init(fabfile, min_version=None):
+    if min_version is not None:
+        if VERSION < min_version:
+            abort(red(
+                'fh-fablib update required. Have: %s. Want: %s.' % (
+                    '.'.join(map(str, VERSION)),
+                    '.'.join(map(str, min_version)),
+                ),
+            ))
 
     fabfile['__all__'] = (
         'check',
