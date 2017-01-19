@@ -110,7 +110,9 @@ def update_requirements():
 @hosts('')
 def frontend_tools():
     """Installs frontend tools. Knows how to handle npm/bower and bundler"""
-    if os.path.exists('package.json'):
+    if os.path.exists('yarn.lock'):
+        run_local('yarn')
+    elif os.path.exists('package.json'):
         run_local('npm install')
     if os.path.exists('bower.json'):
         run_local('bower install')

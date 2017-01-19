@@ -50,4 +50,4 @@ Usage (``fabfile.py``)::
         },
     }
 
-    fh_fablib.init(globals())
+    fh_fablib.init(globals(), min_version=(0, 1, 7))
