@@ -2,11 +2,20 @@ from __future__ import unicode_literals
 
 from multiprocessing import Process
 import os
+import socket
 import subprocess
 
 from fabric.api import env, hosts, task
+from fabric.colors import green
+from fabric.utils import puts
 
 from fh_fablib import run_local, require_services
+
+
+def own_ip():
+    s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+    s.connect(('feinheit.ch', 80))
+    return s.getsockname()[0]
 
 
 @task(default=True)
@@ -15,6 +24,12 @@ from fh_fablib import run_local, require_services
 def dev(host='127.0.0.1', port=8000):
     """Runs the development server, SCSS watcher and backend services if they
     are not running already"""
+    if host == 'net':
+        host = own_ip()
+        puts(green(
+            'Starting dev server on http://%s:%s/' % (host, port),
+            bold=True))
+
     jobs = [
         lambda: run_local(
             'venv/bin/python -Wall manage.py runserver %s:%s' % (
