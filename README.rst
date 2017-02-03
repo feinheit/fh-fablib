@@ -17,7 +17,6 @@ Usage (``fabfile.py``)::
     env.box_database_local = 'example_ch'
     env.box_staticfiles = '%(box_project_name)s/static/%(box_project_name)s' % env
     env.box_static_src = 'assets'
-    env.box_python = 'python3'
     env.box_restart = ['sctl restart %(box_domain)s:*']
     env.forward_agent = True
 

@@ -46,10 +46,8 @@ def clone_repository():
 @require_env
 def create_virtualenv():
     with cd('%(box_domain)s'):
-        run('virtualenv --python %(box_python)s'
-            ' --prompt "(venv:%(box_domain)s)" venv')
+        run('python3 -m venv venv')
         run('venv/bin/pip install -U pip wheel')
-        run('venv/bin/pip install -U setuptools')
         run('venv/bin/pip install -r requirements.txt')
 
 

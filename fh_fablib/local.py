@@ -85,10 +85,8 @@ def update():
 @hosts('')
 def create_virtualenv():
     """Creates the virtualenv and installs all Python requirements"""
-    run_local(
-        'virtualenv --python %(box_python)s'
-        ' --prompt "(venv:%(box_domain)s)" venv')
-    run_local('venv/bin/pip install -U wheel setuptools pip')
+    run_local('python3 -m venv venv')
+    run_local('venv/bin/pip install -U wheel pip')
     if os.path.exists('requirements.txt'):
         run_local('venv/bin/pip install -r requirements.txt')
     else:
