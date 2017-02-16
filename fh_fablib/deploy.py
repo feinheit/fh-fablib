@@ -10,7 +10,7 @@ from fh_fablib import run_local, cd, require_env, run, step
 
 @task(default=True)
 @require_env
-def deploy():
+def deploy(*args):
     """Deploys frontend and backend code to the server if the checking step
     did not report any problems"""
     execute('check.deploy')
@@ -42,6 +42,7 @@ def deploy():
         rsync_project(
             local_dir='static/',
             remote_dir='%(box_domain)s/static/' % env,
+            delete=('clear' in args),
         )
     else:
         rsync_project(
