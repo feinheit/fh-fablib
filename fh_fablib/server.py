@@ -20,7 +20,7 @@ def setup():
     execute('server.create_virtualenv')
     execute('server.create_database_and_dotenv')
     execute('server.nginx_vhost_and_supervisor')
-    execute('deploy.styles')
+    execute('deploy')
     execute('server.create_sso_user')
 
 
