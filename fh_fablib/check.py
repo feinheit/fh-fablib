@@ -87,6 +87,6 @@ def deploy():
 @require_services
 def test():
     step('Running backend testsuite...')
-    run_local('venv/bin/python manage.py test app')
+    run_local('venv/bin/python manage.py test')
     step('We do not have a frontend testsuite yet...')
     # run_local('./node_modules/.bin/gulp test')
