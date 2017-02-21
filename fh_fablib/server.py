@@ -209,7 +209,7 @@ def dump_db():
     """Dumps the database into the tmp/ folder"""
     env.box_datetime = datetime.now().strftime('%Y-%m-%d-%s')
     env.box_dump_filename = os.path.join(
-        os.path.dirname(os.path.dirname(os.path.abspath(__file__))),
+        os.getcwd(),
         'tmp',
         '%(box_database)s-%(box_environment)s-%(box_datetime)s.sql' % env,
     )
