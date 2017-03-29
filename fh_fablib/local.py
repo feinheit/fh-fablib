@@ -61,7 +61,6 @@ def setup_with_production_data():
     execute('local.create_dotenv')
     execute('local.pull_database')
     execute('local.empty_to_password')
-    execute('local.pull_mediafiles')
 
     puts(green(
         'Setup with production data has completed successfully!', bold=True))

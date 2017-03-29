@@ -5,6 +5,15 @@ Change log
 `Next version`_
 ~~~~~~~~~~~~~~~
 
+- Dropped ``pull_mediafiles`` from ``setup_with_production_data``.
+- Only show Python warnings once.
+- Optionally allow cleaning the static folder on deployment.
+- Run a bare ``manage.py test`` again now that ``fabfile`` is a file,
+  not a module again.
+- Fixed paths for DB dumps (relative to CWD, not relative to
+  ``fh-fablib``)
+
+
 0.2 (2017-02-03)
 ~~~~~~~~~~~~~~~~
 
