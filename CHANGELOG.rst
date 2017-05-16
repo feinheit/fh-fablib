@@ -13,6 +13,7 @@ Change log
 - Fixed paths for DB dumps (relative to CWD, not relative to
   ``fh-fablib``)
 - ``update_requirements``: Always fully regenerate the virtualenv
+- Dropped the migration step from ``local.pull``
 
 0.2 (2017-02-03)
 ~~~~~~~~~~~~~~~~

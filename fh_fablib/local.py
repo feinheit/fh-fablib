@@ -238,7 +238,10 @@ def pull_mediafiles():
 @require_env
 @require_services
 def pull():
-    execute('local.backend_tools')
+    # local.backend_tools without migrate step
+    run_local('venv/bin/pip install -r requirements.txt')
+    run_local('find . -name "*.pyc" -delete')
+
     execute('local.pull_database')
     execute('local.empty_to_password')
     execute('local.update')
