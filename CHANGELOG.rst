@@ -5,6 +5,9 @@ Change log
 `Next version`_
 ~~~~~~~~~~~~~~~
 
+0.3 (2017-05-16)
+~~~~~~~~~~~~~~~~
+
 - Dropped ``pull_mediafiles`` from ``setup_with_production_data``.
 - Only show Python warnings once.
 - Optionally allow cleaning the static folder on deployment.
