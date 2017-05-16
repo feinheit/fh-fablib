@@ -12,7 +12,7 @@ Change log
   not a module again.
 - Fixed paths for DB dumps (relative to CWD, not relative to
   ``fh-fablib``)
-
+- ``update_requirements``: Always fully regenerate the virtualenv
 
 0.2 (2017-02-03)
 ~~~~~~~~~~~~~~~~
