@@ -197,7 +197,8 @@ def pull_database():
         return
 
     env.box_remote_db = run(
-        "grep -E '^DATABASE_URL=' %(box_domain)s/.env | cut -f2 -d=")
+        "grep -E '^DATABASE_URL=' %(box_domain)s/.env | cut -f2 -d="
+    ).splitlines()[0].strip()
 
     if not env.box_remote_db:
         abort(red('Unable to determine the remote DATABASE_URL', bold=True))
