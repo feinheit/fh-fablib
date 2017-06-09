@@ -5,6 +5,10 @@ Change log
 `Next version`_
 ~~~~~~~~~~~~~~~
 
+- ``pull_database`` now uses the connection string from the remote
+  ``.env`` instead of assuming an available admin user.
+
+
 0.3 (2017-05-16)
 ~~~~~~~~~~~~~~~~
 

@@ -8,7 +8,7 @@ from fabric.colors import green, red
 from fabric.contrib.project import rsync_project
 from fabric.utils import abort, puts
 
-from fh_fablib import confirm, run_local, require_env, require_services
+from fh_fablib import confirm, run, run_local, require_env, require_services
 from fh_fablib.utils import get_random_string
 
 
@@ -196,15 +196,19 @@ def pull_database():
             ' "%(box_database_local)s" (if it exists)?'):
         return
 
+    env.box_remote_db = run(
+        "grep -E '^DATABASE_URL=' %(box_domain)s/.env | cut -f2 -d=")
+
+    if not env.box_remote_db:
+        abort(red('Unable to determine the remote DATABASE_URL', bold=True))
+
     run_local(
         'dropdb --if-exists %(box_database_local)s')
     run_local(
         'createdb %(box_database_local)s'
         ' --encoding=UTF8 --template=template0')
     run_local(
-        'ssh %(host_string)s "source .profile &&'
-        ' pg_dump %(box_database)s'
-        ' --no-privileges --no-owner --no-reconnect"'
+        'ssh %(host_string)s pg_dump -Ox "%(box_remote_db)s"'
         ' | psql %(box_database_local)s')
 
 
