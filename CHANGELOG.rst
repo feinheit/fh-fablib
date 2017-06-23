@@ -5,6 +5,10 @@ Change log
 `Next version`_
 ~~~~~~~~~~~~~~~
 
+
+0.4 (2017-06-23)
+~~~~~~~~~~~~~~~~
+
 - ``pull_database`` now uses the connection string from the remote
   ``.env`` instead of assuming an available admin user.
 - Run ``prettier`` to format JavaScript and SCSS code in ``fab check``.
