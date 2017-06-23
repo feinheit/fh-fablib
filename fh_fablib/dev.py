@@ -36,7 +36,7 @@ def dev(host='127.0.0.1', port=8000):
                 port,
             ),
         ),
-        run_local('HOST=%s yarn run dev' % host),
+        lambda: run_local('HOST=%s yarn run dev' % host),
     ]
     jobs = [Process(target=j) for j in jobs]
     [j.start() for j in jobs]
