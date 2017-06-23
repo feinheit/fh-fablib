@@ -18,13 +18,7 @@ def check():
     step('Checking Python code with flake8...')
     run_local('PYTHONWARNINGS=ignore venv/bin/flake8 .')
 
-    step('Prettifying and checking Javascript code...')
-    with settings(warn_only=True):
-        run_local(
-            './node_modules/.bin/prettier --write --single-quote'
-            ' --no-bracket-spacing --no-semi --trailing-comma es5 *.js'
-            ' %(box_project_name)s/static/**/*.js'
-            ' %(box_project_name)s/static/**/*.scss')
+    step('Checking Javascript code...')
     run_local('./node_modules/.bin/eslint *.js %(box_project_name)s/static')
 
     step('Invoking Django\'s systems check framework...')

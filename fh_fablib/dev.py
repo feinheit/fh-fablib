@@ -93,3 +93,14 @@ def kill():
     subprocess.call(
         "ps -ef | awk '/(postgres|redis)/ {print $2}' | xargs kill",
         shell=True)
+
+
+@task
+@hosts('')
+def prettify():
+    """Prettifies JS and SCSS code using prettier"""
+    run_local(
+        './node_modules/.bin/prettier --write --single-quote'
+        ' --no-bracket-spacing --no-semi --trailing-comma es5 *.js'
+        ' "%(box_project_name)s/static/**/*.js"'
+        ' "%(box_project_name)s/static/**/*.scss"')
