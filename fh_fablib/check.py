@@ -23,7 +23,12 @@ def check():
     step('Checking Python code with flake8...')
     run_local('PYTHONWARNINGS=ignore venv/bin/flake8 .')
 
-    step('Checking Javascript code...')
+    step('Prettifying and checking Javascript code...')
+    with settings(warn_only=True):
+        run_local(
+            './node_modules/.bin/prettier --write --single-quote'
+            ' --no-bracket-spacing --no-semi --trailing-comma es5'
+            ' *.js %(box_static_src)s/**/*.js %(box_static_src)s/**/*.scss')
     run_local('./node_modules/.bin/eslint %(box_static_src)s webpack*js')
 
     step('Invoking Django\'s systems check framework...')
