@@ -7,6 +7,8 @@ Change log
 
 - ``pull_database`` now uses the connection string from the remote
   ``.env`` instead of assuming an available admin user.
+- Run ``prettier`` to format JavaScript and SCSS code in ``fab check``.
+- Dropped all pre-webpack2 compatibility code.
 
 
 0.3 (2017-05-16)

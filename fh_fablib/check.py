@@ -10,11 +10,6 @@ from fh_fablib import (
 )
 
 
-def complain_on_failure(task, complaint):
-    if not task.succeeded:
-        puts(red(complaint))
-
-
 @task(default=True)
 @hosts('')
 @runs_once
@@ -27,9 +22,10 @@ def check():
     with settings(warn_only=True):
         run_local(
             './node_modules/.bin/prettier --write --single-quote'
-            ' --no-bracket-spacing --no-semi --trailing-comma es5'
-            ' *.js %(box_static_src)s/**/*.js %(box_static_src)s/**/*.scss')
-    run_local('./node_modules/.bin/eslint %(box_static_src)s webpack*js')
+            ' --no-bracket-spacing --no-semi --trailing-comma es5 *.js'
+            ' %(box_project_name)s/static/**/*.js'
+            ' %(box_project_name)s/static/**/*.scss')
+    run_local('./node_modules/.bin/eslint *.js %(box_project_name)s/static')
 
     step('Invoking Django\'s systems check framework...')
     run_local('venv/bin/python manage.py check')
@@ -37,21 +33,9 @@ def check():
     with settings(warn_only=True), hide('warnings'):
         # Remind the user about uglyness, but do not fail (there are good
         # reasons to use the patterns warned about here).
-        step('Pointing to potential tasks...')
+        step('Searching for i?pdb debugger statements...')
         run_local(
             "! git --no-pager grep -n -C3 -E '^[^#]+import i?pdb' -- '*.py'")
-        run_local(
-            "! git --no-pager grep -n -C3 -E '^[^#]+print( |\(|$)' -- '*.py'")
-        run_local(
-            "! git --no-pager grep -n -C3 -E 'console\.log' -- '*.html' '*.js'"
-        )
-        run_local(
-            "! git --no-pager grep -n -E '#.*noqa'"
-            " -- '%(box_project_name)s/*.py'")
-        run_local("! git --no-pager grep -n -E '(XXX|FIXME|TODO)'")
-        complain_on_failure(
-            run_local("! git --no-pager grep -n -E '^-e.+$' -- requirements*"),
-            'Warning: Editable requirements found. Releases are preferred!')
 
 
 @task

@@ -1,11 +1,10 @@
 from __future__ import unicode_literals
 
 from multiprocessing import Process
-import os
 import socket
 import subprocess
 
-from fabric.api import env, hosts, task
+from fabric.api import hosts, task
 from fabric.colors import green
 from fabric.utils import puts
 
@@ -37,24 +36,8 @@ def dev(host='127.0.0.1', port=8000):
                 port,
             ),
         ),
+        run_local('HOST=%s yarn run dev' % host),
     ]
-    if os.path.exists('gulpfile.js'):
-        jobs.append(lambda: run_local('./node_modules/.bin/gulp'))
-    elif os.path.exists('%(box_staticfiles)s/Gruntfile.js' % env):
-        jobs.append(lambda: run_local('cd %(box_sass)s && grunt'))
-    elif os.path.exists('%(box_staticfiles)s/config.rb' % env):
-        jobs.append(
-            lambda: run_local('bundle exec compass watch %(box_staticfiles)s'))
-    elif os.path.exists('%(box_staticfiles)s/webpack.config.js' % env):
-        jobs.append(
-            lambda: run_local(
-                './node_modules/.bin/webpack -d --watch'
-                ' --config %(box_staticfiles)s/webpack.config.js'))
-    elif os.path.exists('server.js'):
-        jobs.append(lambda: run_local('HOST=%s node server' % host))
-    elif os.path.exists('postcss.config.js'):  # Just a marker...
-        jobs.append(lambda: run_local('HOST=%s npm run dev' % host))
-
     jobs = [Process(target=j) for j in jobs]
     [j.start() for j in jobs]
     [j.join() for j in jobs]

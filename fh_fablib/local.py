@@ -110,32 +110,7 @@ def update_requirements():
 @hosts('')
 def frontend_tools():
     """Installs frontend tools. Knows how to handle npm/bower and bundler"""
-    if os.path.exists('yarn.lock'):
-        run_local('yarn')
-    elif os.path.exists('package.json'):
-        run_local('npm install')
-    if os.path.exists('bower.json'):
-        run_local('bower install')
-    if os.path.exists('%(box_staticfiles)s/bower.json' % env):
-        run_local('cd %(box_staticfiles)s && npm install')
-        run_local('cd %(box_staticfiles)s && bower install')
-    if os.path.exists('Gemfile'):
-        run_local('bundle install --path=.bundle/gems')
-
-    if not os.path.exists('%(box_staticfiles)s/bower_components' % env):
-        return
-
-    if not os.path.exists('%(box_staticfiles)s/scss/_settings.scss' % env):
-        run_local(
-            'cp %(box_staticfiles)s/bower_components/foundation/scss/'
-            'foundation/_settings.scss %(box_staticfiles)s/scss/')
-        puts(red(
-            'Please commit %(box_staticfiles)s/scss/_settings.scss if you'
-            ' intend to modify this file!' % env))
-    else:
-        puts(red(
-            'Not replacing %(box_staticfiles)s/scss/_settings.scss with'
-            ' Foundation\'s version, file exists already.' % env))
+    run_local('yarn')
 
 
 @task
