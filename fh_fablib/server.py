@@ -83,8 +83,13 @@ DJANGO_ADMIN_SSO_OAUTH_CLIENT_ID=%(box_oauth2_client_id)s
 DJANGO_ADMIN_SSO_OAUTH_CLIENT_SECRET=%(box_oauth2_client_secret)s
 ALLOWED_HOSTS=['%(box_domain)s', '.%(box_domain)s', '.%(host_string_host)s']
 
+GOOGLE_CLIENT_ID=%(box_oauth2_client_id)s
+GOOGLE_CLIENT_SECRET=%(box_oauth2_client_secret)s
+
 # LIVE=True
-# FORCE_DOMAIN=www.%(box_domain)s
+# CANONICAL_DOMAIN=%(box_domain)s
+# CANONICAL_DOMAIN_SECURE=True
+# FORCE_DOMAIN=%(box_domain)s
 ''' % dict(env, host_string_host=env.host_string.split('@')[-1])), '.env')
 
         run('venv/bin/python manage.py migrate --noinput')
