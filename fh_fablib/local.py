@@ -2,14 +2,15 @@ from __future__ import unicode_literals
 
 from datetime import datetime
 import os
+import speckenv
 
-from fabric.api import env, execute, hosts, settings, task
+from fabric.api import env, execute, get, hosts, settings, task
 from fabric.colors import green, red
 from fabric.contrib.project import rsync_project
 from fabric.utils import abort, puts
 
 from fh_fablib import confirm, run, run_local, require_env, require_services
-from fh_fablib.utils import get_random_string
+from fh_fablib.utils import get_random_string, TemporaryDirectory
 
 
 @task
@@ -171,10 +172,12 @@ def pull_database():
             ' "%(box_database_local)s" (if it exists)?'):
         return
 
-    env.box_remote_db = run(
-        "grep -E '^DATABASE_URL=' %(box_domain)s/.env | cut -f2 -d="
-    ).splitlines()[0].strip()
+    mapping = {}
+    with TemporaryDirectory() as d:
+        get('%(box_domain)s/.env' % env, d)
+        speckenv.read_speckenv(os.path.join(d, '.env'), mapping=mapping)
 
+    env.box_remote_db = speckenv.env('DATABASE_URL', mapping=mapping)
     if not env.box_remote_db:
         abort(red('Unable to determine the remote DATABASE_URL', bold=True))
 

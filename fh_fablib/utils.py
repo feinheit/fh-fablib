@@ -2,6 +2,8 @@ from __future__ import unicode_literals
 
 import os
 import random
+import shutil
+import tempfile
 
 import speckenv
 
@@ -27,3 +29,16 @@ def default_env(*args, **kwargs):
         default_env._loaded = True
 
     return speckenv.env(*args, **kwargs)
+
+
+class TemporaryDirectory(object):
+    """
+    Context manager for tempfile.mkdtemp().
+    This class is available in python +v3.2.
+    """
+    def __enter__(self):
+        self.dir_name = tempfile.mkdtemp()
+        return self.dir_name
+
+    def __exit__(self, exc_type, exc_value, traceback):
+        shutil.rmtree(self.dir_name)
