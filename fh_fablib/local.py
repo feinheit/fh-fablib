@@ -192,7 +192,6 @@ def pull_database():
 
 
 @task
-@require_env
 @require_services
 def empty_to_password():
     run_local(
@@ -231,7 +230,6 @@ def pull():
 
 
 @task
-@require_env
 @require_services
 def dump_db():
     """Dumps the database into the tmp/ folder"""
@@ -239,7 +237,7 @@ def dump_db():
     env.box_dump_filename = os.path.join(
         os.getcwd(),
         'tmp',
-        '%(box_database)s-local-%(box_datetime)s.sql' % env,
+        '%(box_database_local)s-local-%(box_datetime)s.sql' % env,
     )
 
     run_local(
@@ -249,7 +247,6 @@ def dump_db():
 
 
 @task
-@require_env
 @require_services
 def load_db(filename=None):
     """Loads a dump into the database"""
