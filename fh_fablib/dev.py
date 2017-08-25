@@ -95,7 +95,7 @@ def kill():
         shell=True)
 
 
-@task
+@task(aliases=['prettier'])
 @hosts('')
 def prettify():
     """Prettifies JS and SCSS code using prettier"""
