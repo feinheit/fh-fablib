@@ -25,11 +25,19 @@ DEFAULTS = {
         './node_modules/.bin/eslint *.js %(box_project_name)s/static',
         'venv/bin/python manage.py check',
     ],
+    'box_prettify': [
+        './node_modules/.bin/prettier --write --single-quote'
+        ' --no-bracket-spacing --no-semi --trailing-comma es5 *.js'
+        ' "%(box_project_name)s/static/**/*.js"'
+        ' "%(box_project_name)s/static/**/*.scss"',
+    ],
+    'box_python': 'python3',
     'box_test': [
         'venv/bin/python manage.py test',
         # './node_modules/.bin/gulp test',
     ],
 }
+
 
 def require_env(fn):
     @wraps(fn)

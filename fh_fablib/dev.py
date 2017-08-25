@@ -4,7 +4,7 @@ from multiprocessing import Process
 import socket
 import subprocess
 
-from fabric.api import hosts, task
+from fabric.api import env, hosts, task
 from fabric.colors import green
 from fabric.utils import puts
 
@@ -99,8 +99,5 @@ def kill():
 @hosts('')
 def prettify():
     """Prettifies JS and SCSS code using prettier"""
-    run_local(
-        './node_modules/.bin/prettier --write --single-quote'
-        ' --no-bracket-spacing --no-semi --trailing-comma es5 *.js'
-        ' "%(box_project_name)s/static/**/*.js"'
-        ' "%(box_project_name)s/static/**/*.scss"')
+    for cmd in env['box_prettify']:
+        run_local(cmd)

@@ -9,7 +9,7 @@ from fabric.colors import green, red
 from fabric.contrib.project import rsync_project
 from fabric.utils import abort, puts
 
-from fh_fablib import confirm, run, run_local, require_env, require_services
+from fh_fablib import confirm, run_local, require_env, require_services
 from fh_fablib.utils import get_random_string, TemporaryDirectory
 
 
