@@ -6,6 +6,15 @@ Change log
 ~~~~~~~~~~~~~~~
 
 
+0.5 (2017-08-25)
+~~~~~~~~~~~~~~~~
+
+- Made it possible to override ``check``, ``test`` and ``prettify``
+  commands used.
+- Added a ``prettier`` alias for ``prettify``.
+- Removed ``@require_env`` where it was unnecessary.
+
+
 0.4 (2017-06-23)
 ~~~~~~~~~~~~~~~~
 
