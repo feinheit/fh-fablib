@@ -47,4 +47,4 @@ Usage (``fabfile.py``)::
         },
     }
 
-    fh_fablib.init(globals(), min_version=(0, 1, 7))
+    fh_fablib.init(globals(), min_version=(0, 4, 3))

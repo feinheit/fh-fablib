@@ -15,21 +15,8 @@ from fh_fablib import (
 @runs_once
 def check():
     """Runs coding style checks, and Django's checking framework"""
-    step('Checking Python code with flake8...')
-    run_local('PYTHONWARNINGS=ignore venv/bin/flake8 .')
-
-    step('Checking Javascript code...')
-    run_local('./node_modules/.bin/eslint *.js %(box_project_name)s/static')
-
-    step('Invoking Django\'s systems check framework...')
-    run_local('venv/bin/python manage.py check')
-
-    with settings(warn_only=True), hide('warnings'):
-        # Remind the user about uglyness, but do not fail (there are good
-        # reasons to use the patterns warned about here).
-        step('Searching for i?pdb debugger statements...')
-        run_local(
-            "! git --no-pager grep -n -C3 -E '^[^#]+import i?pdb' -- '*.py'")
+    for cmd in env['box_check']:
+        run_local(cmd)
 
 
 @task
@@ -69,7 +56,5 @@ def deploy():
 @hosts('')
 @require_services
 def test():
-    step('Running backend testsuite...')
-    run_local('venv/bin/python manage.py test')
-    step('We do not have a frontend testsuite yet...')
-    # run_local('./node_modules/.bin/gulp test')
+    for cmd in env['box_test']:
+        run_local(cmd)

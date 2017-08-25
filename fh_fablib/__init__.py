@@ -17,6 +17,19 @@ from fabric.utils import abort, puts
 VERSION = (0, 4, 3)
 __version__ = '.'.join(map(str, VERSION))
 
+DEFAULTS = {
+    'box_restart': ['sctl restart %(box_domain)s:*'],
+    'forward_agent': True,
+    'box_check': [
+        'PYTHONWARNINGS=ignore venv/bin/flake8 .',
+        './node_modules/.bin/eslint *.js %(box_project_name)s/static',
+        'venv/bin/python manage.py check',
+    ],
+    'box_test': [
+        'venv/bin/python manage.py test',
+        # './node_modules/.bin/gulp test',
+    ],
+}
 
 def require_env(fn):
     @wraps(fn)
@@ -87,6 +100,11 @@ def init(fabfile, min_version=None):
     if pwd.getpwuid(getuid())[0] == 'www-data':
         abort(red('Stop fab-ing on the server.', bold=True))
 
+    # Set defaults -----------------------------------------------------------
+
+    for key, value in DEFAULTS.items():
+        env.setdefault(key, value)
+
     # Multi-env support ------------------------------------------------------
 
     def _create_setup_task_for_env(environment):
@@ -103,8 +121,7 @@ def init(fabfile, min_version=None):
         _create_setup_task_for_env(env.box_hardwired_environment)()
 
     else:
-        # Create a task for all environments, and use the first
-        # character as alias
+        # Create a task per environment
         for environment in env.box_environments:
             t = _create_setup_task_for_env(environment)
             shortcut = env.box_environments[environment].get('shortcut')
