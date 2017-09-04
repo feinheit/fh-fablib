@@ -19,7 +19,6 @@ __version__ = '.'.join(map(str, VERSION))
 
 DEFAULTS = {
     'box_restart': ['sctl restart %(box_domain)s:*'],
-    'forward_agent': True,
     'box_check': [
         'PYTHONWARNINGS=ignore venv/bin/flake8 .',
         './node_modules/.bin/eslint *.js %(box_project_name)s/static',
