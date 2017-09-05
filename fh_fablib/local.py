@@ -225,8 +225,8 @@ def pull():
     run_local('find . -name "*.pyc" -delete')
 
     execute('local.pull_database')
-    execute('local.empty_to_password')
     execute('local.update')
+    execute('local.empty_to_password')
 
 
 @task
