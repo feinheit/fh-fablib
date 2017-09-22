@@ -31,8 +31,7 @@ def dev(host='127.0.0.1', port=8000):
 
     jobs = [
         lambda: run_local(
-            'venv/bin/python -Wonce manage.py runserver %s:%s' % (
-                host,
+            'venv/bin/python -Wonce manage.py runserver 0.0.0.0:%s' % (
                 port,
             ),
         ),
