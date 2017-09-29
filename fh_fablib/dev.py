@@ -25,9 +25,10 @@ def dev(host='127.0.0.1', port=8000):
     are not running already"""
     if host == 'net':
         host = own_ip()
-        puts(green(
-            'Starting dev server on http://%s:%s/' % (host, port),
-            bold=True))
+
+    puts(green(
+        'Starting dev server on http://%s:%s/' % (host, port),
+        bold=True))
 
     jobs = [
         lambda: run_local(
