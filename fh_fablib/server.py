@@ -205,7 +205,7 @@ def remove_host():
 
     puts(red(
         'The folder ~/%(box_domain)s on the server has not been removed. The'
-        ' "tmp" subfolder also contains a fresh database dump.' % env))
+        ' project folder also contains a fresh database dump.' % env))
 
 
 @task
