@@ -5,6 +5,13 @@ Change log
 `Next version`_
 ~~~~~~~~~~~~~~~
 
+- Reversed the order of ``local.update`` and ``local.empty_to_password``
+  (migrations may have to be applied first).
+- Runserver always binds to ``0.0.0.0`` (as webpack-dev-server already
+  does) to make it easier to develop inside vagrant boxes with forwarded
+  ports.
+- Made ``ALLOWED_HOSTS`` on the server not contain redundant entries.
+
 
 0.5 (2017-08-25)
 ~~~~~~~~~~~~~~~~
