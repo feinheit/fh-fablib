@@ -81,7 +81,7 @@ SECRET_KEY=%(box_secret_key)s
 SENTRY_DSN=%(box_sentry_dsn)s
 DJANGO_ADMIN_SSO_OAUTH_CLIENT_ID=%(box_oauth2_client_id)s
 DJANGO_ADMIN_SSO_OAUTH_CLIENT_SECRET=%(box_oauth2_client_secret)s
-ALLOWED_HOSTS=['%(box_domain)s', '.%(box_domain)s', '.%(host_string_host)s']
+ALLOWED_HOSTS=['.%(box_domain)s', '.%(host_string_host)s']
 
 GOOGLE_CLIENT_ID=%(box_oauth2_client_id)s
 GOOGLE_CLIENT_SECRET=%(box_oauth2_client_secret)s
