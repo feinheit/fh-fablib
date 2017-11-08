@@ -9,7 +9,7 @@ from fabric.colors import green, red
 from fabric.utils import abort, puts
 
 from fh_fablib import confirm, run_local, cd, require_env, run
-from fh_fablib.utils import default_env, get_random_string
+from fh_fablib.utils import default_env, get_random_string, remote_env
 
 
 @task
@@ -219,9 +219,13 @@ def dump_db():
         '%(box_database)s-%(box_environment)s-%(box_datetime)s.sql' % env,
     )
 
+    env.box_remote_db = remote_env('DATABASE_URL')
+    if not env.box_remote_db:
+        abort(red('Unable to determine the remote DATABASE_URL', bold=True))
+
     run_local(
         'ssh %(host_string)s "source .profile &&'
-        ' pg_dump %(box_database)s'
+        ' pg_dump %(box_remote_db)s'
         ' --no-privileges --no-owner --no-reconnect"'
         ' > %(box_dump_filename)s')
     puts(green('\nWrote a dump to %(box_dump_filename)s' % env))

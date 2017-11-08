@@ -5,6 +5,7 @@ import random
 import shutil
 import tempfile
 
+from fabric.api import env, get
 import speckenv
 
 
@@ -42,3 +43,19 @@ class TemporaryDirectory(object):
 
     def __exit__(self, exc_type, exc_value, traceback):
         shutil.rmtree(self.dir_name)
+
+
+REMOTE_ENV = None
+
+
+def remote_env(*args, **kwargs):
+    global REMOTE_ENV
+
+    if REMOTE_ENV is None:
+        REMOTE_ENV = {}
+        with TemporaryDirectory() as d:
+            get('%(box_domain)s/.env' % env, d)
+            speckenv.read_speckenv(os.path.join(d, '.env'), mapping=REMOTE_ENV)
+
+    kwargs['mapping'] = REMOTE_ENV
+    return speckenv.env(*args, **kwargs)
