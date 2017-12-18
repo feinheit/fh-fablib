@@ -26,6 +26,7 @@ def deploy(*args):
         run('find . -name "*.pyc" -delete')
         run('venv/bin/pip install -r requirements.txt')
         run('venv/bin/python manage.py migrate --noinput')
+        run('venv/bin/python manage.py check --deploy')
 
     step('\nUploading static files...')
     rsync_project(
