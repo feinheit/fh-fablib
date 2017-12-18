@@ -26,7 +26,6 @@ def deploy(*args):
         run('find . -name "*.pyc" -delete')
         run('venv/bin/pip install -r requirements.txt')
         run('venv/bin/python manage.py migrate --noinput')
-        run('venv/bin/python manage.py check --deploy')
 
     step('\nUploading static files...')
     rsync_project(
@@ -38,6 +37,10 @@ def deploy(*args):
     step('\nCollecting static files...')
     with cd('%(box_domain)s'):
         run('venv/bin/python manage.py collectstatic --noinput')
+
+    step('\nRunning system checks on server...')
+    with cd('%(box_domain)s'):
+        run('venv/bin/python manage.py check --deploy')
 
     step('\nRestarting server process...')
     for line in env['box_restart']:
