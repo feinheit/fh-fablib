@@ -234,9 +234,7 @@ def dump_db():
         '%(box_database_local)s-local-%(box_datetime)s.sql' % env,
     )
 
-    run_local(
-        'pg_dump %(box_database_local)s --no-privileges --no-owner'
-        ' --no-reconnect > %(box_dump_filename)s')
+    run_local('pg_dump -Ox %(box_database_local)s > %(box_dump_filename)s')
     puts(green('\nWrote a dump to %(box_dump_filename)s' % env))
 
 

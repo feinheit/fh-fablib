@@ -169,10 +169,7 @@ def copy_data_from(environment=None):
     run(
         'createdb %(box_database)s --encoding=UTF8 --template=template0'
         ' --owner=%(box_database)s')
-    run(
-        'pg_dump %(source_database)s'
-        ' --no-privileges --no-owner --no-reconnect'
-        ' | psql %(box_database)s')
+    run('pg_dump -Ox %(source_database)s | psql %(box_database)s')
     run(
         'psql %(box_database)s -c "REASSIGN OWNED BY admin '
         ' TO %(box_database)s"')
@@ -197,8 +194,7 @@ def remove_host():
     with cd(env.box_domain):
         env.box_datetime = datetime.now().strftime('%Y-%m-%d-%s')
         run(
-            'pg_dump %(box_database)s'
-            ' --no-privileges --no-owner --no-reconnect'
+            'pg_dump -Ox %(box_database)s'
             ' > %(box_database)s-%(box_environment)s-%(box_datetime)s.sql')
     run('dropdb %(box_database)s')
     run('dropuser %(box_database)s')
@@ -224,9 +220,7 @@ def dump_db():
         abort(red('Unable to determine the remote DATABASE_URL', bold=True))
 
     run_local(
-        'ssh %(host_string)s "source .profile &&'
-        ' pg_dump %(box_remote_db)s'
-        ' --no-privileges --no-owner --no-reconnect"'
+        'ssh %(host_string)s pg_dump -Ox %(box_remote_db)s'
         ' > %(box_dump_filename)s')
     puts(green('\nWrote a dump to %(box_dump_filename)s' % env))
 
@@ -248,6 +242,10 @@ def load_db(filename=None):
             ' "%(box_database)s" (if it exists)?', default=False):
         return
 
+    env.box_remote_db = remote_env('DATABASE_URL')
+    if not env.box_remote_db:
+        abort(red('Unable to determine the remote DATABASE_URL', bold=True))
+
     run(
         'psql -c "DROP DATABASE IF EXISTS %(box_database)s"')
     run(
@@ -255,7 +253,7 @@ def load_db(filename=None):
         ' --owner=%(box_database)s')
     run_local(
         'cat %(box_dump_filename)s |'
-        'ssh %(host_string)s "source .profile && psql %(box_database)s"')
+        ' ssh %(host_string)s psql %(box_remote_db)s')
     run(
         'psql %(box_database)s -c "REASSIGN OWNED BY admin '
         ' TO %(box_database)s"')
