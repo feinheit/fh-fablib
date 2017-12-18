@@ -13,6 +13,8 @@ Change log
 - Made ``ALLOWED_HOSTS`` on the server not contain redundant entries.
 - ``server.dump_db`` now uses the connection string from the remote
   ``.env``
+- Added a call to ``./manage.py check --deploy`` on the server to detect
+  missing settings before attempting a restart.
 
 
 0.5 (2017-08-25)
