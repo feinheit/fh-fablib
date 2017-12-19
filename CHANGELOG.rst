@@ -11,10 +11,14 @@ Change log
   does) to make it easier to develop inside vagrant boxes with forwarded
   ports.
 - Made ``ALLOWED_HOSTS`` on the server not contain redundant entries.
-- ``server.dump_db`` now uses the connection string from the remote
-  ``.env``
+- ``server.dump_db`` and a few other commands now use the connection
+  string from the remote ``.env``
 - Added a call to ``./manage.py check --deploy`` on the server to detect
   missing settings before attempting a restart.
+- Added support for supervising processes using user systemd instead of
+  supervisord.
+- Made the arguments (currently ``min_version`` and ``systemd``) to
+  ``fh_fablib.init()`` mandatory.
 
 
 0.5 (2017-08-25)

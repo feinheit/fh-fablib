@@ -15,7 +15,6 @@ Usage (``fabfile.py``)::
     env.box_project_name = 'app'
     env.box_domain = 'example.ch'
     env.box_database_local = 'example_ch'
-    env.box_restart = ['sctl restart %(box_domain)s:*']
     env.forward_agent = True
 
     # Remove this for multi-env support
@@ -47,4 +46,4 @@ Usage (``fabfile.py``)::
         },
     }
 
-    fh_fablib.init(globals(), min_version=(0, 4, 3))
+    fh_fablib.init(globals(), min_version=(0, 6, 0), systemd=True)

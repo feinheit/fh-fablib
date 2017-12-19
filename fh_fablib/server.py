@@ -104,9 +104,8 @@ def nginx_vhost_and_supervisor():
     with cd('%(box_domain)s'):
         run('mkdir -p media tmp')
 
-    run('supervisor-create-conf %(box_domain)s wsgi'
-        ' > supervisor/conf.d/%(box_domain)s.conf')
-    run('sctl reload')
+    for line in env['box_enable_process']:
+        run(line)
 
 
 @task
@@ -189,8 +188,8 @@ def remove_host():
         return
 
     run('sudo nine-manage-vhosts virtual-host remove %(box_domain)s')
-    run('rm supervisor/conf.d/%(box_domain)s.conf')
-    run('sctl reload')
+    for line in env['box_disable_process']:
+        run(line)
     with cd(env.box_domain):
         env.box_datetime = datetime.now().strftime('%Y-%m-%d-%s')
         run(

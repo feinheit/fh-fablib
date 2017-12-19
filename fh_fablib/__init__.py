@@ -35,6 +35,30 @@ DEFAULTS = {
         'venv/bin/python manage.py test',
         # './node_modules/.bin/gulp test',
     ],
+
+    'box_enable_process': [
+        'supervisor-create-conf %(box_domain)s wsgi'
+        ' > supervisor/conf.d/%(box_domain)s.conf',
+        'sctl reload',
+    ],
+    'box_disable_process': [
+        'rm supervisor/conf.d/%(box_domain)s.conf',
+        'sctl reload',
+    ],
+}
+
+DEFAULTS_SYSTEMD = {
+    'box_restart': [
+        'systemctl --user restart gunicorn@%(box_domain)s.service',
+    ],
+    'box_enable_process': [
+        'systemctl --user start gunicorn@%(box_domain)s.service',
+        'systemctl --user enable gunicorn@%(box_domain)s.service',
+    ],
+    'box_disable_process': [
+        'systemctl --user stop gunicorn@%(box_domain)s.service',
+        'systemctl --user disable gunicorn@%(box_domain)s.service',
+    ],
 }
 
 
@@ -85,7 +109,13 @@ def step(str):
     puts(cyan('\n%s' % str, bold=True))
 
 
-def init(fabfile, min_version=None):
+def init(fabfile, sentinel=None, min_version=None, systemd=None):
+    if sentinel is not None:
+        abort(red(
+            'Pass min_version and systemd as keyword arguments to'
+            ' fh_fablib.init() please'
+        ))
+
     if min_version is not None:
         if VERSION < min_version:
             abort(red(
@@ -94,6 +124,13 @@ def init(fabfile, min_version=None):
                     '.'.join(map(str, min_version)),
                 ),
             ))
+
+    if systemd is None:
+        abort(red(
+            'fh_fablib.init() requires either systemd=True or systemd=False,'
+            ' depending on whether you want to use systemd for process'
+            ' supervision or not.'
+        ))
 
     fabfile['__all__'] = (
         'check',
@@ -108,6 +145,10 @@ def init(fabfile, min_version=None):
         abort(red('Stop fab-ing on the server.', bold=True))
 
     # Set defaults -----------------------------------------------------------
+
+    if systemd:
+        for key, value in DEFAULTS_SYSTEMD.items():
+            env.setdefault(key, value)
 
     for key, value in DEFAULTS.items():
         env.setdefault(key, value)
