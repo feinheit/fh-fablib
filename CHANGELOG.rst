@@ -19,6 +19,8 @@ Change log
   supervisord.
 - Made the arguments (currently ``min_version`` and ``systemd``) to
   ``fh_fablib.init()`` mandatory.
+- Added a check whether our branch is up to date before the expensive
+  tests and asset compiling steps.
 
 
 0.5 (2017-08-25)

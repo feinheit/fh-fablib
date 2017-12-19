@@ -41,6 +41,9 @@ def deploy():
         if not confirm('Continue deployment?', default=False):
             abort('Aborting.')
 
+    step('\nChecking whether we are up to date...')
+    run_local('git push --dry-run origin %(box_branch)s')
+
     execute('check.check')
     execute('check.test')
 
