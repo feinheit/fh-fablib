@@ -46,7 +46,8 @@ DEFAULTS = {
         'sctl reload',
     ],
     'box_optimize_assets': [
-        'find %(box_project_name)s/templates/ -name "*.svg"' \
+        'PATH=node_modules/.bin/:$PATH'
+        ' find %(box_project_name)s/templates/ -name "*.svg"' \
         ' -type f -exec svgo -i {} --disable=removeViewBox' \
         ' --enable=removeDimensions \;',
         'find %(box_project_name)s/static \( -name "*.jpg" -o -name' \
