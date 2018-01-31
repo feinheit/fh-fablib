@@ -45,6 +45,17 @@ DEFAULTS = {
         'rm supervisor/conf.d/%(box_domain)s.conf',
         'sctl reload',
     ],
+    'box_optimize_assets': [
+        'find %(box_project_name)s/templates/ -name "*.svg"' \
+        ' -type f -exec svgo -i {} --disable=removeViewBox' \
+        ' --enable=removeDimensions \;',
+        'find %(box_project_name)s/static \( -name "*.jpg" -o -name' \
+        ' "*.jpeg" \) -type f -exec convert {} -verbose' \
+        ' -sampling-factor 4:2:0 -strip' \
+        ' -quality 85 -interlace JPEG -colorspace sRGB {} \;',
+        'find %(box_project_name)s/static -name "*.png" -type f' \
+        ' -exec convert {} -verbose -strip {} \;',
+    ],
 }
 
 DEFAULTS_SYSTEMD = {

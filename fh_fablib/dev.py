@@ -101,3 +101,10 @@ def prettify():
     """Prettifies JS and SCSS code using prettier"""
     for cmd in env['box_prettify']:
         run_local(cmd)
+
+@task
+@hosts('')
+def optimize_assets():
+    """Optimizes SVG, PNG and JPEG files with svgo and imagemagick (convert)"""
+    for cmd in env['box_optimize_assets']:
+        run_local(cmd)
