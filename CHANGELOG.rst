@@ -4,8 +4,11 @@ Change log
 
 `Next version`_
 ~~~~~~~~~~~~~~~
+- Added a new task ``dev.optimize_assets`` which optimizes svg, jpg and
+  png files using svgo and imagemagick (convert).
 
-0.6 (2018-01-31)
+
+0.6 (2017-12-19)
 ~~~~~~~~~~~~~~~~
 
 - Reversed the order of ``local.update`` and ``local.empty_to_password``
@@ -24,8 +27,6 @@ Change log
   ``fh_fablib.init()`` mandatory.
 - Added a check whether our branch is up to date before the expensive
   tests and asset compiling steps.
-- Added a new task ``optimize_assets`` which optimizes svg, jpg and png
-  files using svgo and imagemagick (convert).
 
 
 0.5 (2017-08-25)
