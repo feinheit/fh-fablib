@@ -4,6 +4,7 @@ Change log
 
 `Next version`_
 ~~~~~~~~~~~~~~~
+
 - Added a new task ``dev.optimize_assets`` which optimizes svg, jpg and
   png files using svgo and imagemagick (convert).
 
