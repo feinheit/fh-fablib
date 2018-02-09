@@ -7,6 +7,9 @@ Change log
 
 - Added a new task ``dev.optimize_assets`` which optimizes svg, jpg and
   png files using svgo and imagemagick (convert).
+- Replaced ``local.empty_to_password`` with ``local.reset_passwords``,
+  which clobbers all passwords and does not require help from a
+  management command inside the project.
 
 
 0.6 (2017-12-19)

@@ -60,7 +60,7 @@ def setup_with_production_data():
     execute('local.frontend_tools')
     execute('local.create_dotenv')
     execute('local.pull_database')
-    execute('local.empty_to_password')
+    execute('local.reset_passwords')
 
     puts(green(
         'Setup with production data has completed successfully!', bold=True))
@@ -187,12 +187,14 @@ def pull_database():
 
 @task
 @require_services
-def empty_to_password():
+def reset_passwords():
     run_local(
-        'venv/bin/python manage.py update_empty_passwords password')
-    puts(green(
-        'Users with empty passwords (for example SSO users) now have a'
-        ' password of "password" (without quotes).'))
+        'venv/bin/python manage.py shell -c "'
+        'from django.contrib.auth import get_user_model;'
+        'c=get_user_model();u=c();u.set_password(\'password\');'
+        'c.objects.update(password=u.password)"'
+    )
+    puts(green('All users now have a password of "password".'))
 
 
 @task
@@ -220,7 +222,7 @@ def pull():
 
     execute('local.pull_database')
     execute('local.update')
-    execute('local.empty_to_password')
+    execute('local.reset_passwords')
 
 
 @task
