@@ -56,6 +56,7 @@ def setup_with_production_data():
         puts(red('It seems that this project is already set up, aborting.'))
         return 1
 
+    execute('git.add_remote')
     execute('local.create_virtualenv')
     execute('local.frontend_tools')
     execute('local.create_dotenv')

@@ -10,6 +10,7 @@ Change log
 - Replaced ``local.empty_to_password`` with ``local.reset_passwords``,
   which clobbers all passwords and does not require help from a
   management command inside the project.
+- Added ``git.add_remote`` to ``local.setup_with_production_data``.
 
 
 0.6 (2017-12-19)
