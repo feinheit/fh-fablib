@@ -21,7 +21,6 @@ def setup():
     execute('server.create_database_and_dotenv')
     execute('server.nginx_vhost_and_supervisor')
     execute('deploy')
-    execute('server.create_sso_user')
 
 
 @task
@@ -79,8 +78,6 @@ DATABASE_URL=postgres://%(box_database)s:%(box_database_pw)s\
 CACHE_URL=hiredis://localhost:6379/1/?key_prefix=%(box_database)s
 SECRET_KEY=%(box_secret_key)s
 SENTRY_DSN=%(box_sentry_dsn)s
-DJANGO_ADMIN_SSO_OAUTH_CLIENT_ID=%(box_oauth2_client_id)s
-DJANGO_ADMIN_SSO_OAUTH_CLIENT_SECRET=%(box_oauth2_client_secret)s
 ALLOWED_HOSTS=['.%(box_domain)s', '.%(host_string_host)s']
 
 GOOGLE_CLIENT_ID=%(box_oauth2_client_id)s
@@ -89,7 +86,6 @@ GOOGLE_CLIENT_SECRET=%(box_oauth2_client_secret)s
 # LIVE=True
 # CANONICAL_DOMAIN=%(box_domain)s
 # CANONICAL_DOMAIN_SECURE=True
-# FORCE_DOMAIN=%(box_domain)s
 ''' % dict(env, host_string_host=env.host_string.split('@')[-1])), '.env')
 
         run('venv/bin/python manage.py migrate --noinput')
@@ -106,27 +102,6 @@ def nginx_vhost_and_supervisor():
 
     for line in env['box_enable_process']:
         run(line)
-
-
-@task
-@require_env
-def create_sso_user():
-    env.box_sso_domain = prompt(
-        'SSO Domain (leave empty to skip)',
-        default=default_env('SSO_DOMAIN') or '')
-    if not env.box_sso_domain:
-        puts(red('Cannot continue without a SSO Domain.'))
-        return 1
-
-    run("psql %(box_database)s -c \"INSERT INTO auth_user"
-        " (username, email, password, is_active, is_staff, is_superuser,"
-        " first_name, last_name, date_joined, last_login) VALUES"
-        " ('admin', '', '', TRUE, TRUE, TRUE, '', '', NOW(), NOW())\"")
-    run("psql %(box_database)s -c \""
-        "INSERT INTO admin_sso_assignment"
-        " (username_mode, username, domain, copy, weight, user_id)"
-        " SELECT 0, '', '%(box_sso_domain)s', FALSE, 10, id"
-        " FROM auth_user WHERE username='admin'\"")
 
 
 @task

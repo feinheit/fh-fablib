@@ -27,7 +27,7 @@ def setup():
     execute('local.frontend_tools')
     if not os.path.exists('.env'):
         execute('local.create_dotenv')
-    execute('local.create_and_migrate_database')
+    execute('local.create_database')
 
     puts(green(
         'Initial setup has completed successfully!', bold=True))
@@ -141,7 +141,7 @@ ALLOWED_HOSTS=['*']
 @task
 @hosts('')
 @require_services
-def create_and_migrate_database():
+def create_database():
     """Creates and migrates a Postgres database"""
 
     if not confirm(

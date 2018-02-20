@@ -11,6 +11,11 @@ Change log
   which clobbers all passwords and does not require help from a
   management command inside the project.
 - Added ``git.add_remote`` to ``local.setup_with_production_data``.
+- Removed support for django-admin-sso and creating SSO users; it did
+  not work with django-authlib anymore.
+- Removed ``FORCE_DOMAIN`` from the servers' ``.env`` file.
+- Changed ``local.create_and_migrate_database`` to the shorter
+  ``local.create_database``.
 
 
 0.6 (2017-12-19)
