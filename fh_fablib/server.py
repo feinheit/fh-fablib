@@ -9,7 +9,7 @@ from fabric.colors import green, red
 from fabric.utils import abort, puts
 
 from fh_fablib import confirm, run_local, cd, require_env, run
-from fh_fablib.utils import default_env, get_random_string, remote_env
+from fh_fablib.utils import get_random_string, remote_env
 
 
 @task
@@ -103,6 +103,36 @@ def nginx_vhost_and_supervisor():
 
     for line in env['box_enable_process']:
         run(line)
+
+
+@task
+@require_env
+def ssl(template='feinheit_cache_letsencrypt'):
+    env.box_nmv_template = template
+    run('sudo nine-manage-vhosts certificate create'
+        ' --virtual-host=%(box_domain)s')
+    run('sudo nine-manage-vhosts virtual-host update'
+        ' %(box_domain)s --template=%(box_nmv_template)s')
+
+
+@task
+@require_env
+def add_alias(alias):
+    env.box_nmv_alias = alias
+    run('sudo nine-manage-vhosts alias create %(box_nmv_alias)s'
+        ' --virtual-host=%(box_nmv_alias)s')
+    run('sudo nine-manage-vhosts alias create www.%(box_nmv_alias)s'
+        ' --virtual-host=%(box_nmv_alias)s')
+
+
+@task
+@require_env
+def remove_alias(alias):
+    env.box_nmv_alias = alias
+    run('sudo nine-manage-vhosts alias remove %(box_nmv_alias)s'
+        ' --virtual-host=%(box_nmv_alias)s')
+    run('sudo nine-manage-vhosts alias remove www.%(box_nmv_alias)s'
+        ' --virtual-host=%(box_nmv_alias)s')
 
 
 @task

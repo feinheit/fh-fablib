@@ -16,6 +16,8 @@ Change log
 - Removed ``FORCE_DOMAIN`` from the servers' ``.env`` file.
 - Changed ``local.create_and_migrate_database`` to the shorter
   ``local.create_database``.
+- Added ``server.ssl``, ``server.add_alias`` and
+  ``server.remove_alias``.
 
 
 0.6 (2017-12-19)
