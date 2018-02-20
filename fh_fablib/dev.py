@@ -102,6 +102,7 @@ def prettify():
     for cmd in env['box_prettify']:
         run_local(cmd)
 
+
 @task
 @hosts('')
 def optimize_assets():

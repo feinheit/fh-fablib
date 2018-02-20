@@ -225,9 +225,9 @@ def init(fabfile, sentinel=None, min_version=None, systemd=None):
         if not exists(pre_commit_hook_path):
             with open(pre_commit_hook_path, 'w') as hook:
                 hook.write('''\
-    #!/bin/sh
-    fab check
-    ''')
+#!/bin/sh
+fab check
+''')
             chmod(pre_commit_hook_path, 0o755)
 
     # Run this each time the fabfile is loaded
