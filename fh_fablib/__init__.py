@@ -14,7 +14,7 @@ from fabric.contrib.console import confirm
 from fabric.utils import abort, puts
 
 
-VERSION = (0, 6, 2)
+VERSION = (0, 6, 3)
 __version__ = '.'.join(map(str, VERSION))
 
 DEFAULTS = {
