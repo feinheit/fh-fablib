@@ -60,16 +60,17 @@ DEFAULTS = {
 }
 
 DEFAULTS_SYSTEMD = {
+    'box_unit_template': 'gunicorn',
     'box_restart': [
-        'systemctl --user restart gunicorn@%(box_domain)s.service',
+        'systemctl --user restart %(box_unit_template)s@%(box_domain)s.service',  # noqa
     ],
     'box_enable_process': [
-        'systemctl --user start gunicorn@%(box_domain)s.service',
-        'systemctl --user enable gunicorn@%(box_domain)s.service',
+        'systemctl --user start %(box_unit_template)s@%(box_domain)s.service',
+        'systemctl --user enable %(box_unit_template)s@%(box_domain)s.service',
     ],
     'box_disable_process': [
-        'systemctl --user stop gunicorn@%(box_domain)s.service',
-        'systemctl --user disable gunicorn@%(box_domain)s.service',
+        'systemctl --user stop %(box_unit_template)s@%(box_domain)s.service',
+        'systemctl --user disable %(box_unit_template)s@%(box_domain)s.service',  # noqa
     ],
 }
 

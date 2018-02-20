@@ -20,6 +20,9 @@ Usage (``fabfile.py``)::
     # Remove this for multi-env support
     env.box_hardwired_environment = 'production'
 
+    # Set this to a different value if not using gunicorn@.service
+    # env.box_unit_template = 'gunicorn'
+
     # Environment specific values.
     env.box_environments = {
         'production': {

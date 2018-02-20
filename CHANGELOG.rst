@@ -18,6 +18,9 @@ Change log
   ``local.create_database``.
 - Added ``server.ssl``, ``server.add_alias`` and
   ``server.remove_alias``.
+- Added the possibility to override the systemd unit template, e.g. if
+  using ``daphne`` instead of ``gunicorn`` by setting
+  ``env.box_unit_template``.
 
 
 0.6 (2017-12-19)
