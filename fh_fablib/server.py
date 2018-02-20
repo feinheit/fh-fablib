@@ -267,6 +267,7 @@ def load_db(filename=None):
 @task
 @require_env
 def dbshell():
+    # env.box_remote_db = remote_env('DATABASE_URL')
     # ssh SERVER -o RequestTTY=yes\
     # 'psql $(grep -E "^DATABASE_URL=" %(box_domain)s/.env | cut -f2 -d=)'
     run('psql %(box_database)s')
