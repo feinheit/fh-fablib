@@ -57,6 +57,8 @@ DEFAULTS = {
         'find %(box_project_name)s/static -name "*.png" -type f' \
         ' -exec convert {} -verbose -strip {} \;',
     ],
+
+    'box_ssl_template': 'feinheit_cache_letsencrypt',
 }
 
 DEFAULTS_SYSTEMD = {

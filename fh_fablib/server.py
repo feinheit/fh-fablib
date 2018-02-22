@@ -107,8 +107,8 @@ def nginx_vhost_and_supervisor():
 
 @task
 @require_env
-def ssl(template='feinheit_cache_letsencrypt'):
-    env.box_nmv_template = template
+def ssl(template=None):
+    env.box_nmv_template = template or env.box_ssl_template
     run('sudo nine-manage-vhosts certificate create'
         ' --virtual-host=%(box_domain)s')
     run('sudo nine-manage-vhosts virtual-host update'
