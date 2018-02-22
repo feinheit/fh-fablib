@@ -45,7 +45,7 @@ DEFAULTS = {
         'rm supervisor/conf.d/%(box_domain)s.conf',
         'sctl reload',
     ],
-    'box_optimize_assets': [
+    'box_optimize': [
         'PATH=node_modules/.bin/:$PATH'
         ' find %(box_project_name)s/templates/ -name "*.svg"' \
         ' -type f -exec svgo -i {} --disable=removeViewBox' \

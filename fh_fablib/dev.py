@@ -45,7 +45,7 @@ def dev(host='127.0.0.1', port=8000):
 
 @task
 @hosts('')
-def makemessages():
+def mm():
     """Wrapper around the ``makemessages`` management command which excludes
     dependencies (virtualenv, bower components, node modules)"""
     run_local(
@@ -69,7 +69,7 @@ def makemessages():
 
 @task
 @hosts('')
-def compilemessages():
+def cm():
     """Wrapper around ``compilemessages`` which does not descend into
     venv"""
     run_local(
@@ -105,7 +105,7 @@ def prettify():
 
 @task
 @hosts('')
-def optimize_assets():
+def optimize():
     """Optimizes SVG, PNG and JPEG files with svgo and imagemagick (convert)"""
-    for cmd in env['box_optimize_assets']:
+    for cmd in env['box_optimize']:
         run_local(cmd)

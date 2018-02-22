@@ -5,7 +5,7 @@ Change log
 `Next version`_
 ~~~~~~~~~~~~~~~
 
-- Added a new task ``dev.optimize_assets`` which optimizes svg, jpg and
+- Added a new task ``dev.optimize`` which optimizes svg, jpg and
   png files using svgo and imagemagick (convert).
 - Replaced ``local.empty_to_password`` with ``local.reset_passwords``,
   which clobbers all passwords and does not require help from a
@@ -21,6 +21,9 @@ Change log
 - Added the possibility to override the systemd unit template, e.g. if
   using ``daphne`` instead of ``gunicorn`` by setting
   ``env.box_unit_template``.
+- Shortened ``makemessages`` and ``compilemessages`` to ``mm`` and
+  ``cm``.
+
 
 
 0.6 (2017-12-19)
