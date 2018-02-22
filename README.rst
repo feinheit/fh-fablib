@@ -2,7 +2,10 @@
 fh-fablib
 =========
 
-Usage (``fabfile.py``)::
+Usage
+=====
+
+``fabfile.py``::
 
     from __future__ import unicode_literals
 
@@ -50,3 +53,12 @@ Usage (``fabfile.py``)::
     }
 
     fh_fablib.init(globals(), min_version=(0, 6, 0), systemd=True)
+
+Installation
+============
+
+::
+
+    sudo pip2 install -U fh-fablib
+    # or
+    sudo pip2 install -U https://github.com/feinheit/fh-fablib/archive/master.zip
