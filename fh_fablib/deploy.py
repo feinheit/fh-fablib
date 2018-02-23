@@ -22,7 +22,7 @@ def deploy(*args):
     step('\nDeploying new code on server...')
     with cd('%(box_domain)s'):
         run('git fetch')
-        run('git reset --hard origin/%(box_branch)s')
+        run('git merge --ff-only origin/%(box_branch)s')
         run('find . -name "*.pyc" -delete')
         run('venv/bin/pip install -r requirements.txt')
         run('venv/bin/python manage.py migrate --noinput')
