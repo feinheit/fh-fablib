@@ -120,9 +120,9 @@ def ssl(template=None):
 def add_alias(alias):
     env.box_nmv_alias = alias
     run('sudo nine-manage-vhosts alias create %(box_nmv_alias)s'
-        ' --virtual-host=%(box_nmv_alias)s')
+        ' --virtual-host=%(box_domain)s')
     run('sudo nine-manage-vhosts alias create www.%(box_nmv_alias)s'
-        ' --virtual-host=%(box_nmv_alias)s')
+        ' --virtual-host=%(box_domain)s')
 
 
 @task
@@ -130,9 +130,9 @@ def add_alias(alias):
 def remove_alias(alias):
     env.box_nmv_alias = alias
     run('sudo nine-manage-vhosts alias remove %(box_nmv_alias)s'
-        ' --virtual-host=%(box_nmv_alias)s')
+        ' --virtual-host=%(box_domain)s')
     run('sudo nine-manage-vhosts alias remove www.%(box_nmv_alias)s'
-        ' --virtual-host=%(box_nmv_alias)s')
+        ' --virtual-host=%(box_domain)s')
 
 
 @task

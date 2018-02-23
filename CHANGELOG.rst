@@ -23,7 +23,8 @@ Change log
   ``env.box_unit_template``.
 - Shortened ``makemessages`` and ``compilemessages`` to ``mm`` and
   ``cm``.
-
+- Fix the ``server.add_alias`` and the ``server.remove_alias`` command.
+  The alias was mistakenly used as the name of the virtual host.
 
 
 0.6 (2017-12-19)
