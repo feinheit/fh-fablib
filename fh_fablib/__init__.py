@@ -17,16 +17,22 @@ from fabric.utils import abort, puts
 VERSION = (0, 6, 4)
 __version__ = '.'.join(map(str, VERSION))
 
+PRETTIER_OPTIONS = (
+    '--single-quote --no-bracket-spacing --no-semi --trailing-comma es5'
+)
+
 DEFAULTS = {
     'box_restart': ['sctl restart %(box_domain)s:*'],
     'box_check': [
         'PYTHONWARNINGS=ignore venv/bin/flake8 .',
         './node_modules/.bin/eslint *.js %(box_project_name)s/static',
         'venv/bin/python manage.py check',
+        './node_modules/.bin/prettier --list-different ' + PRETTIER_OPTIONS +
+        ' "%(box_project_name)s/static/**/*.scss"',
+
     ],
     'box_prettify': [
-        './node_modules/.bin/prettier --write --single-quote'
-        ' --no-bracket-spacing --no-semi --trailing-comma es5 *.js'
+        './node_modules/.bin/prettier --write ' + PRETTIER_OPTIONS + ' *.js'
         ' "%(box_project_name)s/static/**/*.js"'
         ' "%(box_project_name)s/static/**/*.scss"',
     ],
