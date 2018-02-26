@@ -43,7 +43,6 @@ def deploy(*args):
         run('venv/bin/python manage.py check --deploy')
 
     step('\nRestarting server process...')
-    for line in env['box_restart']:
-        run(line)
+    execute('server.restart')
 
     execute('git.fetch_remote')
