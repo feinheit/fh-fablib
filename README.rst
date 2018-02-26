@@ -17,7 +17,6 @@ Usage
     # Default values available in all environments
     env.box_project_name = 'app'
     env.box_domain = 'example.ch'
-    env.box_database_local = 'example_ch'
     env.forward_agent = True
 
     # Remove this for multi-env support

@@ -25,6 +25,8 @@ Change log
   ``cm``.
 - Fix the ``server.add_alias`` and the ``server.remove_alias`` command.
   The alias was mistakenly used as the name of the virtual host.
+- Replaced the ``box_database_local`` setting with reading the correct
+  value directly from the Django settings.
 
 
 0.6 (2017-12-19)

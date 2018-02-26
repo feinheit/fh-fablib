@@ -2,6 +2,7 @@ from __future__ import unicode_literals
 
 from datetime import datetime
 import os
+import re
 
 from fabric.api import env, execute, hosts, settings, task
 from fabric.colors import green, red
@@ -129,13 +130,28 @@ def create_dotenv():
     local development"""
     with open('.env', 'w') as f:
         env.box_secret_key = get_random_string(50)
+        env.box_local = re.sub(r'[^a-z0-9]+', '_', env.box_domain)
         f.write('''\
-DATABASE_URL=postgres://localhost:5432/%(box_database_local)s
-CACHE_URL=hiredis://localhost:6379/1/?key_prefix=%(box_database_local)s
+DATABASE_URL=postgres://localhost:5432/%(box_local)s
+CACHE_URL=hiredis://localhost:6379/1/?key_prefix=%(box_local)s
 SECRET_KEY=%(box_secret_key)s
 SENTRY_DSN=
 ALLOWED_HOSTS=['*']
 ''' % env)
+
+
+def require_box_database_local():
+    env.box_database_local = run_local(
+        "venv/bin/python manage.py shell -c \""
+        "from django.conf import settings as s;"
+        "print(s.DATABASES['default']['NAME'])\"",
+        capture=True,
+    )
+    if not env.box_database_local:
+        abort(red(
+            'Need a local database name. Do you have a valid .env file?',
+            bold=True,
+        ))
 
 
 @task
@@ -144,6 +160,7 @@ ALLOWED_HOSTS=['*']
 def create_database():
     """Creates and migrates a Postgres database"""
 
+    require_box_database_local()
     if not confirm(
             'Completely replace the local database'
             ' "%(box_database_local)s" (if it exists)?'):
@@ -167,6 +184,7 @@ def pull_database():
     """Pulls the database contents from the server, dropping the local
     database first (if it exists)"""
 
+    require_box_database_local()
     if not confirm(
             'Completely replace the local database'
             ' "%(box_database_local)s" (if it exists)?'):
@@ -230,6 +248,7 @@ def pull():
 @require_services
 def dump_db():
     """Dumps the database into the tmp/ folder"""
+    require_box_database_local()
     env.box_datetime = datetime.now().strftime('%Y-%m-%d-%s')
     env.box_dump_filename = os.path.join(
         os.getcwd(),
@@ -246,6 +265,7 @@ def dump_db():
 def load_db(filename=None):
     """Loads a dump into the database"""
     env.box_dump_filename = filename
+    require_box_database_local()
 
     if not filename:
         abort(red('Dump missing. "fab local.load_db:filename"', bold=True))
