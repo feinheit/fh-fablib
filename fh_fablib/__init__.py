@@ -9,7 +9,7 @@ import time
 import pwd
 
 
-VERSION = (0, 6, 4)
+VERSION = (0, 7, 0)
 __version__ = '.'.join(map(str, VERSION))
 
 PRETTIER_OPTIONS = (

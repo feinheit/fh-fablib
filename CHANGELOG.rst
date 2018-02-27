@@ -5,6 +5,10 @@ Change log
 `Next version`_
 ~~~~~~~~~~~~~~~
 
+
+0.7 (2018-02-27)
+~~~~~~~~~~~~~~~~
+
 - Added a new task ``dev.optimize`` which optimizes svg, jpg and
   png files using svgo and imagemagick (convert).
 - Replaced ``local.empty_to_password`` with ``local.reset_passwords``,
@@ -27,6 +31,15 @@ Change log
   The alias was mistakenly used as the name of the virtual host.
 - Replaced the ``box_database_local`` setting with reading the correct
   value directly from the Django settings.
+- Added automatic creation of ``.env`` if it does not exist yet in
+  some places where it is needed.
+- Extracted ``server.restart``.
+- Changed deployments to use fast forward-only merges instead of resets
+  to make loss of commits even less likely.
+- Removed the requirement for installing Fabric before fh-fablib once.
+- Allow overriding the ``nine-manage-vhosts`` template used with and
+  without SSL in the fabfile.
+- Added a SCSS syntax check.
 
 
 0.6 (2017-12-19)
