@@ -2,8 +2,8 @@
 Change log
 ==========
 
-`Next version`_
-~~~~~~~~~~~~~~~
+Next version
+~~~~~~~~~~~~
 
 
 0.7 (2018-02-27)
