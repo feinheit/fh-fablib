@@ -1,8 +1,8 @@
 from __future__ import unicode_literals
 
-from multiprocessing import Process
 import socket
 import subprocess
+import tempfile
 
 from fabric.api import env, hosts, task
 from fabric.colors import green
@@ -30,17 +30,20 @@ def dev(host='127.0.0.1', port=8000):
         'Starting dev server on http://%s:%s/' % (host, port),
         bold=True))
 
-    jobs = [
-        lambda: run_local(
-            'venv/bin/python -Wonce manage.py runserver 0.0.0.0:%s' % (
-                port,
-            ),
-        ),
-        lambda: run_local('HOST=%s yarn run dev' % host),
-    ]
-    jobs = [Process(target=j) for j in jobs]
-    [j.start() for j in jobs]
-    [j.join() for j in jobs]
+    with tempfile.NamedTemporaryFile() as f:
+        # https://gist.github.com/jiaaro/b2e1b7c705022c2cf56888152a999f65
+        f.write('''\
+trap "exit" INT TERM
+trap "kill 0" EXIT
+
+venv/bin/python -Wonce manage.py runserver 0.0.0.0:%(port)s &
+HOST=%(host)s yarn run dev &
+
+for job in $(jobs -p); do wait $job; done
+''' % {'port': port, 'host': host})
+        f.flush()
+
+        run_local('bash %s' % f.name)
 
 
 @task
