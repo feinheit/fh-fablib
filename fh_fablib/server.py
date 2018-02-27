@@ -181,8 +181,8 @@ def copy_data_from(environment=None):
 
     with cd(env.box_domain):
         run('cp -aln ~/%(source_domain)s/media/* media/')
-    for line in env['box_restart']:
-        run(line)
+
+    execute('server.restart')
 
 
 @task
@@ -271,3 +271,11 @@ def dbshell():
     # ssh SERVER -o RequestTTY=yes\
     # 'psql $(grep -E "^DATABASE_URL=" %(box_domain)s/.env | cut -f2 -d=)'
     run('psql %(box_database)s')
+
+
+@task
+@require_env
+def restart():
+    """Restart the server process"""
+    for line in env['box_restart']:
+        run(line)

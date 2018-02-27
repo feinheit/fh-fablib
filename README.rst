@@ -56,11 +56,7 @@ Usage
 Installation
 ============
 
-Run once::
-
-    sudo pip2 install -U fabric speckenv
-
-Afterwards, you only have to run::
+Run::
 
     sudo pip2 install -U fh-fablib
     # or
