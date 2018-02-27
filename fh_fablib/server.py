@@ -96,7 +96,8 @@ GOOGLE_CLIENT_SECRET=%(box_oauth2_client_secret)s
 @require_env
 def nginx_vhost_and_supervisor():
     run('sudo nine-manage-vhosts virtual-host create %(box_domain)s'
-        ' --template=feinheit --webroot=/home/www-data/%(box_domain)s/htdocs')
+        ' --template=%(box_vhost_template)s'
+        ' --webroot=/home/www-data/%(box_domain)s/htdocs')
 
     with cd('%(box_domain)s'):
         run('mkdir -p media tmp')
@@ -107,12 +108,11 @@ def nginx_vhost_and_supervisor():
 
 @task
 @require_env
-def ssl(template=None):
-    env.box_nmv_template = template or env.box_ssl_template
+def ssl():
     run('sudo nine-manage-vhosts certificate create'
         ' --virtual-host=%(box_domain)s')
-    run('sudo nine-manage-vhosts virtual-host update'
-        ' %(box_domain)s --template=%(box_nmv_template)s')
+    run('sudo nine-manage-vhosts virtual-host update %(box_domain)s'
+        ' --template=%(box_vhost_ssl_template)s')
 
 
 @task

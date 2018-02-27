@@ -59,7 +59,8 @@ DEFAULTS = {
         ' -exec convert {} -verbose -strip {} \;',
     ],
 
-    'box_ssl_template': 'feinheit_cache_letsencrypt',
+    'box_vhost_template': 'feinheit_cache',
+    'box_vhost_ssl_template': 'feinheit_cache_letsencrypt',
 }
 
 DEFAULTS_SYSTEMD = {
