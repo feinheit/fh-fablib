@@ -5,6 +5,9 @@ Change log
 Next version
 ~~~~~~~~~~~~
 
+- Changed ``fab dev`` to use a bash script instead of multiprocessing so
+  that ugly ``KeyboardInterrupt`` tracebacks are avoided.
+
 
 0.7 (2018-02-27)
 ~~~~~~~~~~~~~~~~
