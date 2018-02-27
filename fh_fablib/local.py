@@ -141,6 +141,9 @@ ALLOWED_HOSTS=['*']
 
 
 def require_box_database_local():
+    if not os.path.exists('.env'):
+        execute('local.create_dotenv')
+
     env.box_database_local = run_local(
         "venv/bin/python manage.py shell -c \""
         "from django.conf import settings as s;"
