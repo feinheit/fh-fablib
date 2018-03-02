@@ -7,6 +7,8 @@ Next version
 
 - Changed ``fab dev`` to use a bash script instead of multiprocessing so
   that ugly ``KeyboardInterrupt`` tracebacks are avoided.
+- Allow deploying directly to the server using ``deploy.direct`` when
+  Bitbucket is down.
 
 
 0.7 (2018-02-27)

@@ -15,6 +15,7 @@ from fh_fablib import (
 @runs_once
 def check():
     """Runs coding style checks, and Django's checking framework"""
+    step('\nRunning coding style checks...')
     for cmd in env['box_check']:
         run_local(cmd)
 
@@ -41,9 +42,6 @@ def deploy():
         if not confirm('Continue deployment?', default=False):
             abort('Aborting.')
 
-    step('\nChecking whether we are up to date...')
-    run_local('git push --dry-run origin %(box_branch)s')
-
     execute('check.check')
     execute('check.test')
 
@@ -59,5 +57,6 @@ def deploy():
 @hosts('')
 @require_services
 def test():
+    step('\nRunning the test suite...')
     for cmd in env['box_test']:
         run_local(cmd)
