@@ -17,7 +17,7 @@ PRETTIER_OPTIONS = (
 )
 
 DEFAULTS = {
-    'box_restart': ['sctl restart %(box_domain)s:*'],
+    'box_project_name': 'app',
     'box_check': [
         'PYTHONWARNINGS=ignore venv/bin/flake8 .',
         './node_modules/.bin/prettier --list-different ' + PRETTIER_OPTIONS +
@@ -37,6 +37,7 @@ DEFAULTS = {
         # './node_modules/.bin/gulp test',
     ],
 
+    'box_restart': ['sctl restart %(box_domain)s:*'],
     'box_enable_process': [
         'supervisor-create-conf %(box_domain)s wsgi'
         ' > supervisor/conf.d/%(box_domain)s.conf',
