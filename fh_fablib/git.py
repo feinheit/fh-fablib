@@ -33,7 +33,7 @@ def init_bitbucket():
         default=organization)
     repository = prompt(
         'Repository',
-        default=env.box_repository)
+        default=env.box_domain)
 
     if not confirm(
         'Initialize repository at https://bitbucket.org/%s/%s?' % (

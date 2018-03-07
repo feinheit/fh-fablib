@@ -9,6 +9,8 @@ Next version
   that ugly ``KeyboardInterrupt`` tracebacks are avoided.
 - Allow deploying directly to the server using ``deploy.direct`` when
   Bitbucket is down.
+- Changed the repository name to default to ``box_domain`` instead of
+  ``box_repository``.
 
 
 0.7 (2018-02-27)
