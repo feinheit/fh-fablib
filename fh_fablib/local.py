@@ -87,7 +87,7 @@ def update():
 def create_virtualenv():
     """Creates the virtualenv and installs all Python requirements"""
     run_local('python3 -m venv venv')
-    run_local('venv/bin/pip install -U wheel pip')
+    run_local('venv/bin/pip install -U pip wheel setuptools')
     if os.path.exists('requirements.txt'):
         run_local('venv/bin/pip install -r requirements.txt')
     else:

@@ -47,7 +47,7 @@ def create_virtualenv():
     with cd('%(box_domain)s'):
         run('rm -rf venv')
         run('python3 -m venv venv')
-        run('venv/bin/pip install -U pip wheel')
+        run('venv/bin/pip install -U pip wheel setuptools')
         run('venv/bin/pip install -r requirements.txt')
 
 

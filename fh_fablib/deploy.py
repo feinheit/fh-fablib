@@ -55,6 +55,7 @@ def direct():
 def _do_deploy(args=()):
     with cd('%(box_domain)s'):
         run('find . -name "*.pyc" -delete')
+        run('venv/bin/pip install -U pip wheel setuptools')
         run('venv/bin/pip install -r requirements.txt')
         run('venv/bin/python manage.py migrate --noinput')
 
