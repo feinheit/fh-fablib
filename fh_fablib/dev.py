@@ -48,26 +48,30 @@ for job in $(jobs -p); do wait $job; done
 
 @task
 @hosts('')
-def mm():
+def mm(language=None):
     """Wrapper around the ``makemessages`` management command which excludes
     dependencies (virtualenv, bower components, node modules)"""
-    run_local(
-        'venv/bin/python manage.py makemessages -a'
-        ' -i app/cms'
-        ' -i bower_components'
-        ' -i node_modules'
-        ' -i venv')
+    run_local(' '.join([
+        'venv/bin/python manage.py makemessages',
+        ('-l %s' % language) if language else '-a',
+        '-i app/cms',
+        '-i bower_components',
+        '-i node_modules',
+        '-i venv',
+    ]))
 
     """Also statici18n ``makemessages`` command will be executed"""
-    run_local(
-        'venv/bin/python manage.py makemessages -d djangojs -a'
-        ' -e jsx,js'
-        ' -i app/static/jsi18n'
-        ' -i app/cms'
-        ' -i app/templates/elephantblog'
-        ' -i bower_components'
-        ' -i node_modules'
-        ' -i venv')
+    run_local(' '.join([
+        'venv/bin/python manage.py makemessages -d djangojs',
+        ('-l %s' % language) if language else '-a',
+        '-e jsx,js',
+        '-i app/static/jsi18n',
+        '-i app/cms',
+        '-i app/templates/elephantblog',
+        '-i bower_components',
+        '-i node_modules',
+        '-i venv',
+    ]))
 
 
 @task
