@@ -24,7 +24,8 @@ DEFAULTS = {
         ' "%(box_project_name)s/static/**/*.scss"',
         './node_modules/.bin/eslint *.js %(box_project_name)s/static',
         'venv/bin/python manage.py check',
-
+        # Complain about mismerges:
+        '! git grep \'<<<<<<<\'',
     ],
     'box_prettify': [
         './node_modules/.bin/prettier --write ' + PRETTIER_OPTIONS + ' *.js'
