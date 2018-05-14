@@ -27,7 +27,7 @@ setup(
     ),
     include_package_data=True,
     install_requires=[
-        'fabric',
+        'fabric<2',
         'speckenv>=1.1',
     ],
     zip_safe=False,
