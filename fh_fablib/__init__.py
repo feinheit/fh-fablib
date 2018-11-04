@@ -12,15 +12,11 @@ import pwd
 VERSION = (0, 7, 4)
 __version__ = '.'.join(map(str, VERSION))
 
-PRETTIER_OPTIONS = (
-    '--single-quote --no-bracket-spacing --no-semi --trailing-comma es5'
-)
-
 DEFAULTS = {
     'box_project_name': 'app',
     'box_check': [
         'PYTHONWARNINGS=ignore venv/bin/flake8 .',
-        './node_modules/.bin/prettier --list-different ' + PRETTIER_OPTIONS +
+        './node_modules/.bin/prettier --list-different '
         ' "%(box_project_name)s/static/**/*.scss"',
         './node_modules/.bin/eslint *.js %(box_project_name)s/static',
         'venv/bin/python manage.py check',
@@ -28,7 +24,7 @@ DEFAULTS = {
         '! git grep \'<<<<<<<\'',
     ],
     'box_prettify': [
-        './node_modules/.bin/prettier --write ' + PRETTIER_OPTIONS + ' *.js'
+        './node_modules/.bin/prettier --write *.js'
         ' "%(box_project_name)s/static/**/*.js"'
         ' "%(box_project_name)s/static/**/*.scss"',
     ],
