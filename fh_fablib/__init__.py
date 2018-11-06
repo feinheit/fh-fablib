@@ -16,7 +16,8 @@ DEFAULTS = {
     "box_project_name": "app",
     "box_check": [
         "PYTHONWARNINGS=ignore venv/bin/flake8 .",
-        "./node_modules/.bin/prettier --list-different "
+        "./node_modules/.bin/prettier --list-different *.js"
+        ' "%(box_project_name)s/static/**/*.js"'
         ' "%(box_project_name)s/static/**/*.scss"',
         "./node_modules/.bin/eslint *.js %(box_project_name)s/static",
         "venv/bin/python manage.py check",
