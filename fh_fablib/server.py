@@ -81,6 +81,7 @@ def create_database_and_dotenv():
         put(
             StringIO(
                 """\
+DEBUG=False
 DATABASE_URL=postgres://%(box_database)s:%(box_database_pw)s\
 @localhost:5432/%(box_database)s
 CACHE_URL=hiredis://localhost:6379/1/?key_prefix=%(box_database)s
