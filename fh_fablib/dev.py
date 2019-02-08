@@ -35,7 +35,7 @@ def dev(host="127.0.0.1", port=8000):
 trap "exit" INT TERM
 trap "kill 0" EXIT
 
-venv/bin/python -Wonce manage.py runserver 0.0.0.0:%(port)s &
+PYTHONWARNINGS=always venv/bin/python manage.py runserver 0.0.0.0:%(port)s &
 HOST=%(host)s yarn run dev &
 
 for job in $(jobs -p); do wait $job; done
