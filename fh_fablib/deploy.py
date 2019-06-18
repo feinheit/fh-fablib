@@ -20,7 +20,7 @@ def deploy(*args):
     run_local("yarn run prod")
 
     step("\nPushing changes...")
-    run_local("git push origin %(box_branch)s")
+    run_local("git push --all origin %(box_branch)s")
 
     step("\nDeploying new code on server...")
     with cd("%(box_domain)s"):
