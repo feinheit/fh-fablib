@@ -61,6 +61,7 @@ def mm(language=None):
                 "-i bower_components",
                 "-i node_modules",
                 "-i venv",
+                "--add-location file",
             ]
         )
     )
@@ -78,6 +79,7 @@ def mm(language=None):
                 "-i bower_components",
                 "-i node_modules",
                 "-i venv",
+                "--add-location file",
             ]
         )
     )

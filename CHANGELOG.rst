@@ -11,6 +11,8 @@ Next version
   Bitbucket is down.
 - Changed the repository name to default to ``box_domain`` instead of
   ``box_repository``.
+- Added ``--add-location file`` to ``makemessages`` to avoid endless
+  diffs because of line number changes.
 
 
 0.7 (2018-02-27)
