@@ -13,6 +13,7 @@ Next version
   ``box_repository``.
 - Added ``--add-location file`` to ``makemessages`` to avoid endless
   diffs because of line number changes.
+- Added a migrations step after copying a database.
 
 
 0.7 (2018-02-27)

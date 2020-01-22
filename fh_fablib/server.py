@@ -205,6 +205,7 @@ def copy_data_from(environment=None):
     run('psql %(box_database)s -c "REASSIGN OWNED BY admin ' ' TO %(box_database)s"')
 
     with cd(env.box_domain):
+        run("venv/bin/python manage.py migrate --noinput")
         run("cp -aln ~/%(source_domain)s/media/* media/")
 
     execute("server.restart")
