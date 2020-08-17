@@ -26,6 +26,7 @@ Usage
 
     @task
     def deploy(c):
+        """Deploy once 🔥"""
         check(c)
         c.run(f"git push origin {env.branch}")
         c.run("yarn run prod")
@@ -37,6 +38,7 @@ Usage
 
     @task
     def check(c):
+        """Check the coding style"""
         fl._check_flake8(c)
         fl._check_django(c)
         fl._check_prettier(c)
@@ -45,6 +47,7 @@ Usage
 
     @task
     def fmt(c):
+        """Format the code"""
         fl._fmt_prettier(c)
         fl._fmt_tox_style(c)
 
