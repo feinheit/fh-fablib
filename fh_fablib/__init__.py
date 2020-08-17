@@ -382,6 +382,7 @@ def nine(c):
 
 @task
 def bitbucket(c):
+    """Create a repository on Bitbucket and push the code"""
     e = _local_env(Path.home() / ".box.env")
     print("Username: ", end="")
     username = input(e("BITBUCKET_USERNAME"))
