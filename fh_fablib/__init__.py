@@ -56,27 +56,27 @@ def get_random_string(length, chars=None):
     return "".join(rand.choice(chars) for i in range(length))
 
 
-def _check_flake8(c):
-    c.run("venv/bin/flake8 .")
+def _check_flake8(ctx):
+    ctx.run("venv/bin/flake8 .")
 
 
-def _check_django(c):
-    c.run("venv/bin/python manage.py check")
+def _check_django(ctx):
+    ctx.run("venv/bin/python manage.py check")
 
 
-def _check_prettier(c):
-    c.run(
+def _check_prettier(ctx):
+    ctx.run(
         f'yarn run prettier --list-different *.js "{env.app}/static/**/*.js"'
         f' "{env.app}/static/**/*.scss"'
     )
 
 
-def _check_eslint(c):
-    c.run(f"yarn run eslint *.js {env.app}/static")
+def _check_eslint(ctx):
+    ctx.run(f"yarn run eslint *.js {env.app}/static")
 
 
 @task
-def dev(c, host="127.0.0.1", port=8000):
+def dev(ctx, host="127.0.0.1", port=8000):
     """Run the development server for the frontend and backend"""
     with tempfile.NamedTemporaryFile("w+") as f:
         # https://gist.github.com/jiaaro/b2e1b7c705022c2cf56888152a999f65
@@ -97,50 +97,50 @@ for job in $(jobs -p); do wait $job; done
         )
         f.flush()
 
-        c.run("bash %s" % f.name)
+        ctx.run("bash %s" % f.name)
 
 
-def _fmt_prettier(c):
-    c.run(
+def _fmt_prettier(ctx):
+    ctx.run(
         f'yarn run prettier --write *.js "{env.app}/static/**/*.js"'
         f' "{env.app}/static/**/*.scss"'
     )
 
 
-def _fmt_tox_style(c):
-    c.run('env PATH="$PATH" tox -e style')
+def _fmt_tox_style(ctx):
+    ctx.run('env PATH="$PATH" tox -e style')
 
 
-def _srv_deploy(c, *, rsync_static):
-    with c.cd(env.domain):
-        c.run(f"git checkout {env.branch}")
-        c.run("git fetch origin")
-        c.run(f"git merge --ff-only origin/{env.branch}")
-        c.run('find . -name "*.pyc" -delete')
-        c.run("venv/bin/pip install -U pip wheel setuptools")
-        c.run("venv/bin/pip install -r requirements.txt")
-        c.run("venv/bin/python manage.py migrate")
+def _srv_deploy(conn, *, rsync_static):
+    with conn.cd(env.domain):
+        conn.run(f"git checkout {env.branch}")
+        conn.run("git fetch origin")
+        conn.run(f"git merge --ff-only origin/{env.branch}")
+        conn.run('find . -name "*.pyc" -delete')
+        conn.run("venv/bin/pip install -U pip wheel setuptools")
+        conn.run("venv/bin/pip install -r requirements.txt")
+        conn.run("venv/bin/python manage.py migrate")
     if rsync_static:
-        c.local(f"rsync -avz --delete static/ {env.host}:{env.domain}static")
-    with c.cd(env.domain):
-        c.run("venv/bin/python manage.py collectstatic --noinput")
-        c.run("venv/bin/python manage.py check --deploy", warn=True)
+        conn.local(f"rsync -avz --delete static/ {env.host}:{env.domain}static")
+    with conn.cd(env.domain):
+        conn.run("venv/bin/python manage.py collectstatic --noinput")
+        conn.run("venv/bin/python manage.py check --deploy", warn=True)
 
 
 @task
-def pull_db(c):
+def pull_db(ctx):
     """Pull a local copy of the remote DB and reset all passwords"""
-    with Connection(env.host) as remote:
-        e = _srv_env(remote, f"{env.domain}/.env")
+    with Connection(env.host) as conn:
+        e = _srv_env(conn, f"{env.domain}/.env")
 
     srv_dsn = e("DATABASE_URL")
     local_dsn = _local_env()("DATABASE_URL")
     dbname = local_dsn.rsplit("/", 1)[-1]
 
-    c.run(f"dropdb --if-exists {dbname}", warn=True)
-    c.run(f"createdb {dbname}")
-    c.run(f"ssh {env.host} -C 'pg_dump -Ox {srv_dsn}' | psql {local_dsn}")
-    c.run(
+    ctx.run(f"dropdb --if-exists {dbname}", warn=True)
+    ctx.run(f"createdb {dbname}")
+    ctx.run(f"ssh {env.host} -C 'pg_dump -Ox {srv_dsn}' | psql {local_dsn}")
+    ctx.run(
         'venv/bin/python manage.py shell -c "'
         "from django.contrib.auth import get_user_model;"
         "c=get_user_model();u=c();u.set_password('password');"
@@ -156,25 +156,25 @@ def _local_env(path=".env"):
     return lambda *a, **kw: speckenv.env(*a, **kw, mapping=mapping)
 
 
-def _srv_env(c, path):
+def _srv_env(conn, path):
     mapping = {}
 
     with tempfile.NamedTemporaryFile() as f:
-        c.get(path, f.name)
+        conn.get(path, f.name)
         speckenv.read_speckenv(f.name, mapping=mapping)
 
     return lambda *a, **kw: speckenv.env(*a, **kw, mapping=mapping)
 
 
 @task
-def mm(c):
+def mm(ctx):
     """Update the translation catalogs"""
-    c.run(
+    ctx.run(
         "PATH=/usr/bin:/usr/sbin "
         "venv/bin/python manage.py makemessages -a -i venv -i htmlcov"
         " --add-location file",
     )
-    c.run(
+    ctx.run(
         "PATH=/usr/bin:/usr/sbin "
         "venv/bin/python manage.py makemessages -a -i venv -i htmlcov"
         " --add-location file"
@@ -184,9 +184,9 @@ def mm(c):
 
 
 @task
-def cm(c):
+def cm(ctx):
     """Compile the translation catalogs"""
-    c.run(
+    ctx.run(
         "PATH=/usr/bin:/usr/sbin "
         "venv/bin/python manage.py compilemessages -i venv -i htmlcov"
     )
@@ -198,19 +198,19 @@ def _python3():
 
 
 @task
-def upgrade(c):
+def upgrade(ctx):
     """Re-create the virtualenv with newest versions of all libraries"""
-    c.run("rm -rf venv")
-    c.run(f"{_python3()} -m venv venv")
-    c.run("venv/bin/pip install -U pip wheel setuptools")
-    c.run("venv/bin/pip install -U -r requirements-to-freeze.txt --pre")
-    freeze(c)
+    ctx.run("rm -rf venv")
+    ctx.run(f"{_python3()} -m venv venv")
+    ctx.run("venv/bin/pip install -U pip wheel setuptools")
+    ctx.run("venv/bin/pip install -U -r requirements-to-freeze.txt --pre")
+    freeze(ctx)
 
 
 @task
-def freeze(c):
+def freeze(ctx):
     """Freeze the virtualenv's state"""
-    c.run(
+    ctx.run(
         '(printf "# AUTOGENERATED, DO NOT EDIT\n\n";'
         "venv/bin/pip freeze -l"
         # Until Ubuntu gets its act together:
@@ -220,15 +220,15 @@ def freeze(c):
 
 
 @task
-def update(c):
+def update(ctx):
     """Update virtualenv and node_modules to match the lockfiles"""
     if not os.path.exists("venv"):
-        c.run(f"{_python3()} -m venv venv")
-    c.run("venv/bin/pip install -U pip wheel setuptools")
-    c.run("venv/bin/pip install -r requirements.txt")
-    c.run('find . -name "*.pyc" -delete')
-    c.run("yarn")
-    c.run("venv/bin/python manage.py migrate")
+        ctx.run(f"{_python3()} -m venv venv")
+    ctx.run("venv/bin/pip install -U pip wheel setuptools")
+    ctx.run("venv/bin/pip install -r requirements.txt")
+    ctx.run('find . -name "*.pyc" -delete')
+    ctx.run("yarn")
+    ctx.run("venv/bin/python manage.py migrate")
 
 
 def _local_dotenv_if_not_exists():
@@ -257,35 +257,35 @@ def _local_dbname():
 
 
 @task
-def local(c):
+def local(ctx):
     """Local environment setup"""
     dbname = _local_dbname()
-    c.run(f"createdb {dbname}", warn=True)
-    update(c)
+    ctx.run(f"createdb {dbname}", warn=True)
+    update(ctx)
 
 
 @task
-def nine_vhost(c):
+def nine_vhost(ctx):
     """Create a virtual host using nine-manage-vhosts"""
-    with Connection(env.host) as c:
-        c.run(
+    with Connection(env.host) as conn:
+        conn.run(
             f"sudo nine-manage-vhosts virtual-host create {env.domain}"
             " --template=feinheit_cache"
             " --webroot=/home/www-data/{env.domain}/htdocs"
         )
-        with c.cd(env.domain):
-            c.run("mkdir -f media tmp")
+        with conn.cd(env.domain):
+            conn.run("mkdir -f media tmp")
 
 
 @task
-def nine_alias_add(c, alias):
+def nine_alias_add(ctx, alias):
     """Add aliasses to a nine-manage-vhost virtual host"""
-    with Connection(env.host) as c:
-        c.run(
+    with Connection(env.host) as conn:
+        conn.run(
             f"sudo nine-manage-vhosts alias create --virtual-host={env.domain}"
             f" {alias}"
         )
-        c.run(
+        conn.run(
             f"sudo nine-manage-vhosts alias create --virtual-host={env.domain}"
             f" www.{alias}",
             warn=True,
@@ -293,14 +293,14 @@ def nine_alias_add(c, alias):
 
 
 @task
-def nine_alias_remove(c, alias):
+def nine_alias_remove(ctx, alias):
     """Remove aliasses from a nine-manage-vhost virtual host"""
-    with Connection(env.host) as c:
-        c.run(
+    with Connection(env.host) as conn:
+        conn.run(
             f"sudo nine-manage-vhosts alias remove --virtual-host={env.domain}"
             f" {alias}"
         )
-        c.run(
+        conn.run(
             f"sudo nine-manage-vhosts alias create --virtual-host={env.domain}"
             f" www.{alias}",
             warn=True,
@@ -308,32 +308,32 @@ def nine_alias_remove(c, alias):
 
 
 @task
-def nine_unit(c):
+def nine_unit(ctx):
     """Start and enable a gunicorn@ unit"""
-    with Connection(env.host) as c:
-        c.run(f"systemctl --user start gunicorn@{env.domain}.service")
-        c.run(f"systemctl --user enable gunicorn@{env.domain}.service")
+    with Connection(env.host) as conn:
+        conn.run(f"systemctl --user start gunicorn@{env.domain}.service")
+        conn.run(f"systemctl --user enable gunicorn@{env.domain}.service")
 
 
 @task
-def nine_db_dotenv(c):
+def nine_db_dotenv(ctx):
     """Create a database and initialize the .env"""
-    with Connection(env.host) as c:
+    with Connection(env.host) as conn:
         password = get_random_string(20)
         secret_key = get_random_string(50)
 
-        c.run(
+        conn.run(
             f'psql -c "CREATE ROLE {env.database} WITH'
             f" ENCRYPTED PASSWORD '{password}'"
             f' LOGIN NOCREATEDB NOCREATEROLE NOSUPERUSER"'
         )
-        c.run(f'psql -c "GRANT {env.database} TO admin"')
-        c.run(
+        conn.run(f'psql -c "GRANT {env.database} TO admin"')
+        conn.run(
             f'psql -c "CREATE DATABASE {env.database} WITH'
             f" OWNER {env.database} TEMPLATE template0 ENCODING 'UTF8'"
             f'"'
         )
-        c.put(
+        conn.put(
             io.StringIO(
                 f"""\
 DEBUG=False
@@ -341,7 +341,7 @@ DATABASE_URL=postgres://{env.database}:{password}@localhost:5432/{env.database}
 CACHE_URL=hiredis://localhost:6379/1/?key_prefix={env.database}
 SECRET_KEY={secret_key}
 SENTRY_DSN=
-ALLOWED_HOSTS=[".{env.domain}", ".{c.host}"]
+ALLOWED_HOSTS=[".{env.domain}", ".{conn.host}"]
 GOOGLE_CLIENT_ID=
 GOOGLE_CLIENT_SECRET=
 
@@ -356,62 +356,64 @@ GOOGLE_CLIENT_SECRET=
 
 
 @task
-def nine_ssl(c):
+def nine_ssl(ctx):
     """Activate SSL"""
-    with Connection(env.host) as c:
-        c.run(f"sudo nine-manage-vhosts certificate create --virtual-host={env.domain}")
-        c.run(
+    with Connection(env.host) as conn:
+        conn.run(
+            f"sudo nine-manage-vhosts certificate create --virtual-host={env.domain}"
+        )
+        conn.run(
             f"sudo nine-manage-vhosts virtual-host update {env.domain}"
             f" --template=feinheit_cache_letsencrypt"
         )
 
 
 @task
-def nine_disable(c):
+def nine_disable(ctx):
     """Disable a virtual host, dump and remove the DB and stop the gunicorn@ unit"""
-    with Connection(env.host) as c:
-        c.run(f"sudo nine-manage-vhosts virtual-host remove {env.domain}")
-        c.run(f"systemctl --user stop gunicorn@{env.domain}.service")
-        c.run(f"systemctl --user disable gunicorn@{env.domain}.service")
-        e = _srv_env(c, f"{env.domain}/.env")
+    with Connection(env.host) as conn:
+        conn.run(f"sudo nine-manage-vhosts virtual-host remove {env.domain}")
+        conn.run(f"systemctl --user stop gunicorn@{env.domain}.service")
+        conn.run(f"systemctl --user disable gunicorn@{env.domain}.service")
+        e = _srv_env(conn, f"{env.domain}/.env")
         srv_dsn = e("DATABASE_URL")
-        c.run(f"pg_dump -Ox {srv_dsn} > DUMP.sql")
-        c.run(f"dropdb {env.database}")
-        c.run(f"dropuser {env.database}")
+        conn.run(f"pg_dump -Ox {srv_dsn} > DUMP.sql")
+        conn.run(f"dropdb {env.database}")
+        conn.run(f"dropuser {env.database}")
 
 
 @task
-def nine_checkout(c):
+def nine_checkout(ctx):
     """Checkout the repository on the server"""
-    repo = c.run("git config remote.origin.url", hide=True).stdout
-    with Connection(env.host, forward_agent=True) as c:
-        c.run(f"git clone {repo} {env.domain} -b {env.branch}")
+    repo = ctx.run("git config remote.origin.url", hide=True).stdout
+    with Connection(env.host, forward_agent=True) as conn:
+        conn.run(f"git clone {repo} {env.domain} -b {env.branch}")
 
 
 @task
-def nine_venv(c):
+def nine_venv(ctx):
     """Create a venv and install packages from requirements.txt"""
-    with Connection(env.host, forward_agent=True) as c:
-        with c.cd(env.domain):
-            c.run("python3 -m venv venv")
-            c.run("venv/bin/pip install -U pip wheel setuptools")
-            c.run("venv/bin/pip install -r requirements.txt")
+    with Connection(env.host, forward_agent=True) as conn:
+        with conn.cd(env.domain):
+            conn.run("python3 -m venv venv")
+            conn.run("venv/bin/pip install -U pip wheel setuptools")
+            conn.run("venv/bin/pip install -r requirements.txt")
 
 
 @task
-def nine(c):
+def nine(ctx):
     """Run all nine🌟 setup tasks in order"""
-    nine_checkout(c)
-    nine_venv(c)
-    nine_db_dotenv(c)
-    nine_vhost(c)
-    nine_unit(c)
-    # nine_ssl(c)      Does not apply
-    # nine_disable(c)  Does obviously not apply 😅
+    nine_checkout(ctx)
+    nine_venv(ctx)
+    nine_db_dotenv(ctx)
+    nine_vhost(ctx)
+    nine_unit(ctx)
+    # nine_ssl(ctx)      Does not apply
+    # nine_disable(ctx)  Does obviously not apply 😅
 
 
 @task
-def bitbucket(c):
+def bitbucket(ctx):
     """Create a repository on Bitbucket and push the code"""
     e = _local_env(Path.home() / ".box.env")
     print("Username: ", end="")
@@ -423,19 +425,21 @@ def bitbucket(c):
     print("Repository: ", end="")
     repository = input(env.domain)
 
-    c.run(
+    ctx.run(
         f"""\
 curl -X POST -v -u {username}:"{password}" -H "content-type: application/json"\
  https://api.bitbucket.org/2.0/repositories/{organization}/{repository}\
  -d '{{"scm": "git", "is_private": true, "forking_policy": "no_public_forks"}}'\
 """
     )
-    c.run(f"git remote add origin git@bitbucket.org:{organization}/{repository}.git")
-    c.run(f"git push -u origin {env.branch}")
+    ctx.run(f"git remote add origin git@bitbucket.org:{organization}/{repository}.git")
+    ctx.run(f"git push -u origin {env.branch}")
 
 
 @task
-def fetch(c):
+def fetch(ctx):
     """Add and fetch refs from the server"""
-    c.run(f"git remote add {env.remote} {env.host}:{env.domain}", warn=True, hide=True)
-    c.run(f"git fetch {env.remote}")
+    ctx.run(
+        f"git remote add {env.remote} {env.host}:{env.domain}", warn=True, hide=True
+    )
+    ctx.run(f"git fetch {env.remote}")
