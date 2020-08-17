@@ -461,6 +461,20 @@ def fmt(ctx):
     _fmt_tox_style(ctx)
 
 
+@task
+def deploy(ctx):
+    """Deploy once 🔥"""
+    check(ctx)
+    ctx.run(f"git push origin {env.branch}")
+    ctx.run("yarn run prod")
+
+    with Connection(env.host, forward_agent=True) as conn:
+        _srv_deploy(conn, rsync_static=True)
+        conn.run(f"systemctl --user restart gunicorn@{env.domain}.service")
+
+    fetch(ctx)
+
+
 GENERAL = {
     cm,
     dev,
