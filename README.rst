@@ -19,68 +19,28 @@ Usage
             "host": "www-data@feinheit06.nine.ch",
             "domain": "example.com",
             "database": "example_com",
-            "branch": "master",
+            "branch": "main",
+            "remote": "production",
         }
     )
 
 
     @task
-    def deploy(c):
+    def deploy(ctx):
         """Deploy once 🔥"""
-        check(c)
-        c.run(f"git push origin {env.branch}")
-        c.run("yarn run prod")
+        fl.check(ctx)
+        ctx.run(f"git push origin {env.branch}")
+        ctx.run("yarn run prod")
 
-        with Connection(env.host, forward_agent=True) as c:
-            fl._srv_deploy(c, rsync_static=True)
-            c.run("systemctl --user restart gunicorn@example.com.service")
+        with Connection(env.host, forward_agent=True) as conn:
+            fl._srv_deploy(conn, rsync_static=True)
+            conn.run("systemctl --user restart gunicorn@example.com.service")
 
-
-    @task
-    def check(c):
-        """Check the coding style"""
-        fl._check_flake8(c)
-        fl._check_django(c)
-        fl._check_prettier(c)
-        fl._check_eslint(c)
+        fl.fetch(ctx)
 
 
-    @task
-    def fmt(c):
-        """Format the code"""
-        fl._fmt_prettier(c)
-        fl._fmt_tox_style(c)
-
-
-    ns = Collection(
-        fl.cm,
-        fl.dev,
-        fl.mm,
-        fl.upgrade,
-        fl.freeze,
-        fl.update,
-        fl.pull_db,
-        fl.local,
-        fl.bitbucket,
-        # Nine
-        fl.nine_vhost,
-        fl.nine_alias_add,
-        fl.nine_alias_remove,
-        fl.nine_unit,
-        fl.nine_db_dotenv,
-        fl.nine_ssl,
-        fl.nine_disable,
-        fl.nine_checkout,
-        fl.nine_venv,
-        fl.nine,
-        # Custom
-        check,
-        deploy,
-        fmt,
-    )
-
-
-    # task(nine_alias)
+    ns = Collection(*fl.GENERAL, *fl.NINE)
+    ns.add_task(deploy)
 
 
 Installation
