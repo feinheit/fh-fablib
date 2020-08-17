@@ -258,6 +258,7 @@ def _local_dbname():
 
 @task
 def local(c):
+    """Local environment setup"""
     dbname = _local_dbname()
     c.run(f"createdb {dbname}", warn=True)
     update(c)
@@ -265,6 +266,7 @@ def local(c):
 
 @task
 def nine_vhost(c):
+    """Create a virtual host using nine-manage-vhosts"""
     with Connection(env.host) as c:
         c.run(
             f"sudo nine-manage-vhosts virtual-host create {env.domain}"
@@ -277,6 +279,7 @@ def nine_vhost(c):
 
 @task
 def nine_unit(c):
+    """Start and enable a gunicorn@ unit"""
     with Connection(env.host) as c:
         c.run(f"systemctl --user start gunicorn@{env.domain}.service")
         c.run(f"systemctl --user enable gunicorn@{env.domain}.service")
@@ -284,6 +287,7 @@ def nine_unit(c):
 
 @task
 def nine_db_dotenv(c):
+    """Create a database and initialize the .env"""
     with Connection(env.host) as c:
         password = get_random_string(20)
         secret_key = get_random_string(50)
@@ -323,6 +327,7 @@ GOOGLE_CLIENT_SECRET=
 
 @task
 def nine_ssl(c):
+    """Activate SSL"""
     with Connection(env.host) as c:
         c.run(f"sudo nine-manage-vhosts certificate create --virtual-host={env.domain}")
         c.run(
@@ -333,6 +338,7 @@ def nine_ssl(c):
 
 @task
 def nine_disable(c):
+    """Disable a virtual host, dump and remove the DB and stop the gunicorn@ unit"""
     with Connection(env.host) as c:
         c.run(f"sudo nine-manage-vhosts virtual-host remove {env.domain}")
         c.run(f"systemctl --user stop gunicorn@{env.domain}.service")
