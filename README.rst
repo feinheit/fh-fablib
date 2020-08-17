@@ -58,12 +58,16 @@ Usage
         fl.update,
         fl.pull_db,
         fl.local,
+        fl.bitbucket,
         # Nine
         fl.nine_vhost,
         fl.nine_unit,
         fl.nine_db_dotenv,
         fl.nine_ssl,
         fl.nine_disable,
+        fl.nine_checkout,
+        fl.nine_venv,
+        fl.nine,
         # Custom
         check,
         deploy,

@@ -348,3 +348,56 @@ def nine_disable(c):
         c.run(f"pg_dump -Ox {srv_dsn} > DUMP.sql")
         c.run(f"dropdb {env.database}")
         c.run(f"dropuser {env.database}")
+
+
+@task
+def nine_checkout(c):
+    """Checkout the repository on the server"""
+    repo = c.run("git config remote.origin.url", hide=True).stdout
+    with Connection(env.host, forward_agent=True) as c:
+        c.run(f"git clone {repo} {env.domain} -b {env.branch}")
+
+
+@task
+def nine_venv(c):
+    """Create a venv and install packages from requirements.txt"""
+    with Connection(env.host, forward_agent=True) as c:
+        with c.cd(env.domain):
+            c.run("python3 -m venv venv")
+            c.run("venv/bin/pip install -U pip wheel setuptools")
+            c.run("venv/bin/pip install -r requirements.txt")
+
+
+@task
+def nine(c):
+    """Run all nine🌟 setup tasks in order"""
+    nine_checkout(c)
+    nine_venv(c)
+    nine_db_dotenv(c)
+    nine_vhost(c)
+    nine_unit(c)
+    # nine_ssl(c)      Does not apply
+    # nine_disable(c)  Does obviously not apply 😅
+
+
+@task
+def bitbucket(c):
+    e = _local_env(Path.home() / ".box.env")
+    print("Username: ", end="")
+    username = input(e("BITBUCKET_USERNAME"))
+    print("Password: ", end="")
+    password = input(e("BITBUCKET_PASSWORD"))
+    print("Organization: ", end="")
+    organization = input(e("BITBUCKET_ORGANIZATION"))
+    print("Repository: ", end="")
+    repository = input(env.domain)
+
+    c.run(
+        f"""\
+curl -X POST -v -u {username}:"{password}" -H "content-type: application/json"\
+ https://api.bitbucket.org/2.0/repositories/{organization}/{repository}\
+ -d '{{"scm": "git", "is_private": true, "forking_policy": "no_public_forks"}}'\
+"""
+    )
+    c.run(f"git remote add origin git@bitbucket.org:{organization}/{repository}.git")
+    c.run(f"git push -u origin {env.branch}")
