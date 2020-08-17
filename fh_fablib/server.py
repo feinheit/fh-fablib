@@ -1,14 +1,14 @@
 from __future__ import unicode_literals
 
-from datetime import datetime
-from io import StringIO
+import datetime as dt
 import os
+from io import StringIO
 
 from fabric.api import env, execute, hide, prompt, put, settings, task
 from fabric.colors import green, red
 from fabric.utils import abort, puts
 
-from fh_fablib import confirm, run_local, cd, require_env, run
+from fh_fablib import cd, confirm, require_env, run, run_local
 from fh_fablib.utils import get_random_string, remote_env
 
 
@@ -46,7 +46,7 @@ def clone_repository():
 def create_virtualenv():
     with cd("%(box_domain)s"):
         run("rm -rf venv")
-        run("python3 -m venv venv")
+        run("%(box_python)s -m venv venv")
         run("venv/bin/pip install -U pip wheel setuptools")
         run("venv/bin/pip install -r requirements.txt")
 
@@ -224,7 +224,7 @@ def remove_host():
     for line in env["box_disable_process"]:
         run(line)
     with cd(env.box_domain):
-        env.box_datetime = datetime.now().strftime("%Y-%m-%d-%s")
+        env.box_datetime = dt.datetime.now().strftime("%Y-%m-%d-%s")
         run(
             "pg_dump -Ox %(box_database)s"
             " > %(box_database)s-%(box_environment)s-%(box_datetime)s.sql"
@@ -244,7 +244,7 @@ def remove_host():
 @require_env
 def dump_db():
     """Dumps the database into the tmp/ folder"""
-    env.box_datetime = datetime.now().strftime("%Y-%m-%d-%s")
+    env.box_datetime = dt.datetime.now().strftime("%Y-%m-%d-%s")
     env.box_dump_filename = os.path.join(
         os.getcwd(),
         "tmp",

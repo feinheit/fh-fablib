@@ -4,7 +4,7 @@ from fabric.api import env, execute, hide, hosts, run, runs_once, settings, task
 from fabric.colors import red
 from fabric.utils import abort, puts
 
-from fh_fablib import cd, confirm, run_local, require_env, require_services, step
+from fh_fablib import cd, confirm, require_env, require_services, run_local, step
 
 
 @task(default=True)

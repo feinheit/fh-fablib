@@ -3,7 +3,7 @@ from __future__ import unicode_literals
 from fabric.api import env, execute, task
 from fabric.contrib.project import rsync_project
 
-from fh_fablib import run_local, cd, require_env, run, step
+from fh_fablib import cd, require_env, run, run_local, step
 
 
 @task(default=True)

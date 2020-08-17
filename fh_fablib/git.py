@@ -7,7 +7,7 @@ from fabric.colors import red
 from fabric.contrib.console import confirm
 from fabric.utils import puts
 
-from fh_fablib import run_local, require_env, step
+from fh_fablib import require_env, run_local, step
 from fh_fablib.utils import default_env
 
 

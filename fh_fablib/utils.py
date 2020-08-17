@@ -5,8 +5,8 @@ import random
 import shutil
 import tempfile
 
-from fabric.api import env, get
 import speckenv
+from fabric.api import env, get
 
 
 def get_random_string(length, chars=None):

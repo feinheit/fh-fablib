@@ -8,7 +8,7 @@ from fabric.api import env, hosts, task
 from fabric.colors import green
 from fabric.utils import puts
 
-from fh_fablib import run_local, require_services
+from fh_fablib import require_services, run_local
 
 
 def own_ip():

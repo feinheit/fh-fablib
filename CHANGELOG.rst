@@ -14,6 +14,7 @@ Next version
 - Added ``--add-location file`` to ``makemessages`` to avoid endless
   diffs because of line number changes.
 - Added a migrations step after copying a database.
+- Reformatted the code using black and isort.
 
 
 0.7 (2018-02-27)

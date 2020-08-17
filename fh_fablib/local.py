@@ -1,6 +1,6 @@
 from __future__ import unicode_literals
 
-from datetime import datetime
+import datetime as dt
 import os
 import re
 
@@ -9,7 +9,7 @@ from fabric.colors import green, red
 from fabric.contrib.project import rsync_project
 from fabric.utils import abort, puts
 
-from fh_fablib import confirm, run_local, require_env, require_services
+from fh_fablib import confirm, require_env, require_services, run_local
 from fh_fablib.utils import get_random_string, remote_env
 
 
@@ -248,7 +248,7 @@ def pull():
 def dump_db():
     """Dumps the database into the tmp/ folder"""
     require_box_database_local()
-    env.box_datetime = datetime.now().strftime("%Y-%m-%d-%s")
+    env.box_datetime = dt.datetime.now().strftime("%Y-%m-%d-%s")
     env.box_dump_filename = os.path.join(
         os.getcwd(), "tmp", "%(box_database_local)s-local-%(box_datetime)s.sql" % env
     )

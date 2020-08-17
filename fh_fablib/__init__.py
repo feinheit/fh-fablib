@@ -1,12 +1,12 @@
 from __future__ import unicode_literals
 
-from functools import wraps
-from os import chmod, mkdir, getuid
-from os.path import dirname, exists, join
-import socket
-from subprocess import Popen, PIPE, call
-import time
 import pwd
+import socket
+import time
+from functools import wraps
+from os import chmod, getuid, mkdir
+from os.path import dirname, exists, join
+from subprocess import PIPE, Popen, call
 
 
 VERSION = (0, 8, 4)
