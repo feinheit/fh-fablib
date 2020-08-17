@@ -488,6 +488,7 @@ GENERAL = {
     fetch,
     check,
     fmt,
+    deploy,
 }
 NINE = {
     nine_vhost,
