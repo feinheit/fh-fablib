@@ -32,7 +32,7 @@ Usage
         c.run("yarn run prod")
 
         with Connection(env.host, forward_agent=True) as c:
-            fl._srv_deploy(c, branch=env.branch, domain=env.domain, rsync_static=True)
+            fl._srv_deploy(c, rsync_static=True)
             c.run("systemctl --user restart gunicorn@example.com.service")
 
 
