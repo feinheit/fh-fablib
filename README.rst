@@ -5,59 +5,79 @@ fh-fablib
 Usage
 =====
 
-``fabfile.py``::
+``fabfile.py``:
 
-    from __future__ import unicode_literals
+.. code-block:: python
 
-    from fabric.api import env
-    import fh_fablib
+    import fh_fablib as fl
+    from fh_fablib import Collection, Connection, Path, env, task
 
-    # env.box_environment contains the currently active environment.
 
-    # Default values available in all environments
-    env.box_project_name = 'app'
-    env.box_domain = 'example.ch'
-    env.forward_agent = True
+    env.update(
+        {
+            "base": Path(__file__).parent,
+            "host": "www-data@feinheit06.nine.ch",
+            "domain": "example.com",
+            "database": "example_com",
+            "branch": "master",
+        }
+    )
 
-    # Remove this for multi-env support
-    env.box_hardwired_environment = 'production'
 
-    # Set this to a different value if not using gunicorn@.service
-    # env.box_unit_template = 'gunicorn'
+    @task
+    def deploy(c):
+        check(c)
+        c.run(f"git push origin {env.branch}")
+        c.run("yarn run prod")
 
-    # Environment specific values.
-    env.box_environments = {
-        'production': {
-            'shortcut': 'p',
-            'domain': 'example.ch',
-            'branch': 'master',
-            'servers': [
-                'user@example.com',
-            ],
-            'remote': 'production',  # git remote alias for the server.
-            'repository': 'example.ch',
-            'database': 'example_ch',
-        },
-        'staging': {
-            'shortcut': 's',
-            'domain': 'stage.example.ch',
-            'branch': 'develop',
-            'servers': [
-                'user@example.com',
-            ],
-            'remote': 'staging',
-            'repository': 'example.ch',
-            'database': 'stage_example_ch',
-        },
-    }
+        with Connection(env.host, forward_agent=True) as c:
+            fl._srv_deploy(c, branch=env.branch, domain=env.domain, rsync_static=True)
+            c.run("systemctl --user restart gunicorn@example.com.service")
 
-    fh_fablib.init(globals(), min_version=(0, 6, 0), systemd=True)
+
+    @task
+    def check(c):
+        fl._check_flake8(c)
+        fl._check_django(c)
+        fl._check_prettier(c)
+        fl._check_eslint(c)
+
+
+    @task
+    def fmt(c):
+        fl._fmt_prettier(c)
+        fl._fmt_tox_style(c)
+
+
+    ns = Collection(
+        fl.cm,
+        fl.dev,
+        fl.mm,
+        fl.upgrade,
+        fl.freeze,
+        fl.update,
+        fl.pull_db,
+        fl.local,
+        # Nine
+        fl.nine_vhost,
+        fl.nine_unit,
+        fl.nine_db_dotenv,
+        fl.nine_ssl,
+        fl.nine_disable,
+        # Custom
+        check,
+        deploy,
+        fmt,
+    )
+
+
+    # task(init_bitbucket)
+    # task(nine_alias)
+
 
 Installation
 ============
 
-Run::
-
-    sudo pip2 install -U fh-fablib
-    # or
-    sudo pip2 install -U https://github.com/feinheit/fh-fablib/archive/master.zip
+1. Install `pipx <https://pipxproject.github.io/pipx/>`__
+2. ``pipx install --editable git+ssh://git@github.com/feinheit/fh-fablib.git@main#egg=fh_fablib``
+3. Enjoy!
