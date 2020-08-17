@@ -108,7 +108,7 @@ def _fmt_prettier(ctx):
 
 
 def _fmt_tox_style(ctx):
-    ctx.run('env PATH="$PATH" tox -e style')
+    ctx.run("tox -e style", replace_env=False)
 
 
 def _srv_deploy(conn, *, rsync_static):
