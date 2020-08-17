@@ -79,5 +79,5 @@ Installation
 ============
 
 1. Install `pipx <https://pipxproject.github.io/pipx/>`__
-2. ``pipx install --editable git+ssh://git@github.com/feinheit/fh-fablib.git@main#egg=fh_fablib``
+2. ``pipx install --editable git+ssh://git@github.com/feinheit/fh-fablib.git@main#egg=fh_fablib --include-deps``
 3. Run ``fab --list`` to get a list of commands.
