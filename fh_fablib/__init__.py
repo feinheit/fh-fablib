@@ -432,3 +432,10 @@ curl -X POST -v -u {username}:"{password}" -H "content-type: application/json"\
     )
     c.run(f"git remote add origin git@bitbucket.org:{organization}/{repository}.git")
     c.run(f"git push -u origin {env.branch}")
+
+
+@task
+def fetch(c):
+    """Add and fetch refs from the server"""
+    c.run(f"git remote add {env.remote} {env.host}:{env.domain}", warn=True, hide=True)
+    c.run(f"git fetch {env.remote}")
