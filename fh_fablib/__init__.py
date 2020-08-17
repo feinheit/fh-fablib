@@ -443,3 +443,47 @@ def fetch(ctx):
         f"git remote add {env.remote} {env.host}:{env.domain}", warn=True, hide=True
     )
     ctx.run(f"git fetch {env.remote}")
+
+
+@task
+def check(ctx):
+    """Check the coding style"""
+    _check_flake8(ctx)
+    _check_django(ctx)
+    _check_prettier(ctx)
+    _check_eslint(ctx)
+
+
+@task
+def fmt(ctx):
+    """Format the code"""
+    _fmt_prettier(ctx)
+    _fmt_tox_style(ctx)
+
+
+GENERAL = {
+    cm,
+    dev,
+    mm,
+    upgrade,
+    freeze,
+    update,
+    pull_db,
+    local,
+    bitbucket,
+    fetch,
+    check,
+    fmt,
+}
+NINE = {
+    nine_vhost,
+    nine_alias_add,
+    nine_alias_remove,
+    nine_unit,
+    nine_db_dotenv,
+    nine_ssl,
+    nine_disable,
+    nine_checkout,
+    nine_venv,
+    nine,
+}
