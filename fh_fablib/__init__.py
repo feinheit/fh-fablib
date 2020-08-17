@@ -278,6 +278,36 @@ def nine_vhost(c):
 
 
 @task
+def nine_alias_add(c, alias):
+    """Add aliasses to a nine-manage-vhost virtual host"""
+    with Connection(env.host) as c:
+        c.run(
+            f"sudo nine-manage-vhosts alias create --virtual-host={env.domain}"
+            f" {alias}"
+        )
+        c.run(
+            f"sudo nine-manage-vhosts alias create --virtual-host={env.domain}"
+            f" www.{alias}",
+            warn=True,
+        )
+
+
+@task
+def nine_alias_remove(c, alias):
+    """Remove aliasses from a nine-manage-vhost virtual host"""
+    with Connection(env.host) as c:
+        c.run(
+            f"sudo nine-manage-vhosts alias remove --virtual-host={env.domain}"
+            f" {alias}"
+        )
+        c.run(
+            f"sudo nine-manage-vhosts alias create --virtual-host={env.domain}"
+            f" www.{alias}",
+            warn=True,
+        )
+
+
+@task
 def nine_unit(c):
     """Start and enable a gunicorn@ unit"""
     with Connection(env.host) as c:

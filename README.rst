@@ -64,6 +64,8 @@ Usage
         fl.bitbucket,
         # Nine
         fl.nine_vhost,
+        fl.nine_alias_add,
+        fl.nine_alias_remove,
         fl.nine_unit,
         fl.nine_db_dotenv,
         fl.nine_ssl,
@@ -78,7 +80,6 @@ Usage
     )
 
 
-    # task(init_bitbucket)
     # task(nine_alias)
 
 
