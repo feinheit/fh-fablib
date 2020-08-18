@@ -37,6 +37,7 @@ class Connection(Connection):
     """Connection subclass which makes c.run() echo all commands"""
 
     def __init__(self, *args, **kwargs):
+        kwargs.setdefault("forward_agent", True)
         super().__init__(*args, **kwargs)
         self.config["run"]["echo"] = True
 
@@ -390,14 +391,14 @@ def nine_disable(ctx):
 def nine_checkout(ctx):
     """Checkout the repository on the server"""
     repo = ctx.run("git config remote.origin.url", hide=True).stdout
-    with Connection(config.host, forward_agent=True) as conn:
+    with Connection(config.host) as conn:
         conn.run(f"git clone {repo} {config.domain} -b {config.branch}")
 
 
 @task
 def nine_venv(ctx):
     """Create a venv and install packages from requirements.txt"""
-    with Connection(config.host, forward_agent=True) as conn:
+    with Connection(config.host) as conn:
         with conn.cd(config.domain):
             conn.run("python3 -m venv venv")
             conn.run("venv/bin/pip install -U pip wheel setuptools")
@@ -474,7 +475,7 @@ def deploy(ctx):
     ctx.run(f"git push origin {config.branch}")
     ctx.run("yarn run prod")
 
-    with Connection(config.host, forward_agent=True) as conn:
+    with Connection(config.host) as conn:
         _srv_deploy(conn, rsync_static=True)
         conn.run(f"systemctl --user restart gunicorn@{config.domain}.service")
 
