@@ -15,13 +15,11 @@ Usage
        from fh_fablib import Collection, Path, config
 
        config.update(
-           {
-               "base": Path(__file__).parent,
-               "host": "www-data@feinheit06.nine.ch",
-               "domain": "example.com",
-               "branch": "main",
-               "remote": "production",
-           }
+           base=Path(__file__).parent,
+           host="www-data@feinheit06.nine.ch",
+           domain="example.com",
+           branch="main",
+           remote="production",
        )
 
        ns = Collection(*fl.GENERAL, *fl.NINE)

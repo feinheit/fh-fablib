@@ -17,17 +17,8 @@ warnings.simplefilter("ignore", category=ResourceWarning)
 
 
 class Config:
-    __slots__ = [
-        "app",  # Name of primary Django app containing settings, assets etc.
-        "base",
-        "branch",
-        "domain",
-        "host",
-        "remote",
-    ]
-
-    def update(self, data):
-        for key, value in data.items():
+    def update(self, **kwargs):
+        for key, value in kwargs.items():
             setattr(self, key, value)
 
             if key == "base":
@@ -38,7 +29,7 @@ class Config:
 
 
 #: Defaults
-config = Config({"app": "app", "branch": "main"})
+config = Config(app="app", branch="main")
 
 
 class Connection(Connection):
