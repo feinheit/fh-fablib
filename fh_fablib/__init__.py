@@ -16,14 +16,25 @@ from invoke import Collection  # noqa, re-export
 warnings.simplefilter("ignore", category=ResourceWarning)
 
 
-class Config(dict):
-    __getattr__ = dict.__getitem__
+class Config:
+    __slots__ = [
+        "app",  # Name of primary Django app containing settings, assets etc.
+        "base",
+        "branch",
+        "domain",
+        "host",
+        "remote",
+    ]
 
     def update(self, data):
-        super().update(data)
-        if self.get("base"):
-            os.chdir(self["base"])
-            pre_commit_hook()
+        for key, value in data.items():
+            setattr(self, key, value)
+
+            if key == "base":
+                os.chdir(value)
+                pre_commit_hook()
+
+    __init__ = update
 
 
 #: Defaults
@@ -321,24 +332,25 @@ def nine_db_dotenv(ctx):
     with Connection(config.host) as conn:
         password = get_random_string(20)
         secret_key = get_random_string(50)
+        dbname = re.sub(r"[^a-z0-9]+", "_", config.domain)
 
         conn.run(
-            f'psql -c "CREATE ROLE {config.database} WITH'
+            f'psql -c "CREATE ROLE {dbname} WITH'
             f" ENCRYPTED PASSWORD '{password}'"
             f' LOGIN NOCREATEDB NOCREATEROLE NOSUPERUSER"'
         )
-        conn.run(f'psql -c "GRANT {config.database} TO admin"')
+        conn.run(f'psql -c "GRANT {dbname} TO admin"')
         conn.run(
-            f'psql -c "CREATE DATABASE {config.database} WITH'
-            f" OWNER {config.database} TEMPLATE template0 ENCODING 'UTF8'"
+            f'psql -c "CREATE DATABASE {dbname} WITH'
+            f" OWNER {dbname} TEMPLATE template0 ENCODING 'UTF8'"
             f'"'
         )
         conn.put(
             io.StringIO(
                 f"""\
 DEBUG=False
-DATABASE_URL=postgres://{config.database}:{password}@localhost:5432/{config.database}
-CACHE_URL=hiredis://localhost:6379/1/?key_prefix={config.database}
+DATABASE_URL=postgres://{dbname}:{password}@localhost:5432/{dbname}
+CACHE_URL=hiredis://localhost:6379/1/?key_prefix={dbname}
 SECRET_KEY={secret_key}
 SENTRY_DSN=
 ALLOWED_HOSTS=[".{config.domain}", ".{conn.host}"]

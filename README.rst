@@ -19,7 +19,6 @@ Usage
                "base": Path(__file__).parent,
                "host": "www-data@feinheit06.nine.ch",
                "domain": "example.com",
-               "database": "example_com",
                "branch": "main",
                "remote": "production",
            }
@@ -28,6 +27,19 @@ Usage
        ns = Collection(*fl.GENERAL, *fl.NINE)
 
 4. Run ``fab --list`` to get a list of commands.
+
+
+Configuration values
+====================
+
+- ``app = "app"``: Name of primary Django app containing settings, assets etc.
+- ``base``: ``pathlib.Path`` object pointing to the base dir of the
+- ``branch = "main"``: Branch containing code to be deployed.
+  project.
+- ``domain``: Primary domain of website. The database name and cache key
+  prefix are derived from this value, too.
+- ``host``: SSH connection string (``username@server``)
+- ``remote``: git remote name for the server.
 
 
 Adding or overriding bundled tasks
