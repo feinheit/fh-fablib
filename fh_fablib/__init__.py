@@ -452,24 +452,6 @@ def fmt(ctx):
     _fmt_tox_style(ctx)
 
 
-def _srv_deploy(conn):
-    with conn.cd(config.domain):
-        conn.run(f"git checkout {config.branch}")
-        conn.run("git fetch origin")
-        conn.run(f"git merge --ff-only origin/{config.branch}")
-        conn.run('find . -name "*.pyc" -delete')
-        conn.run("venv/bin/pip install -U pip wheel setuptools")
-        conn.run("venv/bin/pip install -r requirements.txt")
-        conn.run("venv/bin/python manage.py migrate")
-        conn.run("venv/bin/python manage.py check --deploy", warn=True)
-    conn.local(
-        f"rsync -pthrz --delete static/ {config.host}:{config.domain}/static/"
-    )
-    with conn.cd(config.domain):
-        conn.run("venv/bin/python manage.py collectstatic --noinput")
-    conn.run(f"systemctl --user restart gunicorn@{config.domain}.service")
-
-
 @task
 def deploy(ctx):
     """Deploy once 🔥"""
@@ -478,8 +460,21 @@ def deploy(ctx):
     ctx.run("yarn run prod")
 
     with Connection(config.host) as conn:
-        _srv_deploy(conn)
-        _srv_restart(conn)
+        with conn.cd(config.domain):
+            conn.run(f"git checkout {config.branch}")
+            conn.run("git fetch origin")
+            conn.run(f"git merge --ff-only origin/{config.branch}")
+            conn.run('find . -name "*.pyc" -delete')
+            conn.run("venv/bin/pip install -U pip wheel setuptools")
+            conn.run("venv/bin/pip install -r requirements.txt")
+            conn.run("venv/bin/python manage.py migrate")
+            conn.run("venv/bin/python manage.py check --deploy", warn=True)
+        conn.local(
+            f"rsync -pthrz --delete static/ {config.host}:{config.domain}/static/"
+        )
+        with conn.cd(config.domain):
+            conn.run("venv/bin/python manage.py collectstatic --noinput")
+        conn.run(f"systemctl --user restart gunicorn@{config.domain}.service")
 
     fetch(ctx)
 

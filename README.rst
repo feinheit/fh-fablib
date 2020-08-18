@@ -142,16 +142,6 @@ Formatters
 - ``_fmt_tox_style(ctx)``: Run ``tox -e style``
 
 
-Deployment
-~~~~~~~~~~
-
-- ``_srv_deploy(ctx, *, rsync_static)``: Deploy the code from git's
-  ``origin`` remote to the server. Runs Django's management commands to
-  collect static files and migrate the database, and optionally
-  ``rsync``'s the local ``static/`` folder to the server (potentially
-  useful for frontend assets).
-
-
 Helpers
 ~~~~~~~
 
