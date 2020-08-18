@@ -85,9 +85,59 @@ Available tasks
 - ``nine-alias-add``: Add aliasses to a nine-manage-vhost virtual host
 - ``nine-alias-remove``: Remove aliasses from a nine-manage-vhost virtual host
 - ``nine-checkout``: Checkout the repository on the server
-- ``nine-db-dotenv``: Create a database and initialize the .env
-- ``nine-disable``: Disable a virtual host, dump and remove the DB and stop the gunicorn@ unit
+- ``nine-db-dotenv``: Create a database and initialize the .env.
+  Currently assumes that the shell user has superuser rights (either
+  through ``PGUSER`` and ``PGPASSWORD`` environment variables or through
+  peer authentication)
+- ``nine-disable``: Disable a virtual host, dump and remove the DB and
+  stop the gunicorn@ unit
 - ``nine-ssl``: Activate SSL
 - ``nine-unit``: Start and enable a gunicorn@ unit
 - ``nine-venv``: Create a venv and install packages from requirements.txt
 - ``nine-vhost``: Create a virtual host using nine-manage-vhosts
+
+
+Building blocks
+===============
+
+The following functions may be used to build your own tasks. They cannot
+be executed directly from the command line.
+
+Checks
+~~~~~~
+
+- ``_check_flake8(ctx)``: Run ``venv/bin/flake8``
+- ``_check_django(ctx)``: Run Django's checks
+- ``_check_prettier(ctx)``: Check whether the frontend code conforms to
+  prettier's formatting
+- ``_check_eslint(ctx)``: Run ESLint
+
+
+Formatters
+~~~~~~~~~~
+
+- ``_fmt_prettier(ctx)``: Run ``prettier``
+- ``_fmt_tox_style(ctx)``: Run ``tox -e style``
+
+
+Deployment
+~~~~~~~~~~
+
+- ``_srv_deploy(ctx, *, rsync_static)``: Deploy the code from git's
+  ``origin`` remote to the server. Runs Django's management commands to
+  collect static files and migrate the database, and optionally
+  ``rsync``'s the local ``static/`` folder to the server (potentially
+  useful for frontend assets).
+
+
+Helpers
+~~~~~~~
+
+- ``_local_env(path=".env")``: ``speckenv.env`` for a local env file
+- ``_srv_env(conn, path)``: ``speckenv.env`` for a remote env file
+- ``_python3()``: Return the path of a Python 3 executable. Prefers
+  newer Python versions.
+- ``_local_dotenv_if_not_exists()``: Ensure a local ``.env`` with a few
+  default values exists. Does nothing if ``.env`` exists already.
+- ``_local_dbname()``: Ensure a local ``.env`` exists and return the
+  database name.
