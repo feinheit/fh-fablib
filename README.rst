@@ -65,7 +65,6 @@ some other way. A custom ``deploy`` task follows:
         with Connection(config.host) as conn:
             fl._srv_deploy(conn)
             fl._srv_restart(conn)
-            conn.run("systemctl --user restart gunicorn@example.com.service")
 
         fl.fetch(ctx)
 
