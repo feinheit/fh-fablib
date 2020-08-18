@@ -450,7 +450,7 @@ curl -X POST -v -u {username}:"{password}" -H "content-type: application/json"\
 
 @task
 def fetch(ctx):
-    """Add and fetch refs from the server"""
+    """Ensure a remote exists for the server and fetch"""
     ctx.run(
         f"git remote add {config.remote} {config.host}:{config.domain}",
         warn=True,

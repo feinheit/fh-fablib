@@ -90,7 +90,7 @@ Available tasks
 - ``cm``: Compile the translation catalogs
 - ``deploy``: Deploy once 🔥
 - ``dev``: Run the development server for the frontend and backend
-- ``fetch``: Add and fetch refs from the server
+- ``fetch``: Ensure a remote exists for the server and fetch
 - ``fmt``: Format the code
 - ``freeze``: Freeze the virtualenv's state
 - ``local``: Local environment setup
