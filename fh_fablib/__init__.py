@@ -14,6 +14,7 @@ from invoke import Collection  # noqa, re-export
 
 # I don't care, in this context.
 warnings.simplefilter("ignore", category=ResourceWarning)
+os.environ["FABRIC_RUN_ECHO"] = "1"
 
 
 class Config:
