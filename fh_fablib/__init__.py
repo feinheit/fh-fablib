@@ -50,7 +50,7 @@ class Config:
 
 
 #: Defaults
-config = Config(app="app", branch="main")
+config = Config(app="app")
 
 
 class Connection(Connection):

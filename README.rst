@@ -34,13 +34,13 @@ Configuration values
 ====================
 
 - ``app = "app"``: Name of primary Django app containing settings, assets etc.
-- ``base``: ``pathlib.Path`` object pointing to the base dir of the
-- ``branch = "main"``: Branch containing code to be deployed.
-  project.
+- ``base``: ``pathlib.Path`` object pointing to the base dir of the project.
+- ``branch``: Branch containing code to be deployed.
 - ``domain``: Primary domain of website. The database name and cache key
   prefix are derived from this value.
 - ``host``: SSH connection string (``username@server``)
-- ``remote``: git remote name for the server. Only used for fetching.
+- ``remote``: git remote name for the server. Only used for the
+  ``fetch`` task.
 
 
 Adding or overriding bundled tasks
