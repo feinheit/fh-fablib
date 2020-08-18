@@ -3,6 +3,7 @@ import os
 import random
 import re
 import shutil
+import sys
 import tempfile
 import warnings
 from pathlib import Path  # noqa, re-export
@@ -16,6 +17,20 @@ from invoke import Collection  # noqa, re-export
 warnings.simplefilter("ignore", category=ResourceWarning)
 os.environ["FABRIC_RUN_ECHO"] = "1"
 os.environ["FABRIC_RUN_PTY"] = "True"
+
+
+def ansi(code):
+    return lambda s: "\033[{}m{}\033[0m".format(code, s)
+
+
+# underline = ansi("4")
+red = ansi("31")
+# green = ansi("32")
+
+
+def terminate(msg):
+    print(red(msg), file=sys.stderr)
+    sys.exit(1)
 
 
 class Config:
@@ -455,6 +470,10 @@ def fmt(ctx):
 @task
 def deploy(ctx):
     """Deploy once 🔥"""
+    branch = ctx.run("git rev-parse --abbrev-ref HEAD", hide=True).stdout.strip()
+    if branch != config.branch:
+        terminate(f"Current branch is '{branch}', should be '{config.branch}'")
+
     check(ctx)
     ctx.run(f"git push origin {config.branch}")
     ctx.run("yarn run prod")
