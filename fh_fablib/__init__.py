@@ -123,7 +123,7 @@ def _srv_deploy(conn, *, rsync_static):
         conn.run("venv/bin/pip install -r requirements.txt")
         conn.run("venv/bin/python manage.py migrate")
     if rsync_static:
-        conn.local(f"rsync -avz --delete static/ {config.host}:{config.domain}static")
+        conn.local(f"rsync -avz --delete static/ {config.host}:{config.domain}/static/")
     with conn.cd(config.domain):
         conn.run("venv/bin/python manage.py collectstatic --noinput")
         conn.run("venv/bin/python manage.py check --deploy", warn=True)
