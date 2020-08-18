@@ -70,13 +70,13 @@ def _check_django(ctx):
 
 def _check_prettier(ctx):
     ctx.run(
-        f'yarn run prettier --list-different *.js "{config.app}/static/**/*.js"'
+        f'yarn run prettier --list-different "*.js" "{config.app}/static/**/*.js"'
         f' "{config.app}/static/**/*.scss"'
     )
 
 
 def _check_eslint(ctx):
-    ctx.run(f"yarn run eslint *.js {config.app}/static")
+    ctx.run(f'yarn run eslint "*.js" {config.app}/static')
 
 
 @task
@@ -106,7 +106,7 @@ for job in $(jobs -p); do wait $job; done
 
 def _fmt_prettier(ctx):
     ctx.run(
-        f'yarn run prettier --write *.js "{config.app}/static/**/*.js"'
+        f'yarn run prettier --write "*.js" "{config.app}/static/**/*.js"'
         f' "{config.app}/static/**/*.scss"'
     )
 
