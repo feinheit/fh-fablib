@@ -14,7 +14,7 @@ def read(filename):
 
 setup(
     name="fh-fablib",
-    version="0.9.20200817",
+    version="0.9.20200818",
     description="fh-fablib",
     long_description=read("README.rst"),
     author="Matthias Kestenholz",
