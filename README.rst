@@ -8,23 +8,24 @@ Usage
 1. Install `pipx <https://pipxproject.github.io/pipx/>`__
 2. ``pipx install --editable git+ssh://git@github.com/feinheit/fh-fablib.git@main#egg=fh_fablib --include-deps``
 3. Add a ``fabfile.py`` to your project. A minimal example follows:
+
    .. code-block:: python
 
-    import fh_fablib as fl
-    from fh_fablib import Collection, Path, config
+       import fh_fablib as fl
+       from fh_fablib import Collection, Path, config
 
-    config.update(
-        {
-            "base": Path(__file__).parent,
-            "host": "www-data@feinheit06.nine.ch",
-            "domain": "example.com",
-            "database": "example_com",
-            "branch": "main",
-            "remote": "production",
-        }
-    )
+       config.update(
+           {
+               "base": Path(__file__).parent,
+               "host": "www-data@feinheit06.nine.ch",
+               "domain": "example.com",
+               "database": "example_com",
+               "branch": "main",
+               "remote": "production",
+           }
+       )
 
-    ns = Collection(*fl.GENERAL, *fl.NINE)
+       ns = Collection(*fl.GENERAL, *fl.NINE)
 
 4. Run ``fab --list`` to get a list of commands.
 
