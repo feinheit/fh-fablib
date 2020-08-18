@@ -461,12 +461,12 @@ def _srv_deploy(conn):
         conn.run("venv/bin/pip install -U pip wheel setuptools")
         conn.run("venv/bin/pip install -r requirements.txt")
         conn.run("venv/bin/python manage.py migrate")
-        conn.run("venv/bin/python manage.py collectstatic --noinput")
         conn.run("venv/bin/python manage.py check --deploy", warn=True)
-
-
-def _srv_rsync_static(conn):
-    conn.local(f"rsync -pthrvz --delete static/ {config.host}:{config.domain}/static/")
+    conn.local(
+        f"rsync -pthrz --delete static/ {config.host}:{config.domain}/static/"
+    )
+    with conn.cd(config.domain):
+        conn.run("venv/bin/python manage.py collectstatic --noinput")
 
 
 def _srv_restart(conn):
@@ -482,7 +482,6 @@ def deploy(ctx):
 
     with Connection(config.host) as conn:
         _srv_deploy(conn)
-        _srv_rsync_static(conn)
         _srv_restart(conn)
 
     fetch(ctx)
