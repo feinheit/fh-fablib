@@ -85,23 +85,21 @@ def dev(ctx, host="127.0.0.1", port=8000):
     with tempfile.NamedTemporaryFile("w+", prefix="fabdev.", suffix=".sh") as f:
         # https://gist.github.com/jiaaro/b2e1b7c705022c2cf56888152a999f65
         f.write(
-            """\
+            f"""\
 trap "exit" INT TERM
 trap "kill 0" EXIT
 
 export PYTHONWARNINGS=always
 export PYTHONUNBUFFERED=yes
 
-venv/bin/python manage.py runserver 0.0.0.0:%(port)s &
-HOST=%(host)s yarn run dev &
+venv/bin/python manage.py runserver 0.0.0.0:{port} &
+HOST="{host}" yarn run dev &
 
 for job in $(jobs -p); do wait $job; done
 """
-            % {"host": host, "port": port}
         )
         f.flush()
-
-        ctx.run("bash %s" % f.name)
+        ctx.run(f"bash {f.name}")
 
 
 def _fmt_prettier(ctx):
