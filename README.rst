@@ -26,6 +26,9 @@ Usage
 
 4. Run ``fab --list`` to get a list of commands.
 
+Loading the ``fh_fablib`` module automatically creates
+``.git/hooks/pre-commit`` which runs ``fab check`` before each commit.
+
 
 Configuration values
 ====================
