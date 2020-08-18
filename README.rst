@@ -37,9 +37,9 @@ Configuration values
 - ``branch = "main"``: Branch containing code to be deployed.
   project.
 - ``domain``: Primary domain of website. The database name and cache key
-  prefix are derived from this value, too.
+  prefix are derived from this value.
 - ``host``: SSH connection string (``username@server``)
-- ``remote``: git remote name for the server.
+- ``remote``: git remote name for the server. Only used for fetching.
 
 
 Adding or overriding bundled tasks
