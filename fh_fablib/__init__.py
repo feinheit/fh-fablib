@@ -34,6 +34,9 @@ def terminate(msg):
 
 
 class Config:
+    def __init__(self, **kwargs):
+        self.update(**kwargs)
+
     def update(self, **kwargs):
         for key, value in kwargs.items():
             setattr(self, key, value)
@@ -42,7 +45,8 @@ class Config:
                 os.chdir(value)
                 pre_commit_hook()
 
-    __init__ = update
+    def __getattr__(self, key):
+        terminate(f"Configuration key '{key}' not set")
 
 
 #: Defaults
@@ -195,7 +199,8 @@ def freeze(ctx):
 @task
 def update(ctx):
     """Update virtualenv and node_modules to match the lockfiles"""
-    if not os.path.exists("venv"):
+    venv = config.base / "venv"
+    if not venv.exists():
         ctx.run(f"{_python3()} -m venv venv")
     ctx.run("venv/bin/pip install -U pip wheel setuptools")
     ctx.run("venv/bin/pip install -r requirements.txt")
@@ -205,13 +210,14 @@ def update(ctx):
 
 
 def _local_dotenv_if_not_exists():
-    if os.path.exists(".env"):
+    dotenv = config.base / ".env"
+    if dotenv.exists():
         return
 
     secret_key = _random_string(50)
     dbname = re.sub(r"[^a-z0-9]+", "_", config.domain)
 
-    with open(".env", "w") as f:
+    with dotenv.open("w") as f:
         f.write(
             f"""\
 DATABASE_URL=postgres://localhost:5432/{dbname}
