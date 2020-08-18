@@ -34,23 +34,21 @@ def terminate(msg):
 
 
 class Config:
-    def __init__(self, **kwargs):
-        self.update(**kwargs)
+    app = "app"
 
     def update(self, **kwargs):
         for key, value in kwargs.items():
             setattr(self, key, value)
 
-            if key == "base":
-                os.chdir(value)
-                pre_commit_hook()
+        os.chdir(self.base)
+        pre_commit_hook()
 
     def __getattr__(self, key):
         terminate(f"Configuration key '{key}' not set")
 
 
 #: Defaults
-config = Config(app="app")
+config = Config()
 
 
 class Connection(Connection):
