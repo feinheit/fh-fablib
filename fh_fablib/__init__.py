@@ -15,6 +15,7 @@ from invoke import Collection  # noqa, re-export
 # I don't care, in this context.
 warnings.simplefilter("ignore", category=ResourceWarning)
 os.environ["FABRIC_RUN_ECHO"] = "1"
+os.environ["FABRIC_RUN_PTY"] = "True"
 
 
 class Config:
@@ -40,6 +41,7 @@ class Connection(Connection):
         kwargs.setdefault("forward_agent", True)
         super().__init__(*args, **kwargs)
         self.config["run"]["echo"] = True
+        self.config["run"]["pty"] = True
 
 
 def pre_commit_hook():
@@ -99,7 +101,7 @@ for job in $(jobs -p); do wait $job; done
 """
         )
         f.flush()
-        ctx.run(f"bash {f.name}")
+        ctx.run(f"bash {f.name}", replace_env=False)
 
 
 def _fmt_prettier(ctx):
