@@ -25,7 +25,7 @@ def ansi(code):
 
 # underline = ansi("4")
 red = ansi("31")
-# green = ansi("32")
+green = ansi("32")
 
 
 def terminate(msg):
@@ -84,6 +84,7 @@ def _random_string(length, chars=None):
 @task
 def dev(ctx, host="127.0.0.1", port=8000):
     """Run the development server for the frontend and backend"""
+    print(green(f"Starting server at http://{host}:{port}/"))
     with tempfile.NamedTemporaryFile("w+", prefix="fabdev.", suffix=".sh") as f:
         # https://gist.github.com/jiaaro/b2e1b7c705022c2cf56888152a999f65
         f.write(
