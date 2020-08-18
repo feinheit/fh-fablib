@@ -62,25 +62,6 @@ def _random_string(length, chars=None):
     return "".join(rand.choice(chars) for i in range(length))
 
 
-def _check_flake8(ctx):
-    ctx.run("venv/bin/flake8 .")
-
-
-def _check_django(ctx):
-    ctx.run("venv/bin/python manage.py check")
-
-
-def _check_prettier(ctx):
-    ctx.run(
-        f'yarn run prettier --list-different "*.js" "{config.app}/static/**/*.js"'
-        f' "{config.app}/static/**/*.scss"'
-    )
-
-
-def _check_eslint(ctx):
-    ctx.run(f'yarn run eslint "*.js" {config.app}/static')
-
-
 @task
 def dev(ctx, host="127.0.0.1", port=8000):
     """Run the development server for the frontend and backend"""
@@ -102,35 +83,6 @@ for job in $(jobs -p); do wait $job; done
         )
         f.flush()
         ctx.run(f"bash {f.name}", replace_env=False)
-
-
-def _fmt_prettier(ctx):
-    ctx.run(
-        f'yarn run prettier --write "*.js" "{config.app}/static/**/*.js"'
-        f' "{config.app}/static/**/*.scss"'
-    )
-
-
-def _fmt_tox_style(ctx):
-    ctx.run("tox -e style", pty=True, replace_env=False)
-
-
-def _srv_deploy(conn, *, rsync_static):
-    with conn.cd(config.domain):
-        conn.run(f"git checkout {config.branch}")
-        conn.run("git fetch origin")
-        conn.run(f"git merge --ff-only origin/{config.branch}")
-        conn.run('find . -name "*.pyc" -delete')
-        conn.run("venv/bin/pip install -U pip wheel setuptools")
-        conn.run("venv/bin/pip install -r requirements.txt")
-        conn.run("venv/bin/python manage.py migrate")
-    if rsync_static:
-        conn.local(
-            f"rsync -pthrvz --delete static/ {config.host}:{config.domain}/static/"
-        )
-    with conn.cd(config.domain):
-        conn.run("venv/bin/python manage.py collectstatic --noinput")
-        conn.run("venv/bin/python manage.py check --deploy", warn=True)
 
 
 @task
@@ -454,6 +406,25 @@ def fetch(ctx):
     ctx.run(f"git fetch {config.remote}")
 
 
+def _check_flake8(ctx):
+    ctx.run("venv/bin/flake8 .")
+
+
+def _check_django(ctx):
+    ctx.run("venv/bin/python manage.py check")
+
+
+def _check_prettier(ctx):
+    ctx.run(
+        f'yarn run prettier --list-different "*.js" "{config.app}/static/**/*.js"'
+        f' "{config.app}/static/**/*.scss"'
+    )
+
+
+def _check_eslint(ctx):
+    ctx.run(f'yarn run eslint "*.js" {config.app}/static')
+
+
 @task
 def check(ctx):
     """Check the coding style"""
@@ -463,11 +434,43 @@ def check(ctx):
     _check_eslint(ctx)
 
 
+def _fmt_prettier(ctx):
+    ctx.run(
+        f'yarn run prettier --write "*.js" "{config.app}/static/**/*.js"'
+        f' "{config.app}/static/**/*.scss"'
+    )
+
+
+def _fmt_tox_style(ctx):
+    ctx.run("tox -e style", pty=True, replace_env=False)
+
+
 @task
 def fmt(ctx):
     """Format the code"""
     _fmt_prettier(ctx)
     _fmt_tox_style(ctx)
+
+
+def _srv_deploy(conn):
+    with conn.cd(config.domain):
+        conn.run(f"git checkout {config.branch}")
+        conn.run("git fetch origin")
+        conn.run(f"git merge --ff-only origin/{config.branch}")
+        conn.run('find . -name "*.pyc" -delete')
+        conn.run("venv/bin/pip install -U pip wheel setuptools")
+        conn.run("venv/bin/pip install -r requirements.txt")
+        conn.run("venv/bin/python manage.py migrate")
+        conn.run("venv/bin/python manage.py collectstatic --noinput")
+        conn.run("venv/bin/python manage.py check --deploy", warn=True)
+
+
+def _srv_rsync_static(conn):
+    conn.local(f"rsync -pthrvz --delete static/ {config.host}:{config.domain}/static/")
+
+
+def _srv_restart(conn):
+    conn.run(f"systemctl --user restart gunicorn@{config.domain}.service")
 
 
 @task
@@ -478,8 +481,9 @@ def deploy(ctx):
     ctx.run("yarn run prod")
 
     with Connection(config.host) as conn:
-        _srv_deploy(conn, rsync_static=True)
-        conn.run(f"systemctl --user restart gunicorn@{config.domain}.service")
+        _srv_deploy(conn)
+        _srv_rsync_static(conn)
+        _srv_restart(conn)
 
     fetch(ctx)
 
