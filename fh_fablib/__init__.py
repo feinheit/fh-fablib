@@ -467,9 +467,6 @@ def _srv_deploy(conn):
     )
     with conn.cd(config.domain):
         conn.run("venv/bin/python manage.py collectstatic --noinput")
-
-
-def _srv_restart(conn):
     conn.run(f"systemctl --user restart gunicorn@{config.domain}.service")
 
 
