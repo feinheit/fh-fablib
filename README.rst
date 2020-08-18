@@ -11,9 +11,9 @@ Usage
    .. code-block:: python
 
     import fh_fablib as fl
-    from fh_fablib import Collection, Path, env
+    from fh_fablib import Collection, Path, config
 
-    env.update(
+    config.update(
         {
             "base": Path(__file__).parent,
             "host": "www-data@feinheit06.nine.ch",
@@ -39,22 +39,31 @@ some other way. A custom ``deploy`` task follows:
 
     # ... continuing the fabfile above
 
-    from fh_fablib import Connection, env, task
+    from fh_fablib import Connection, config, task
 
     @task
     def deploy(ctx):
         """Deploy once 🔥"""
         fl.check(ctx)
-        ctx.run(f"git push origin {env.branch}")
+        ctx.run(f"git push origin {config.branch}")
         ctx.run("node frontend.js build")
 
-        with Connection(env.host, forward_agent=True) as conn:
+        with Connection(config.host, forward_agent=True) as conn:
             fl._srv_deploy(conn, rsync_static=True)
             conn.run("systemctl --user restart gunicorn@example.com.service")
 
         fl.fetch(ctx)
 
     ns.add_task(deploy)
+
+.. note::
+
+   Instead of making existing tasks more flexible or configurable it's
+   preferable to contribute better building blocks resp. to improve
+   existing buildings blocks to make it easier to build customized tasks
+   inside projects. E.g. if you want to ``fmt`` additional paths it's
+   better to build your own ``fmt`` task and not add configuration
+   variables to the ``config`` dictionary.
 
 
 Available tasks
