@@ -79,6 +79,14 @@ def _random_string(length, chars=None):
     return "".join(rand.choice(chars) for i in range(length))
 
 
+def _dbname_from_dsn(dsn):
+    return dsn.rsplit("/", 1)[-1]
+
+
+def _dbname_from_domain(domain):
+    return re.sub(r"[^a-z0-9]+", "_", domain)
+
+
 @task
 def dev(ctx, host="127.0.0.1", port=8000):
     """Run the development server for the frontend and backend"""
@@ -111,7 +119,7 @@ def pull_db(ctx):
 
     srv_dsn = e("DATABASE_URL")
     local_dsn = _local_env()("DATABASE_URL")
-    dbname = local_dsn.rsplit("/", 1)[-1]
+    dbname = _dbname_from_dsn(local_dsn)
 
     ctx.run(f"dropdb --if-exists {dbname}", warn=True)
     ctx.run(f"createdb {dbname}")
@@ -214,7 +222,7 @@ def _local_dotenv_if_not_exists():
         return
 
     secret_key = _random_string(50)
-    dbname = re.sub(r"[^a-z0-9]+", "_", config.domain)
+    dbname = _dbname_from_domain(config.domain)
 
     with dotenv.open("w") as f:
         f.write(
@@ -231,7 +239,7 @@ DEBUG=True
 
 def _local_dbname():
     _local_dotenv_if_not_exists()
-    return _local_env()("DATABASE_URL").rsplit("/", 1)[-1]
+    return _dbname_from_dsn(_local_env()("DATABASE_URL"))
 
 
 @task
@@ -299,7 +307,7 @@ def nine_db_dotenv(ctx):
     with Connection(config.host) as conn:
         password = _random_string(20)
         secret_key = _random_string(50)
-        dbname = re.sub(r"[^a-z0-9]+", "_", config.domain)
+        dbname = _dbname_from_domain(config.domain)
 
         conn.run(
             f'psql -c "CREATE ROLE {dbname} WITH'
@@ -356,7 +364,7 @@ def nine_disable(ctx):
         e = _srv_env(conn, f"{config.domain}/.env")
         srv_dsn = e("DATABASE_URL")
         conn.run(f"pg_dump -Ox {srv_dsn} > DUMP.sql")
-        srv_dbname = srv_dsn.rsplit("/", 1)[-1]
+        srv_dbname = _dbname_from_dsn(srv_dsn)
         conn.run(f"dropdb {srv_dbname}")
         conn.run(f"dropuser {srv_dbname}")
 
