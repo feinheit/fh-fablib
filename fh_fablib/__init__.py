@@ -87,11 +87,9 @@ def _dbname_from_domain(domain):
     return re.sub(r"[^a-z0-9]+", "_", domain)
 
 
-@task
-def dev(ctx, host="127.0.0.1", port=8000):
-    """Run the development server for the frontend and backend"""
-    print(green(f"Starting server at http://{host}:{port}/"))
-    with tempfile.NamedTemporaryFile("w+", prefix="fabdev.", suffix=".sh") as f:
+def _concurrently(ctx, jobs):
+    with tempfile.NamedTemporaryFile("w+", prefix="fab.", suffix=".sh") as f:
+        jobs = "\n".join(f"{job} &" for job in jobs)
         # https://gist.github.com/jiaaro/b2e1b7c705022c2cf56888152a999f65
         f.write(
             f"""\
@@ -101,14 +99,26 @@ trap "kill 0" EXIT
 export PYTHONWARNINGS=always
 export PYTHONUNBUFFERED=yes
 
-venv/bin/python manage.py runserver 0.0.0.0:{port} &
-HOST="{host}" yarn run dev &
+{jobs}
 
 for job in $(jobs -p); do wait $job; done
 """
         )
         f.flush()
         ctx.run(f"bash {f.name}", replace_env=False)
+
+
+@task
+def dev(ctx, host="127.0.0.1", port=8000):
+    """Run the development server for the frontend and backend"""
+    print(green(f"Starting server at http://{host}:{port}/"))
+    _concurrently(
+        ctx,
+        [
+            f"venv/bin/python manage.py runserver 0.0.0.0:{port}",
+            f'HOST="{host}" yarn run dev',
+        ],
+    )
 
 
 @task
