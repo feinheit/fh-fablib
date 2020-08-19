@@ -121,6 +121,15 @@ def dev(ctx, host="127.0.0.1", port=8000):
     )
 
 
+def _reset_passwords(ctx):
+    ctx.run(
+        'venv/bin/python manage.py shell -c "'
+        "from django.contrib.auth import get_user_model;"
+        "U=get_user_model();u=U();u.set_password('password');"
+        'U.objects.update(password=u.password)"'
+    )
+
+
 @task
 def pull_db(ctx):
     """Pull a local copy of the remote DB and reset all passwords"""
@@ -134,13 +143,8 @@ def pull_db(ctx):
     ctx.run(f"dropdb --if-exists {dbname}", warn=True)
     ctx.run(f"createdb {dbname}")
     ctx.run(f"ssh {config.host} -C 'pg_dump -Ox {srv_dsn}' | psql {local_dsn}")
-    ctx.run(
-        'venv/bin/python manage.py shell -c "'
-        "from django.contrib.auth import get_user_model;"
-        "c=get_user_model();u=c();u.set_password('password');"
-        'c.objects.update(password=u.password)"',
-        echo=True,
-    )
+
+    _reset_passwords(ctx)
 
 
 def _local_env(path=".env"):
@@ -164,16 +168,15 @@ def _srv_env(conn, path):
 def mm(ctx):
     """Update the translation catalogs"""
     ctx.run(
-        "PATH=/usr/bin:/usr/sbin "
-        "venv/bin/python manage.py makemessages -a -i venv -i htmlcov"
-        " --add-location file",
+        "venv/bin/python manage.py makemessages -a --add-location file"
+        " -i venv -i htmlcov",
+        replace_env=False,
     )
     ctx.run(
-        "PATH=/usr/bin:/usr/sbin "
-        "venv/bin/python manage.py makemessages -a -i venv -i htmlcov"
-        " --add-location file"
-        " -i node_modules -i lib"
+        "venv/bin/python manage.py makemessages -a --add-location file"
+        " -i venv -i htmlcov -i node_modules -i lib"
         " -d djangojs",
+        replace_env=False,
     )
 
 
@@ -181,8 +184,9 @@ def mm(ctx):
 def cm(ctx):
     """Compile the translation catalogs"""
     ctx.run(
-        "PATH=/usr/bin:/usr/sbin "
-        "venv/bin/python manage.py compilemessages -i venv -i htmlcov"
+        "venv/bin/python manage.py compilemessages"
+        " -i venv -i htmlcov -i node_modules -i lib",
+        replace_env=False,
     )
 
 
