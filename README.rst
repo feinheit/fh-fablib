@@ -14,6 +14,7 @@ Usage
        import fh_fablib as fl
        from fh_fablib import Collection, Path, config
 
+       fl.require("1.0.20200819")
        config.update(
            base=Path(__file__).parent,
            host="www-data@feinheit06.nine.ch",
