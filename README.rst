@@ -6,7 +6,10 @@ Usage
 =====
 
 1. Install `pipx <https://pipxproject.github.io/pipx/>`__
-2. ``pipx install --editable git+ssh://git@github.com/feinheit/fh-fablib.git@main#egg=fh_fablib --include-deps``
+2. ``pipx install --editable
+   git+ssh://git@github.com/feinheit/fh-fablib.git@main#egg=fh_fablib
+   --include-deps`` or ``pipx install fh_fablib --include-deps`` if
+   you're happy with the packaged version
 3. Add a ``fabfile.py`` to your project. A minimal example follows:
 
    .. code-block:: python
