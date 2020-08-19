@@ -13,6 +13,9 @@ from fabric import Connection, task
 from invoke import Collection  # noqa, re-export
 
 
+__version__ = "1.0.20200819"
+
+
 # I don't care, in this context.
 warnings.simplefilter("ignore", category=ResourceWarning)
 os.environ["FABRIC_RUN_ECHO"] = "1"
@@ -31,6 +34,11 @@ green = ansi("32")
 def terminate(msg):
     print(red(msg), file=sys.stderr)
     sys.exit(1)
+
+
+def require(version):
+    if __version__ < version:
+        terminate(f"fh_fablib version {version} required (you have {__version__})")
 
 
 class Config:

@@ -1,22 +1,27 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
-import os
-from io import open
+from pathlib import Path
 
 from setuptools import find_packages, setup
 
 
-def read(filename):
-    path = os.path.join(os.path.dirname(__file__), filename)
-    with open(path, encoding="utf-8") as handle:
-        return handle.read()
-
+_base = Path(__file__).parent
+_prefix = "__version__ ="
+_version = (
+    next(
+        line
+        for line in (_base / "fh_fablib" / "__init__.py").open()
+        if line.startswith(_prefix)
+    )[len(_prefix) :]
+    .strip()
+    .strip('"')
+)
 
 setup(
     name="fh-fablib",
-    version="0.9.20200818",
+    version=_version,
     description="fh-fablib",
-    long_description=read("README.rst"),
+    long_description=(_base / "README.rst").read_text(),
     author="Matthias Kestenholz",
     author_email="mk@feinheit.ch",
     url="https://github.com/feinheit/fh-fablib/",
