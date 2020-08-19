@@ -11,11 +11,12 @@ Usage
 
    .. code-block:: python
 
+       from pathlib import Path
+
        import fh_fablib as fl
-       from fh_fablib import Collection, Path, config
 
        fl.require("1.0.20200819")
-       config.update(
+       fl.config.update(
            base=Path(__file__).parent,
            host="www-data@feinheit06.nine.ch",
            domain="example.com",
@@ -23,7 +24,7 @@ Usage
            remote="production",
        )
 
-       ns = Collection(*fl.GENERAL, *fl.NINE)
+       ns = fl.Collection(*fl.GENERAL, *fl.NINE)
 
 4. Run ``fab --list`` to get a list of commands.
 
@@ -47,26 +48,19 @@ Configuration values
 Adding or overriding bundled tasks
 ==================================
 
-For the sake of an example, suppose that frontend assets should be built
-some other way. A custom ``deploy`` task follows:
+For the sake of an example, suppose that additional processes should be
+restarted after deployment. A custom ``deploy`` task follows:
 
 .. code-block:: python
 
     # ... continuing the fabfile above
 
-    from fh_fablib import Connection, config, task
-
-    @task
+    @fl.task
     def deploy(ctx):
         """Deploy once 🔥"""
-        fl.check(ctx)
-        ctx.run(f"git push origin {config.branch}")
-        ctx.run("node frontend.js build")
-
-        with Connection(config.host) as conn:
-            fl._srv_deploy(conn)
-
-        fl.fetch(ctx)
+        fl.deploy(ctx)  # Reuse
+        with fl.Connection(fl.config.host) as conn:
+            conn.run("systemctl --user restart other.service")
 
     ns.add_task(deploy)
 
@@ -154,3 +148,13 @@ Helpers
   default values exists. Does nothing if ``.env`` exists already.
 - ``_local_dbname()``: Ensure a local ``.env`` exists and return the
   database name.
+- ``_dbname_from_dsn(dsn)``: Extract the database name from a DSN.
+- ``_dbname_from_domain(domain)``: Mangle the domain to produce a string
+  suitable as a database name, database user and cache key prefix.
+- ``_concurrently(ctx, jobs)``: Run a list of shell commands
+  concurrently and wait for all of them to terminate (or Ctrl-C).
+- ``_random_string(length, chars=None)``: Return a random string of
+  length, suitable for generating secret keys etc.
+- ``_reset_passwords(ctx)``: Set all user passwords to ``"password"``.
+- ``require(version)``: Terminate if fh_fablib is older.
+- ``terminate(msg)``: Terminate processing with an error message.
