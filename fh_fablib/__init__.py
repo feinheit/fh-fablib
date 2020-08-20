@@ -130,11 +130,12 @@ def dev(ctx, host="127.0.0.1", port=8000):
 
 
 def _reset_passwords(ctx):
+    # 'password' encoded with a constant salt. Does not force a login after pull_db
+    pw = r"pbkdf2_sha256\$216000\$salt\$xuFh/Jmp9ZyNeO4k67igyjH9t5hHZ84M69rSfrV2W/g="
     ctx.run(
-        'venv/bin/python manage.py shell -c "'
-        "from django.contrib.auth import get_user_model;"
-        "U=get_user_model();u=U();u.set_password('password');"
-        'U.objects.update(password=u.password)"'
+        f"venv/bin/python manage.py shell -c \"pw='{pw}';"
+        f"from django.contrib.auth import get_user_model as g;"
+        f'g()._base_manager.update(password=pw)"'
     )
 
 
