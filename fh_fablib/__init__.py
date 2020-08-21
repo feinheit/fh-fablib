@@ -78,7 +78,7 @@ def pre_commit_hook():
         path.chmod(0o755)
 
 
-def _random_string(length, chars=None):
+def _random_string(length, *, chars=None):
     """Returns a random string; mostly used to generate passwords and
     the contents of SECRET_KEY"""
     rand = random.SystemRandom()
@@ -332,7 +332,7 @@ def nine_unit(ctx):
 def nine_db_dotenv(ctx):
     """Create a database and initialize the .env"""
     with Connection(config.host) as conn:
-        password = _random_string(20)
+        password = _random_string(20, chars="abcdefghijklmnopqrstuvwxyz0123456789")
         secret_key = _random_string(50)
         dbname = _dbname_from_domain(config.domain)
 
