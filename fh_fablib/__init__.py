@@ -173,6 +173,10 @@ def _srv_env(conn, path):
     return lambda *a, **kw: speckenv.env(*a, **kw, mapping=mapping)
 
 
+def _nine_has_manage_databases(conn):
+    return bool(conn.run("which nine-manage-databases").stdout.strip())
+
+
 @task
 def mm(ctx):
     """Update the translation catalogs"""
@@ -332,17 +336,26 @@ def nine_db_dotenv(ctx):
         secret_key = _random_string(50)
         dbname = _dbname_from_domain(config.domain)
 
-        conn.run(
-            f'psql -c "CREATE ROLE {dbname} WITH'
-            f" ENCRYPTED PASSWORD '{password}'"
-            f' LOGIN NOCREATEDB NOCREATEROLE NOSUPERUSER"'
-        )
-        conn.run(f'psql -c "GRANT {dbname} TO admin"')
-        conn.run(
-            f'psql -c "CREATE DATABASE {dbname} WITH'
-            f" OWNER {dbname} TEMPLATE template0 ENCODING 'UTF8'"
-            f'"'
-        )
+        if _nine_has_manage_databases(conn):
+            dbname = f"nmd_{dbname}"
+            conn.run(
+                f"sudo nine-manage-databases database create -t postgresql"
+                f' --user={dbname} --password="{password}" {dbname}'
+            )
+
+        else:
+            conn.run(
+                f'psql -c "CREATE ROLE {dbname} WITH'
+                f" ENCRYPTED PASSWORD '{password}'"
+                f' LOGIN NOCREATEDB NOCREATEROLE NOSUPERUSER"'
+            )
+            conn.run(f'psql -c "GRANT {dbname} TO admin"')
+            conn.run(
+                f'psql -c "CREATE DATABASE {dbname} WITH'
+                f" OWNER {dbname} TEMPLATE template0 ENCODING 'UTF8'"
+                f'"'
+            )
+
         conn.put(
             io.StringIO(
                 f"""\
@@ -388,8 +401,12 @@ def nine_disable(ctx):
         srv_dsn = e("DATABASE_URL")
         conn.run(f"pg_dump -Ox {srv_dsn} > DUMP.sql")
         srv_dbname = _dbname_from_dsn(srv_dsn)
-        conn.run(f"dropdb {srv_dbname}")
-        conn.run(f"dropuser {srv_dbname}")
+
+        if _nine_has_manage_databases(conn):
+            conn.run(f"sudo nine-manage-databases database drop --force {srv_dbname}")
+        else:
+            conn.run(f"dropdb {srv_dbname}")
+            conn.run(f"dropuser {srv_dbname}")
 
 
 @task
