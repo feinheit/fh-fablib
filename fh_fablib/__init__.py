@@ -373,7 +373,7 @@ GOOGLE_CLIENT_SECRET=
 # CANONICAL_DOMAIN_SECURE=True
 """
             ),
-            ".env",
+            f"{config.domain}/.env",
         )
 
 
