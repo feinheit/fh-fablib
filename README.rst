@@ -19,14 +19,9 @@ Usage
 
        import fh_fablib as fl
 
-       fl.require("1.0.20200819")
-       fl.config.update(
-           base=Path(__file__).parent,
-           host="www-data@feinheit06.nine.ch",
-           domain="example.com",
-           branch="main",
-           remote="production",
-       )
+       fl.require("1.0.20200824")
+       fl.config.update(base=Path(__file__).parent, host="www-data@feinheit06.nine.ch")
+       fl.config.update(domain="example.com", branch="main", remote="production")
 
        ns = fl.Collection(*fl.GENERAL, *fl.NINE)
 
@@ -76,6 +71,36 @@ restarted after deployment. A custom ``deploy`` task follows:
    inside projects. E.g. if you want to ``fmt`` additional paths it's
    better to build your own ``fmt`` task and not add configuration
    variables to the ``config`` dictionary.
+
+
+Multiple environments
+=====================
+
+If you need multiple environments, add tasks which only update
+``fl.config`` as follows:
+
+.. code-block:: python
+
+    from pathlib import Path
+
+    import fh_fablib as fl
+
+    fl.require("1.0.20200824")
+    fl.config.update(base=Path(__file__).parent, host="www-data@feinheit06.nine.ch")
+
+    @fl.task(aliases=["p"])
+    def production(ctx):
+        fl.config.update(domain="example.com", branch="master", remote="production")
+
+
+    @fl.task(aliases=["s"])
+    def stage(ctx):
+        fl.config.update(domain="stage.example.com", branch="develop", remote="stage")
+
+    ns = fl.Collection(*fl.GENERAL, *fl.NINE, production, stage)
+
+Now, ``fab production pull-db``, ``fab stage deploy`` and friends should
+work as expected.
 
 
 Available tasks
