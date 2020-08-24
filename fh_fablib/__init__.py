@@ -332,6 +332,13 @@ def nine_unit(ctx):
 def nine_db_dotenv(ctx):
     """Create a database and initialize the .env"""
     with Connection(config.host) as conn:
+        try:
+            conn.get(f"{config.domain}/.env", io.BytesIO())
+        except FileNotFoundError:
+            pass
+        else:
+            terminate(f"'{config.domain}/.env' already exists on the server")
+
         password = _random_string(20, chars="abcdefghijklmnopqrstuvwxyz0123456789")
         secret_key = _random_string(50)
         dbname = _dbname_from_domain(config.domain)
