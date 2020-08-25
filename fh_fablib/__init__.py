@@ -120,7 +120,7 @@ for job in $(jobs -p); do wait $job; done
         run(ctx, f"bash {f.name}", replace_env=False)
 
 
-@task
+@task(auto_shortflags=False)
 def dev(ctx, host="127.0.0.1", port=8000):
     """Run the development server for the frontend and backend"""
     print(green(f"Starting server at http://{host}:{port}/"))
@@ -216,13 +216,14 @@ def _python3():
     return next(filter(None, (shutil.which(v) for v in interpreters)))
 
 
-@task
-def upgrade(ctx):
+@task(auto_shortflags=False, help={"stable": "Prefer stable versions of packages"})
+def upgrade(ctx, stable=False):
     """Re-create the virtualenv with newest versions of all libraries"""
     run(ctx, "rm -rf venv")
     run(ctx, f"{_python3()} -m venv venv")
     run(ctx, "venv/bin/pip install -U pip wheel setuptools")
-    run(ctx, "venv/bin/pip install -U -r requirements-to-freeze.txt --pre")
+    extra = "" if stable else "--pre"
+    run(ctx, f"venv/bin/pip install -U -r requirements-to-freeze.txt {extra}")
     freeze(ctx)
 
 
