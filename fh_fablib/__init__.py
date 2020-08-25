@@ -572,7 +572,8 @@ def deploy(ctx):
             run(conn, "venv/bin/python manage.py check --deploy", warn=True)
             run(
                 ctx,
-                f"rsync -pthrz --delete static/ {config.host}:{config.domain}/static/",
+                f"rsync -pthrz --delete --stats"
+                f" static/ {config.host}:{config.domain}/static/",
             )
             run(conn, "venv/bin/python manage.py collectstatic --noinput")
         run(conn, f"systemctl --user restart gunicorn@{config.domain}.service")
