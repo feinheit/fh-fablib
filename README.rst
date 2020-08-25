@@ -59,7 +59,7 @@ restarted after deployment. A custom ``deploy`` task follows:
         """Deploy once 🔥"""
         fl.deploy(ctx)  # Reuse
         with fl.Connection(fl.config.host) as conn:
-            conn.run("systemctl --user restart other.service")
+            fl.run(conn, "systemctl --user restart other.service")
 
     ns.add_task(deploy)
 
@@ -148,6 +148,14 @@ Building blocks
 
 The following functions may be used to build your own tasks. They cannot
 be executed directly from the command line.
+
+Running commands
+~~~~~~~~~~~~~~~~~
+
+- ``run(c, ...)``: Wrapper around ``Context.run`` or ``Connection.run``
+  which always sets a few useful arguments (``echo=True``, ``pty= True``
+  and ``replace_env=False`` at the time of writing)
+
 
 Checks
 ~~~~~~
