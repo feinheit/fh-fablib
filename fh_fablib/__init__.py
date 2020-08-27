@@ -128,7 +128,8 @@ def dev(ctx, host="127.0.0.1", port=8000):
         ctx,
         [
             f"venv/bin/python manage.py runserver 0.0.0.0:{port}",
-            f'HOST="{host}" yarn run dev',
+            f'HOST="{host}" yarn run webpack-dev-server'
+            f" --host 0.0.0.0 --port 4000 --hot",
         ],
     )
 
@@ -513,7 +514,7 @@ def _check_django(ctx):
 def _check_prettier(ctx):
     run(
         ctx,
-        f'yarn run prettier --list-different --no-semi --trailing-comma es5'
+        f"yarn run prettier --list-different --no-semi --trailing-comma es5"
         f' "*.js" "{config.app}/static/**/*.js" "{config.app}/static/**/*.scss"',
     )
 
@@ -534,7 +535,7 @@ def check(ctx):
 def _fmt_prettier(ctx):
     run(
         ctx,
-        f'yarn run prettier --write --no-semi --trailing-comma es5'
+        f"yarn run prettier --write --no-semi --trailing-comma es5"
         f' "*.js" "{config.app}/static/**/*.js" "{config.app}/static/**/*.scss"',
     )
 
@@ -551,7 +552,7 @@ def _fmt_pipx_cmds(ctx):
         " .",
     )
     run(ctx, "pipx run --spec 'black>=20.8b1' black .")
-    run(ctx, "pipx run --spec 'flake8>=3.8.3' flake8 .")
+    _check_flake8(ctx)
 
 
 @task
@@ -570,7 +571,7 @@ def deploy(ctx):
 
     check(ctx)
     run(ctx, f"git push origin {config.branch}")
-    run(ctx, "yarn run prod")
+    run(ctx, "NODE_ENV=production yarn run webpack -p --bail")
 
     with Connection(config.host) as conn:
         with conn.cd(config.domain):

@@ -15,6 +15,7 @@ Change log
   configuration may be dropped from package.json (ES5 commas, no
   semicolons where not necessary).
 - Changed ``check`` to run flake8 using pipx too.
+- Inlined the ``dev`` and ``prod`` npm scripts.
 
 
 `1.0.20200825`_
