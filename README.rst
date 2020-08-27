@@ -197,3 +197,129 @@ Helpers
 - ``_reset_passwords(ctx)``: Set all user passwords to ``"password"``.
 - ``require(version)``: Terminate if fh_fablib is older.
 - ``terminate(msg)``: Terminate processing with an error message.
+
+
+Recommended configuration files
+===============================
+
+``.editorconfig``
+~~~~~~~~~~~~~~~~~
+
+::
+
+    # top-most EditorConfig file
+    root = true
+
+    [*]
+    end_of_line = lf
+    insert_final_newline = true
+    charset = utf-8
+    trim_trailing_whitespace = true
+    indent_style = space
+    indent_size = 4
+
+    [*.{html,js,scss}]
+    indent_size = 2
+
+
+``.eslintrc.js``
+~~~~~~~~~~~~~~~~
+
+::
+
+    module.exports = {
+      env: {
+        browser: true,
+        es2020: true,
+        node: true,
+      },
+      extends: [
+        "eslint:recommended",
+        "prettier",
+        "preact",
+        // "prettier/react",
+        // "plugin:react/recommended",
+      ],
+      parser: "babel-eslint",
+      parserOptions: {
+        ecmaFeatures: {
+          experimentalObjectRestSpread: true,
+          jsx: true,
+        },
+        sourceType: "module",
+      },
+      plugins: [
+        // "react",
+        // "react-hooks",
+      ],
+      rules: {
+        "no-unused-vars": [
+          "error",
+          {
+            argsIgnorePattern: "^_",
+            varsIgnorePattern: "React|Fragment|h|^_",
+          },
+        ],
+        // "react/prop-types": "off",
+        // "react/display-name": "off",
+        // "react-hooks/rules-of-hooks": "warn", // Checks rules of Hooks
+        // "react-hooks/exhaustive-deps": "warn", // Checks effect dependencies
+      },
+      settings: {
+        react: {
+          version: "detect",
+        },
+      },
+    }
+
+
+``setup.cfg``
+~~~~~~~~~~~~~
+
+::
+
+    [flake8]
+    exclude=venv,build,docs,.tox,migrate,migrations,node_modules
+    ignore=E203,W503
+    max-line-length=88
+    max-complexity=10
+
+
+``package.json``
+~~~~~~~~~~~~~~~~
+
+::
+
+    {
+      "name": "feinheit.ch",
+      "description": "feinheit",
+      "version": "0.0.1",
+      "private": true,
+      "dependencies": {
+        "babel-eslint": "^10.0.3",
+        "eslint": "^7.7.0",
+        "eslint-config-prettier": "^6.11.0",
+        "fh-webpack-config": "^1.0.7",
+        "prettier": "^2.1.1"
+      },
+      "eslintIgnore": [
+        "app/static/app/lib/",
+        "app/static/app/plugin_buttons.js"
+      ]
+    }
+
+
+``webpack.config.js``
+~~~~~~~~~~~~~~~~~~~~~
+
+::
+
+    const merge = require("webpack-merge")
+    const config = require("fh-webpack-config")
+
+    module.exports = merge.smart(
+      config.commonConfig,
+      // config.preactConfig,
+      // config.reactConfig,
+      config.chunkSplittingConfig
+    )
