@@ -513,8 +513,8 @@ def _check_django(ctx):
 def _check_prettier(ctx):
     run(
         ctx,
-        f'yarn run prettier --list-different "*.js" "{config.app}/static/**/*.js"'
-        f' "{config.app}/static/**/*.scss"',
+        f'yarn run prettier --list-different --no-semi --trailing-comma es5'
+        f' "*.js" "{config.app}/static/**/*.js" "{config.app}/static/**/*.scss"',
     )
 
 
@@ -534,8 +534,8 @@ def check(ctx):
 def _fmt_prettier(ctx):
     run(
         ctx,
-        f'yarn run prettier --write "*.js" "{config.app}/static/**/*.js"'
-        f' "{config.app}/static/**/*.scss"',
+        f'yarn run prettier --write --no-semi --trailing-comma es5'
+        f' "*.js" "{config.app}/static/**/*.js" "{config.app}/static/**/*.scss"',
     )
 
 
