@@ -503,7 +503,7 @@ def fetch(ctx):
 
 
 def _check_flake8(ctx):
-    run(ctx, "venv/bin/flake8 .")
+    run(ctx, "pipx run --spec 'flake8>=3.8.3' flake8 .")
 
 
 def _check_django(ctx):
