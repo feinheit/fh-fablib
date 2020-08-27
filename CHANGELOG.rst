@@ -11,6 +11,10 @@ Change log
 - Changed the default ``fmt`` implementation to run isort, black and
   flake8 via `pipx <https://pipxproject.github.io/pipx/>`__. It is
   recommended you remove ``isort`` configuration from your project.
+- Added default options when running prettier so that prettier
+  configuration may be dropped from package.json (ES5 commas, no
+  semicolons where not necessary).
+- Changed ``check`` to run flake8 using pipx too.
 
 
 `1.0.20200825`_
