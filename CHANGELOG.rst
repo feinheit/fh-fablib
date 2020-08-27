@@ -8,6 +8,9 @@ Change log
 - Added the ``--stable`` switch to ``upgrade`` to only install stable
   Python packages, no alpha, beta or rc versions.
 - Disabled shortflags to ``dev``.
+- Changed the default ``fmt`` implementation to run isort, black and
+  flake8 via `pipx <https://pipxproject.github.io/pipx/>`__. It is
+  recommended you remove ``isort`` configuration from your project.
 
 
 `1.0.20200825`_

@@ -543,11 +543,22 @@ def _fmt_tox_style(ctx):
     run(ctx, "tox -e style")
 
 
+def _fmt_pipx_cmds(ctx):
+    run(
+        ctx,
+        "pipx run --spec 'isort>=5.4' isort"
+        " --virtual-env venv --profile=black --lines-after-imports=2 --combine-as"
+        " .",
+    )
+    run(ctx, "pipx run --spec 'black>=20.8b1' black .")
+    run(ctx, "pipx run --spec 'flake8>=3.8.3' flake8 .")
+
+
 @task
 def fmt(ctx):
     """Format the code"""
     _fmt_prettier(ctx)
-    _fmt_tox_style(ctx)
+    _fmt_pipx_cmds(ctx)
 
 
 @task

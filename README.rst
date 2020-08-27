@@ -172,6 +172,8 @@ Formatters
 
 - ``_fmt_prettier(ctx)``: Run ``prettier``
 - ``_fmt_tox_style(ctx)``: Run ``tox -e style``
+- ``_fmt_pipx_cmds(ctx)``: Run isort, black and flake8 via `pipx
+  <https://pipxproject.github.io/pipx/>`__
 
 
 Helpers
