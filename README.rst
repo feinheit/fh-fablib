@@ -8,8 +8,8 @@ Usage
 1. Install `pipx <https://pipxproject.github.io/pipx/>`__
 2. Install fh-fablib
 
-   a. ``pipx install fh_fablib --include-deps`` if you're happy with the packaged version
-   b. ``pipx install --editable git+ssh://git@github.com/feinheit/fh-fablib.git@main#egg=fh_fablib --include-deps`` otherwise
+   a. ``pipx install fh_fablib`` if you're happy with the packaged version
+   b. ``pipx install --editable git+ssh://git@github.com/feinheit/fh-fablib.git@main#egg=fh_fablib`` otherwise
 
 3. Add a ``fabfile.py`` to your project. A minimal example follows:
 
