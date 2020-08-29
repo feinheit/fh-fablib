@@ -32,4 +32,5 @@ setup(
     install_requires=["fabric", "speckenv>=1.1"],
     python_requires=">=3",
     zip_safe=False,
+    entry_points={"console_scripts": ["fab = fabric.main:program.run"]},
 )
