@@ -6,7 +6,7 @@ import shutil
 import sys
 import tempfile
 import warnings
-from pathlib import Path  # noqa, re-export
+from pathlib import Path
 
 import speckenv
 from fabric import Connection, task
