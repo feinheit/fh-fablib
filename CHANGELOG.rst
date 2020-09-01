@@ -8,6 +8,7 @@ Change log
 - Added our own ``entry_points`` so that the ``--include-deps`` argument
   to ``pipx`` isn't necessary anymore.
 - Removed an unnecessary ``# noqa``.
+- Stopped running ``flake8`` when formatting code.
 
 
 `1.0.20200827`_

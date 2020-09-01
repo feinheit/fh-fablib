@@ -552,7 +552,6 @@ def _fmt_pipx_cmds(ctx):
         " .",
     )
     run(ctx, "pipx run --spec 'black>=20.8b1' black .")
-    _check_flake8(ctx)
 
 
 @task
