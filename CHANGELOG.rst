@@ -9,6 +9,8 @@ Change log
   to ``pipx`` isn't necessary anymore.
 - Removed an unnecessary ``# noqa``.
 - Stopped running ``flake8`` when formatting code.
+- Removed the redundant ``--trailing-comma es5`` argument to prettier,
+  it is the default.
 
 
 `1.0.20200827`_
