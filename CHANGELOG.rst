@@ -11,6 +11,8 @@ Change log
 - Stopped running ``flake8`` when formatting code.
 - Removed the redundant ``--trailing-comma es5`` argument to prettier,
   it is the default.
+- Splitted ``_fmt_pipx_cmds`` into ``_fmt_isort`` and ``_fmt_black``.
+- Reordered ``fmt`` to run Python tasks first, as ``check`` does.
 
 
 `1.0.20200827`_
