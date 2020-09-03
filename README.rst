@@ -165,6 +165,8 @@ Checks
 - ``_check_prettier(ctx)``: Check whether the frontend code conforms to
   prettier's formatting
 - ``_check_eslint(ctx)``: Run ESLint
+- ``_check_branch(ctx)``: Terminates if checked out branch does not
+  match configuration.
 
 
 Formatters

@@ -523,6 +523,12 @@ def _check_eslint(ctx):
     run(ctx, f'yarn run eslint "*.js" {config.app}/static')
 
 
+def _check_branch(ctx):
+    branch = run(ctx, "git rev-parse --abbrev-ref HEAD", hide=True).stdout.strip()
+    if branch != config.branch:
+        terminate(f"Current branch is '{branch}', should be '{config.branch}'")
+
+
 @task
 def check(ctx):
     """Check the coding style"""
@@ -564,10 +570,7 @@ def fmt(ctx):
 @task
 def deploy(ctx):
     """Deploy once 🔥"""
-    branch = run(ctx, "git rev-parse --abbrev-ref HEAD", hide=True).stdout.strip()
-    if branch != config.branch:
-        terminate(f"Current branch is '{branch}', should be '{config.branch}'")
-
+    _check_branch(ctx)
     check(ctx)
     run(ctx, f"git push origin {config.branch}")
     run(ctx, "NODE_ENV=production yarn run webpack -p --bail")
