@@ -217,7 +217,7 @@ def _python3():
     return next(filter(None, (shutil.which(v) for v in interpreters)))
 
 
-@task(auto_shortflags=False, help={"stable": "Prefer stable versions of packages"})
+@task(auto_shortflags=False, help={"stable": "Avoid pre-release versions of packages"})
 def upgrade(ctx, stable=False):
     """Re-create the virtualenv with newest versions of all libraries"""
     run(ctx, "rm -rf venv")
