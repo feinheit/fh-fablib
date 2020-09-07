@@ -5,6 +5,9 @@ Change log
 `Next version`_
 ~~~~~~~~~~~~~~~
 
+`1.0.20200907`_
+~~~~~~~~~~~~~~~
+
 - Removed the redundant ``--trailing-comma es5`` argument to prettier,
   it is the default.
 - Splitted ``_fmt_pipx_cmds`` into ``_fmt_isort`` and ``_fmt_black``.
@@ -69,4 +72,5 @@ Change log
 .. _1.0.20200825: https://github.com/feinheit/fh-fablib/compare/1.0.20200824...1.0.20200825
 .. _1.0.20200827: https://github.com/feinheit/fh-fablib/compare/1.0.20200825...1.0.20200827
 .. _1.0.20200901: https://github.com/feinheit/fh-fablib/compare/1.0.20200827...1.0.20200901
-.. _Next version: https://github.com/feinheit/fh-fablib/compare/1.0.20200901...main
+.. _1.0.20200907: https://github.com/feinheit/fh-fablib/compare/1.0.20200901...1.0.20200907
+.. _Next version: https://github.com/feinheit/fh-fablib/compare/1.0.20200907...main
