@@ -449,7 +449,7 @@ def nine_venv(ctx):
     """Create a venv and install packages from requirements.txt"""
     with Connection(config.host) as conn:
         with conn.cd(config.domain):
-            run(conn, "python3 -m venv venv")
+            run(conn, "PATH=~/.pyenv/shims:$PATH python3 -m venv venv")
             run(conn, "venv/bin/pip install -U pip wheel setuptools")
             run(conn, "venv/bin/pip install -r requirements.txt")
 
