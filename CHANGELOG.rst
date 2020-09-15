@@ -5,6 +5,10 @@ Change log
 `Next version`_
 ~~~~~~~~~~~~~~~
 
+
+`1.0.20200915`_
+~~~~~~~~~~~~~~~
+
 - Fixed ``nine-alias-remove`` to actually remove the second subdomain.
 - Added a ``--include-www`` option to ``nine-alias-add`` and
   ``nine-alias-remove``. The ``www.`` subdomain isn't added or removed
@@ -79,4 +83,5 @@ Change log
 .. _1.0.20200827: https://github.com/feinheit/fh-fablib/compare/1.0.20200825...1.0.20200827
 .. _1.0.20200901: https://github.com/feinheit/fh-fablib/compare/1.0.20200827...1.0.20200901
 .. _1.0.20200907: https://github.com/feinheit/fh-fablib/compare/1.0.20200901...1.0.20200907
-.. _Next version: https://github.com/feinheit/fh-fablib/compare/1.0.20200907...main
+.. _1.0.20200915: https://github.com/feinheit/fh-fablib/compare/1.0.20200907...1.0.20200915
+.. _Next version: https://github.com/feinheit/fh-fablib/compare/1.0.20200915...main
