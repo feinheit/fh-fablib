@@ -328,7 +328,7 @@ def nine_alias_remove(ctx, alias):
         )
         run(
             conn,
-            f"sudo nine-manage-vhosts alias create --virtual-host={config.domain}"
+            f"sudo nine-manage-vhosts alias remove --virtual-host={config.domain}"
             f" www.{alias}",
             warn=True,
         )

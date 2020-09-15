@@ -5,6 +5,9 @@ Change log
 `Next version`_
 ~~~~~~~~~~~~~~~
 
+- Fixed ``nine-alias-remove`` to actually remove the second subdomain.
+
+
 `1.0.20200907`_
 ~~~~~~~~~~~~~~~
 
