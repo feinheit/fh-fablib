@@ -300,8 +300,8 @@ def nine_vhost(ctx):
             run(conn, "mkdir -f media tmp")
 
 
-@task
-def nine_alias_add(ctx, alias):
+@task(auto_shortflags=False, help={"include-www": "Include the www. subdomain"})
+def nine_alias_add(ctx, alias, include_www=False):
     """Add aliasses to a nine-manage-vhost virtual host"""
     with Connection(config.host) as conn:
         run(
@@ -309,16 +309,17 @@ def nine_alias_add(ctx, alias):
             f"sudo nine-manage-vhosts alias create --virtual-host={config.domain}"
             f" {alias}",
         )
-        run(
-            conn,
-            f"sudo nine-manage-vhosts alias create --virtual-host={config.domain}"
-            f" www.{alias}",
-            warn=True,
-        )
+        if include_www:
+            run(
+                conn,
+                f"sudo nine-manage-vhosts alias create --virtual-host={config.domain}"
+                f" www.{alias}",
+                warn=True,
+            )
 
 
-@task
-def nine_alias_remove(ctx, alias):
+@task(auto_shortflags=False, help={"include-www": "Include the www. subdomain"})
+def nine_alias_remove(ctx, alias, include_www=False):
     """Remove aliasses from a nine-manage-vhost virtual host"""
     with Connection(config.host) as conn:
         run(
@@ -326,12 +327,13 @@ def nine_alias_remove(ctx, alias):
             f"sudo nine-manage-vhosts alias remove --virtual-host={config.domain}"
             f" {alias}",
         )
-        run(
-            conn,
-            f"sudo nine-manage-vhosts alias remove --virtual-host={config.domain}"
-            f" www.{alias}",
-            warn=True,
-        )
+        if include_www:
+            run(
+                conn,
+                f"sudo nine-manage-vhosts alias remove --virtual-host={config.domain}"
+                f" www.{alias}",
+                warn=True,
+            )
 
 
 @task

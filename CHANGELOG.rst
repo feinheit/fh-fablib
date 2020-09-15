@@ -6,6 +6,9 @@ Change log
 ~~~~~~~~~~~~~~~
 
 - Fixed ``nine-alias-remove`` to actually remove the second subdomain.
+- Added a ``--include-www`` option to ``nine-alias-add`` and
+  ``nine-alias-remove``. The ``www.`` subdomain isn't added or removed
+  by default anymore.
 
 
 `1.0.20200907`_
