@@ -5,6 +5,10 @@ Change log
 `Next version`_
 ~~~~~~~~~~~~~~~
 
+- Made ``nine-venv`` recreate the virtualenv from scratch.
+- Made ``local`` recreate ``node_modules`` and the virtualenv from
+  scratch.
+
 
 `1.0.20200915`_
 ~~~~~~~~~~~~~~~
