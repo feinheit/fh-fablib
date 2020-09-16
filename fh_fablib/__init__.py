@@ -78,7 +78,7 @@ def pre_commit_hook():
     path = config.base / ".git" / "hooks" / "pre-commit"
     if not path.exists():
         with path.open("w") as hook:
-            hook.write("#!/bin/sh\nfab check\n")
+            hook.write("#!/bin/sh\nfl check\n")
         path.chmod(0o755)
 
 
@@ -100,7 +100,7 @@ def _dbname_from_domain(domain):
 
 
 def _concurrently(ctx, jobs):
-    with tempfile.NamedTemporaryFile("w+", prefix="fab.", suffix=".sh") as f:
+    with tempfile.NamedTemporaryFile("w+", prefix="fl.", suffix=".sh") as f:
         jobs = "\n".join(f"{job} &" for job in jobs)
         # https://gist.github.com/jiaaro/b2e1b7c705022c2cf56888152a999f65
         f.write(

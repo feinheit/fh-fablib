@@ -5,6 +5,7 @@ Change log
 `Next version`_
 ~~~~~~~~~~~~~~~
 
+- Renamed the preferred entrypoint from ``fab`` to ``fl``.
 - Made ``nine-venv`` recreate the virtualenv from scratch.
 - Made ``local`` recreate ``node_modules`` and the virtualenv from
   scratch.
