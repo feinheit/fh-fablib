@@ -5,6 +5,10 @@ Change log
 `Next version`_
 ~~~~~~~~~~~~~~~
 
+
+`1.0.20200916`_
+~~~~~~~~~~~~~~~
+
 - Renamed the preferred entrypoint from ``fab`` to ``fl``.
 - Made ``nine-venv`` recreate the virtualenv from scratch.
 - Made ``local`` recreate ``node_modules`` and the virtualenv from
@@ -89,4 +93,5 @@ Change log
 .. _1.0.20200901: https://github.com/feinheit/fh-fablib/compare/1.0.20200827...1.0.20200901
 .. _1.0.20200907: https://github.com/feinheit/fh-fablib/compare/1.0.20200901...1.0.20200907
 .. _1.0.20200915: https://github.com/feinheit/fh-fablib/compare/1.0.20200907...1.0.20200915
-.. _Next version: https://github.com/feinheit/fh-fablib/compare/1.0.20200915...main
+.. _1.0.20200916: https://github.com/feinheit/fh-fablib/compare/1.0.20200915...1.0.20200916
+.. _Next version: https://github.com/feinheit/fh-fablib/compare/1.0.20200916...main

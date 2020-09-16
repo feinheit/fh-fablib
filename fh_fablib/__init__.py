@@ -13,7 +13,7 @@ from fabric import Connection, task
 from invoke import Collection  # noqa, re-export
 
 
-__version__ = "1.0.20200915"
+__version__ = "1.0.20200916"
 
 
 # I don't care, in this context.
