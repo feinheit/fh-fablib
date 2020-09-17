@@ -34,7 +34,6 @@ setup(
     zip_safe=False,
     entry_points={
         "console_scripts": [
-            "fab = fabric.main:program.run",
             "fl = fabric.main:program.run",
         ]
     },
