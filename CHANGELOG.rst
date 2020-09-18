@@ -9,7 +9,7 @@ Change log
 `1.0.20200916`_
 ~~~~~~~~~~~~~~~
 
-- Renamed the preferred entrypoint from ``fab`` to ``fl``.
+- Renamed the entrypoint from ``fab`` to ``fl``.
 - Made ``nine-venv`` recreate the virtualenv from scratch.
 - Made ``local`` recreate ``node_modules`` and the virtualenv from
   scratch.
