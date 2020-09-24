@@ -6,10 +6,19 @@ Change log
 ~~~~~~~~~~~~~~~
 
 
-`1.0.20200916`_
+`1.0.20200924`_
 ~~~~~~~~~~~~~~~
 
 - Renamed the entrypoint from ``fab`` to ``fl``.
+- Switched from running ``pip`` directly to the recommended ``python -m
+  pip`` everywhere.
+- Avoided starting too many processes by executing binaries in
+  ``node_modules/.bin`` directly instead of going through ``yarn run``.
+
+
+`1.0.20200916`_
+~~~~~~~~~~~~~~~
+
 - Made ``nine-venv`` recreate the virtualenv from scratch.
 - Made ``local`` recreate ``node_modules`` and the virtualenv from
   scratch.
@@ -94,4 +103,5 @@ Change log
 .. _1.0.20200907: https://github.com/feinheit/fh-fablib/compare/1.0.20200901...1.0.20200907
 .. _1.0.20200915: https://github.com/feinheit/fh-fablib/compare/1.0.20200907...1.0.20200915
 .. _1.0.20200916: https://github.com/feinheit/fh-fablib/compare/1.0.20200915...1.0.20200916
-.. _Next version: https://github.com/feinheit/fh-fablib/compare/1.0.20200916...main
+.. _1.0.20200924: https://github.com/feinheit/fh-fablib/compare/1.0.20200915...1.0.20200924
+.. _Next version: https://github.com/feinheit/fh-fablib/compare/1.0.20200924...main
