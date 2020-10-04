@@ -295,7 +295,7 @@ def nine_vhost(ctx):
             conn,
             f"sudo nine-manage-vhosts virtual-host create {config.domain}"
             " --template=feinheit_cache"
-            " --webroot=/home/www-data/{config.domain}/htdocs",
+            f" --webroot=/home/www-data/{config.domain}/htdocs",
         )
         with conn.cd(config.domain):
             run(conn, "mkdir -f media tmp")
