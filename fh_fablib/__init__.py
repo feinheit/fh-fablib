@@ -298,7 +298,7 @@ def nine_vhost(ctx):
             f" --webroot=/home/www-data/{config.domain}/htdocs",
         )
         with conn.cd(config.domain):
-            run(conn, "mkdir -f media tmp")
+            run(conn, "mkdir -p media tmp")
 
 
 @task(auto_shortflags=False, help={"include-www": "Include the www. subdomain"})
