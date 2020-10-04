@@ -5,8 +5,9 @@ Change log
 `Next version`_
 ~~~~~~~~~~~~~~~
 
-- Source ``.profile`` again when running psql admin commands on the
-  server.
+- Started sourcing ``.profile`` again when running psql admin commands
+  on the server.
+- Fixed many problems with obviously untested ``nine-*`` tasks.
 
 
 `1.0.20201004`_

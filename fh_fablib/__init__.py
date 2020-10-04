@@ -179,10 +179,6 @@ def _srv_env(conn, path):
     return lambda *a, **kw: speckenv.env(*a, **kw, mapping=mapping)
 
 
-def _nine_has_manage_databases(conn):
-    return bool(run(conn, "which nine-manage-databases", warn=True).stdout.strip())
-
-
 @task
 def mm(ctx):
     """Update the translation catalogs"""
@@ -343,6 +339,10 @@ def nine_unit(ctx):
     with Connection(config.host) as conn:
         run(conn, f"systemctl --user start gunicorn@{config.domain}.service")
         run(conn, f"systemctl --user enable gunicorn@{config.domain}.service")
+
+
+def _nine_has_manage_databases(conn):
+    return bool(run(conn, "which nine-manage-databases", warn=True).stdout.strip())
 
 
 @task
