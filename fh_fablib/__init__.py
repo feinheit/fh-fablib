@@ -13,7 +13,7 @@ from fabric import Connection, task
 from invoke import Collection  # noqa, re-export
 
 
-__version__ = "1.0.20200924"
+__version__ = "1.0.20201004"
 
 
 # I don't care, in this context.
@@ -474,14 +474,19 @@ def nine(ctx):
 def bitbucket(ctx):
     """Create a repository on Bitbucket and push the code"""
     e = _local_env(Path.home() / ".box.env")
-    print("Username: ", end="")
-    username = input(e("BITBUCKET_USERNAME"))
-    print("Password: ", end="")
-    password = input(e("BITBUCKET_PASSWORD"))
-    print("Organization: ", end="")
-    organization = input(e("BITBUCKET_ORGANIZATION"))
-    print("Repository: ", end="")
-    repository = input(config.domain)
+    username = e("BITBUCKET_USERNAME")
+    password = e("BITBUCKET_PASSWORD")
+    organization = e("BITBUCKET_ORGANIZATION")
+    repository = config.domain
+
+    print(f"Username [{username}]: ", end="")
+    username = input() or username
+    print(f"Password [{password}]: ", end="")
+    password = input() or password
+    print(f"Organization [{organization}]: ", end="")
+    organization = input() or organization
+    print(f"Repository [{repository}]: ", end="")
+    repository = input() or repository
 
     run(
         ctx,
@@ -499,10 +504,13 @@ curl -X POST -v -u {username}:"{password}" -H "content-type: application/json"\
 def github(ctx):
     """Create a repository on GitHub and push the code"""
     e = _local_env(Path.home() / ".box.env")
-    print("Organization: ", end="")
-    organization = input(e("GITHUB_ORGANIZATION"))
-    print("Repository: ", end="")
-    repository = input(config.domain)
+    organization = e("GITHUB_ORGANIZATION")
+    repository = config.domain
+
+    print(f"Organization [{organization}]: ", end="")
+    organization = input() or organization
+    print(f"Repository [{repository}]: ", end="")
+    repository = input() or repository
 
     run(ctx, f"gh repo create {organization}/{repository} --private")
     run(ctx, f"git push -u origin {config.branch}")

@@ -5,8 +5,14 @@ Change log
 `Next version`_
 ~~~~~~~~~~~~~~~
 
+
+`1.0.20201004`_
+~~~~~~~~~~~~~~~
+
 - Added ``github`` to create a repo on GitHub using the `GitHub CLI
   <https://cli.github.com/>__` and immediately push the code there.
+- Fixed uses of ``input()`` which somehow didn't work like they were
+  supposed to at all.
 
 
 `1.0.20200924`_
@@ -107,4 +113,5 @@ Change log
 .. _1.0.20200915: https://github.com/feinheit/fh-fablib/compare/1.0.20200907...1.0.20200915
 .. _1.0.20200916: https://github.com/feinheit/fh-fablib/compare/1.0.20200915...1.0.20200916
 .. _1.0.20200924: https://github.com/feinheit/fh-fablib/compare/1.0.20200915...1.0.20200924
-.. _Next version: https://github.com/feinheit/fh-fablib/compare/1.0.20200924...main
+.. _1.0.20201004: https://github.com/feinheit/fh-fablib/compare/1.0.20200924...1.0.20201004
+.. _Next version: https://github.com/feinheit/fh-fablib/compare/1.0.20201004...main
