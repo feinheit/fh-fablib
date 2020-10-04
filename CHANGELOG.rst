@@ -5,6 +5,9 @@ Change log
 `Next version`_
 ~~~~~~~~~~~~~~~
 
+- Added ``github`` to create a repo on GitHub using the `GitHub CLI
+  <https://cli.github.com/>__` and immediately push the code there.
+
 
 `1.0.20200924`_
 ~~~~~~~~~~~~~~~

@@ -496,6 +496,19 @@ curl -X POST -v -u {username}:"{password}" -H "content-type: application/json"\
 
 
 @task
+def github(ctx):
+    """Create a repository on GitHub and push the code"""
+    e = _local_env(Path.home() / ".box.env")
+    print("Organization: ", end="")
+    organization = input(e("GITHUB_ORGANIZATION"))
+    print("Repository: ", end="")
+    repository = input(config.domain)
+
+    run(ctx, f"gh repo create {organization}/{repository} --private")
+    run(ctx, f"git push -u origin {config.branch}")
+
+
+@task
 def fetch(ctx):
     """Ensure a remote exists for the server and fetch"""
     run(
@@ -614,6 +627,7 @@ GENERAL = {
     pull_db,
     local,
     bitbucket,
+    github,
     fetch,
     check,
     fmt,

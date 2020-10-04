@@ -117,6 +117,7 @@ Available tasks
 - ``fetch``: Ensure a remote exists for the server and fetch
 - ``fmt``: Format the code
 - ``freeze``: Freeze the virtualenv's state
+- ``github``: Create a repository on GitHub and push the code
 - ``local``: Local environment setup
 - ``mm``: Update the translation catalogs
 - ``pull-db``: Pull a local copy of the remote DB and reset all passwords
