@@ -371,14 +371,17 @@ def nine_db_dotenv(ctx):
         else:
             run(
                 conn,
-                f'psql -c "CREATE ROLE {dbname} WITH'
+                f'source ~/.profile && psql -c "CREATE ROLE {dbname} WITH'
                 f" ENCRYPTED PASSWORD '{password}'"
                 f' LOGIN NOCREATEDB NOCREATEROLE NOSUPERUSER"',
             )
-            run(conn, f'psql -c "GRANT {dbname} TO admin"')
             run(
                 conn,
-                f'psql -c "CREATE DATABASE {dbname} WITH'
+                f'source ~/.profile && psql -c "GRANT {dbname} TO admin"',
+            )
+            run(
+                conn,
+                f'source ~/.profile && psql -c "CREATE DATABASE {dbname} WITH'
                 f" OWNER {dbname} TEMPLATE template0 ENCODING 'UTF8'"
                 f'"',
             )
