@@ -442,7 +442,7 @@ def nine_disable(ctx):
 @task
 def nine_checkout(ctx):
     """Checkout the repository on the server"""
-    repo = run(ctx, "git config remote.origin.url", hide=True).stdout
+    repo = run(ctx, "git config remote.origin.url", hide=True).stdout.strip()
     with Connection(config.host) as conn:
         run(conn, f"git clone {repo} {config.domain} -b {config.branch}")
 
