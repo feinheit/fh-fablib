@@ -1,4 +1,3 @@
-import invoke
 import io
 import os
 import random
@@ -181,10 +180,7 @@ def _srv_env(conn, path):
 
 
 def _nine_has_manage_databases(conn):
-    try:
-        return bool(run(conn, "which nine-manage-databases").stdout.strip())
-    except invoke.exceptions.UnexpectedExit:
-        return False
+    return bool(run(conn, "which nine-manage-databases", warn=True).stdout.strip())
 
 
 @task
