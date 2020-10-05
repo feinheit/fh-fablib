@@ -5,6 +5,10 @@ Change log
 `Next version`_
 ~~~~~~~~~~~~~~~
 
+
+`1.0.20201005`_
+~~~~~~~~~~~~~~~
+
 - Started sourcing ``.profile`` again when running psql admin commands
   on the server.
 - Fixed many problems with obviously untested ``nine-*`` tasks.
@@ -118,4 +122,5 @@ Change log
 .. _1.0.20200916: https://github.com/feinheit/fh-fablib/compare/1.0.20200915...1.0.20200916
 .. _1.0.20200924: https://github.com/feinheit/fh-fablib/compare/1.0.20200915...1.0.20200924
 .. _1.0.20201004: https://github.com/feinheit/fh-fablib/compare/1.0.20200924...1.0.20201004
-.. _Next version: https://github.com/feinheit/fh-fablib/compare/1.0.20201004...main
+.. _1.0.20201005: https://github.com/feinheit/fh-fablib/compare/1.0.20201004...1.0.20201005
+.. _Next version: https://github.com/feinheit/fh-fablib/compare/1.0.20201005...main
