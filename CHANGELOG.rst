@@ -5,6 +5,8 @@ Change log
 `Next version`_
 ~~~~~~~~~~~~~~~
 
+- Started using pip's 2020 resolver when upgrading the virtualenv.
+
 
 `1.0.20201005`_
 ~~~~~~~~~~~~~~~

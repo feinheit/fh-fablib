@@ -220,6 +220,7 @@ def upgrade(ctx, stable=False):
     run(ctx, f"{_python3()} -m venv venv")
     run(ctx, "venv/bin/python -m pip install -U pip wheel setuptools")
     extra = "" if stable else "--pre"
+    extra += " --use-feature=2020-resolver"
     run(ctx, f"venv/bin/python -m pip install -U -r requirements-to-freeze.txt {extra}")
     freeze(ctx)
 
