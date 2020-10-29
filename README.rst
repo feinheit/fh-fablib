@@ -168,6 +168,8 @@ Checks
 - ``_check_eslint(ctx)``: Run ESLint
 - ``_check_branch(ctx)``: Terminates if checked out branch does not
   match configuration.
+- ``_check_no_uncommitted_changes(ctx)``: Terminates if there are
+  uncommitted changes on the server.
 
 
 Formatters

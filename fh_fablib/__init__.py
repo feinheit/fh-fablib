@@ -558,6 +558,14 @@ def _check_branch(ctx):
         terminate(f"Current branch is '{branch}', should be '{config.branch}'")
 
 
+def _check_no_uncommitted_changes(ctx):
+    with Connection(config.host) as conn:
+        with conn.cd(config.domain):
+            result = run(conn, "git status --porcelain").stdout.strip()
+            if result:
+                terminate("Terminating because of uncommitted changes on server")
+
+
 @task
 def check(ctx):
     """Check the coding style"""
@@ -604,6 +612,7 @@ def fmt(ctx):
 def deploy(ctx):
     """Deploy once 🔥"""
     _check_branch(ctx)
+    _check_no_uncommitted_changes(ctx)
     check(ctx)
     run(ctx, f"git push origin {config.branch}")
     run(ctx, "NODE_ENV=production node_modules/.bin/webpack -p --bail")
