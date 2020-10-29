@@ -5,7 +5,13 @@ Change log
 `Next version`_
 ~~~~~~~~~~~~~~~
 
+
+`1.0.20201029`_
+~~~~~~~~~~~~~~~
+
 - Started using pip's 2020 resolver when upgrading the virtualenv.
+- Started terminating deploys when there are uncommitted changes on
+  the server.
 
 
 `1.0.20201005`_
