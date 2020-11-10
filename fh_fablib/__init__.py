@@ -58,7 +58,14 @@ class Config:
         pre_commit_hook()
 
     def __getattr__(self, key):
-        terminate(f"Configuration key '{key}' not set")
+        environments = self.__dict__.get("environments")
+        if environments:
+            environments = f" [{', '.join(sorted(environments))}]"
+        terminate(
+            f"Configuration key '{key}' not set. "
+            f"Maybe you forgot to set an environment with which to interact?"
+            f"{environments}"
+        )
 
 
 #: Defaults

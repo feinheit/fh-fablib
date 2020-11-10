@@ -5,6 +5,9 @@ Change log
 `Next version`_
 ~~~~~~~~~~~~~~~
 
+- Allowed setting the ``environments`` config key to produce nicer error
+  messages when forgetting to set an environment with which to interact.
+
 
 `1.0.20201029`_
 ~~~~~~~~~~~~~~~

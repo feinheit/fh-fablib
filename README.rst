@@ -87,6 +87,9 @@ If you need multiple environments, add tasks which only update
 
     fl.require("1.0.20200824")
     fl.config.update(base=Path(__file__).parent, host="www-data@feinheit06.nine.ch")
+    # Not required, but produces a nicer error message if users forget
+    # to set an environment with which to interact:
+    fl.config.update(environments=["production", "stage"])
 
     @fl.task(aliases=["p"])
     def production(ctx):
