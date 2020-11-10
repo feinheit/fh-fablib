@@ -85,7 +85,7 @@ If you need multiple environments, add tasks which only update
 
     import fh_fablib as fl
 
-    fl.require("1.0.20200824")
+    fl.require("1.0.20201110")
     fl.config.update(base=Path(__file__).parent, host="www-data@feinheit06.nine.ch")
     # Not required, but produces a nicer error message if users forget
     # to set an environment with which to interact:

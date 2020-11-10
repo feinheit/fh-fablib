@@ -5,6 +5,10 @@ Change log
 `Next version`_
 ~~~~~~~~~~~~~~~
 
+
+`1.0.20201110`_
+~~~~~~~~~~~~~~~
+
 - Allowed setting the ``environments`` config key to produce nicer error
   messages when forgetting to set an environment with which to interact.
 
@@ -134,4 +138,6 @@ Change log
 .. _1.0.20200924: https://github.com/feinheit/fh-fablib/compare/1.0.20200915...1.0.20200924
 .. _1.0.20201004: https://github.com/feinheit/fh-fablib/compare/1.0.20200924...1.0.20201004
 .. _1.0.20201005: https://github.com/feinheit/fh-fablib/compare/1.0.20201004...1.0.20201005
-.. _Next version: https://github.com/feinheit/fh-fablib/compare/1.0.20201005...main
+.. _1.0.20201029: https://github.com/feinheit/fh-fablib/compare/1.0.20201005...1.0.20201029
+.. _1.0.20201110: https://github.com/feinheit/fh-fablib/compare/1.0.20201029...1.0.20201110
+.. _Next version: https://github.com/feinheit/fh-fablib/compare/1.0.20201110...main
