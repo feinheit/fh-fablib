@@ -267,12 +267,13 @@ def _local_dotenv_if_not_exists():
     with dotenv.open("w") as f:
         f.write(
             f"""\
+DEBUG=True
 DATABASE_URL=postgres://localhost:5432/{dbname}
 CACHE_URL=hiredis://localhost:6379/1/?key_prefix={dbname}
 SECRET_KEY={secret_key}
-SENTRY_DSN=
 ALLOWED_HOSTS=["*"]
-DEBUG=True
+
+SENTRY_DSN=
 """
         )
 
@@ -401,10 +402,11 @@ DEBUG=False
 DATABASE_URL=postgres://{dbname}:{password}@localhost:5432/{dbname}
 CACHE_URL=hiredis://localhost:6379/1/?key_prefix={dbname}
 SECRET_KEY={secret_key}
-SENTRY_DSN=
 ALLOWED_HOSTS=[".{config.domain}", ".{conn.host}"]
+
 GOOGLE_CLIENT_ID=
 GOOGLE_CLIENT_SECRET=
+SENTRY_DSN=
 
 # LIVE=True
 # CANONICAL_DOMAIN={config.domain}
