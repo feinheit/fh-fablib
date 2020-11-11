@@ -5,6 +5,8 @@ Change log
 `Next version`_
 ~~~~~~~~~~~~~~~
 
+- Fixed ``nine-disable`` to backup and drop the database for real.
+
 
 `1.0.20201110`_
 ~~~~~~~~~~~~~~~

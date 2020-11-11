@@ -440,16 +440,18 @@ def nine_disable(ctx):
         run(conn, f"sudo nine-manage-vhosts virtual-host remove {config.domain}")
         run(conn, f"systemctl --user stop gunicorn@{config.domain}.service")
         run(conn, f"systemctl --user disable gunicorn@{config.domain}.service")
+
         e = _srv_env(conn, f"{config.domain}/.env")
         srv_dsn = e("DATABASE_URL")
-        run(conn, f"pg_dump -Ox {srv_dsn} > DUMP.sql")
-        srv_dbname = _dbname_from_dsn(srv_dsn)
+        srv_dbname = _dbname_from_dsn(e("DATABASE_URL"))
+
+        run(conn, f"pg_dump -Ox {srv_dsn} > {config.domain}/{srv_dbname}.sql")
 
         if _nine_has_manage_databases(conn):
             run(conn, f"sudo nine-manage-databases database drop --force {srv_dbname}")
         else:
-            run(conn, f"dropdb {srv_dbname}")
-            run(conn, f"dropuser {srv_dbname}")
+            run(conn, f"source ~/.profile && dropdb {srv_dbname}")
+            run(conn, f"source ~/.profile && dropuser {srv_dbname}")
 
 
 @task
