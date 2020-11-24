@@ -6,6 +6,7 @@ Change log
 ~~~~~~~~~~~~~~~
 
 - Fixed ``nine-disable`` to backup and drop the database for real.
+- Promoted ``_reset_passwords`` to ``reset-pw``.
 
 
 `1.0.20201110`_

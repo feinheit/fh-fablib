@@ -141,17 +141,6 @@ def dev(ctx, host="127.0.0.1", port=8000):
     )
 
 
-def _reset_passwords(ctx):
-    # 'password' encoded with a constant salt. Does not force a login after pull_db
-    pw = r"pbkdf2_sha256\$216000\$salt\$xuFh/Jmp9ZyNeO4k67igyjH9t5hHZ84M69rSfrV2W/g="
-    run(
-        ctx,
-        f"venv/bin/python manage.py shell -c \"pw='{pw}';"
-        f"from django.contrib.auth import get_user_model as g;"
-        f'g()._base_manager.update(password=pw)"',
-    )
-
-
 @task
 def pull_db(ctx):
     """Pull a local copy of the remote DB and reset all passwords"""
@@ -166,7 +155,20 @@ def pull_db(ctx):
     run(ctx, f"createdb {dbname}")
     run(ctx, f"ssh {config.host} -C 'pg_dump -Ox {srv_dsn}' | psql {local_dsn}")
 
-    _reset_passwords(ctx)
+    reset_pw(ctx)
+
+
+@task
+def reset_pw(ctx):
+    """Set all user passwords to ``"password"``"""
+    # 'password' encoded with a constant salt. Does not force a login after pull_db
+    pw = r"pbkdf2_sha256\$216000\$salt\$xuFh/Jmp9ZyNeO4k67igyjH9t5hHZ84M69rSfrV2W/g="
+    run(
+        ctx,
+        f"venv/bin/python manage.py shell -c \"pw='{pw}';"
+        f"from django.contrib.auth import get_user_model as g;"
+        f'g()._base_manager.update(password=pw)"',
+    )
 
 
 def _local_env(path=".env"):
@@ -657,6 +659,7 @@ GENERAL = {
     freeze,
     update,
     pull_db,
+    reset_pw,
     local,
     bitbucket,
     github,

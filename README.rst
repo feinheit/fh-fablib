@@ -124,6 +124,7 @@ Available tasks
 - ``local``: Local environment setup
 - ``mm``: Update the translation catalogs
 - ``pull-db``: Pull a local copy of the remote DB and reset all passwords
+- ``reset-pw``: Set all user passwords to ``"password"``
 - ``update``: Update virtualenv and node_modules to match the lockfiles
 - ``upgrade``: Re-create the virtualenv with newest versions of all libraries
 
@@ -202,7 +203,6 @@ Helpers
   concurrently and wait for all of them to terminate (or Ctrl-C).
 - ``_random_string(length, chars=None)``: Return a random string of
   length, suitable for generating secret keys etc.
-- ``_reset_passwords(ctx)``: Set all user passwords to ``"password"``.
 - ``require(version)``: Terminate if fh_fablib is older.
 - ``terminate(msg)``: Terminate processing with an error message.
 
