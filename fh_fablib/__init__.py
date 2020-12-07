@@ -58,7 +58,7 @@ class Config:
         pre_commit_hook()
 
     def __getattr__(self, key):
-        environments = self.__dict__.get("environments")
+        environments = self.__dict__.get("environments", "")
         if environments:
             environments = f" [{', '.join(sorted(environments))}]"
         terminate(
