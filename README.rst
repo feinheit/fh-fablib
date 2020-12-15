@@ -15,20 +15,18 @@ Usage
 
    .. code-block:: python
 
-       from pathlib import Path
-
        import fh_fablib as fl
 
-       fl.require("1.0.20200824")
-       fl.config.update(base=Path(__file__).parent, host="www-data@feinheit06.nine.ch")
+       fl.require("1.0.20201215")
+       fl.config.update(base=fl.Path(__file__).parent, host="www-data@feinheit06.nine.ch")
        fl.config.update(domain="example.com", branch="main", remote="production")
 
        ns = fl.Collection(*fl.GENERAL, *fl.NINE)
 
-4. Run ``fab --list`` to get a list of commands.
+4. Run ``fl --list`` to get a list of commands.
 
 Loading the ``fh_fablib`` module automatically creates
-``.git/hooks/pre-commit`` which runs ``fab check`` before each commit.
+``.git/hooks/pre-commit`` which runs ``fl check`` before each commit.
 
 
 Configuration values
@@ -85,7 +83,7 @@ If you need multiple environments, add tasks which only update
 
     import fh_fablib as fl
 
-    fl.require("1.0.20201110")
+    fl.require("1.0.20201215")
     fl.config.update(base=Path(__file__).parent, host="www-data@feinheit06.nine.ch")
     # Not required, but produces a nicer error message if users forget
     # to set an environment with which to interact:
@@ -102,7 +100,7 @@ If you need multiple environments, add tasks which only update
 
     ns = fl.Collection(*fl.GENERAL, *fl.NINE, production, stage)
 
-Now, ``fab production pull-db``, ``fab stage deploy`` and friends should
+Now, ``fl production pull-db``, ``fl stage deploy`` and friends should
 work as expected.
 
 
