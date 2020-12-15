@@ -37,6 +37,8 @@ Configuration values
 - ``branch``: Branch containing code to be deployed.
 - ``domain``: Primary domain of website. The database name and cache key
   prefix are derived from this value.
+- ``environments``: A list of environments; only used to generate a help
+  text to point users to environments if a configuration key isn't set.
 - ``host``: SSH connection string (``username@server``)
 - ``remote``: git remote name for the server. Only used for the
   ``fetch`` task.
