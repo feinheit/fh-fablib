@@ -435,6 +435,15 @@ def nine_ssl(ctx):
 
 
 @task
+def nine_restart(ctx):
+    """Restart the application server"""
+    with Connection(config.host) as conn:
+        with conn.cd(config.domain):
+            run(conn, "venv/bin/python manage.py check --deploy")
+        run(conn, f"systemctl --user restart gunicorn@{config.domain}.service")
+
+
+@task
 def nine_disable(ctx):
     """Disable a virtual host, dump and remove the DB and stop the gunicorn@ unit"""
     with Connection(config.host) as conn:
@@ -674,6 +683,7 @@ NINE = {
     nine_unit,
     nine_db_dotenv,
     nine_ssl,
+    nine_restart,
     nine_disable,
     nine_checkout,
     nine_venv,

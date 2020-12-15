@@ -142,6 +142,7 @@ Available tasks
   peer authentication)
 - ``nine-disable``: Disable a virtual host, dump and remove the DB and
   stop the gunicorn@ unit
+- ``nine-restart``: Restart the application server
 - ``nine-ssl``: Activate SSL
 - ``nine-unit``: Start and enable a gunicorn@ unit
 - ``nine-venv``: Create a venv and install packages from requirements.txt
