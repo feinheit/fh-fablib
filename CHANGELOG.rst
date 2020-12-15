@@ -5,6 +5,10 @@ Change log
 `Next version`_
 ~~~~~~~~~~~~~~~
 
+
+`1.0.20201215`_
+~~~~~~~~~~~~~~~
+
 - Fixed ``nine-disable`` to backup and drop the database for real.
 - Promoted ``_reset_passwords`` to ``reset-pw``.
 - Removed the explicit activation of pip's 2020 resolver from pip
@@ -149,4 +153,5 @@ Change log
 .. _1.0.20201005: https://github.com/feinheit/fh-fablib/compare/1.0.20201004...1.0.20201005
 .. _1.0.20201029: https://github.com/feinheit/fh-fablib/compare/1.0.20201005...1.0.20201029
 .. _1.0.20201110: https://github.com/feinheit/fh-fablib/compare/1.0.20201029...1.0.20201110
-.. _Next version: https://github.com/feinheit/fh-fablib/compare/1.0.20201110...main
+.. _1.0.20201215: https://github.com/feinheit/fh-fablib/compare/1.0.20201110...1.0.20201215
+.. _Next version: https://github.com/feinheit/fh-fablib/compare/1.0.20201215...main
