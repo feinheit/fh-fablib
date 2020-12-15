@@ -10,6 +10,7 @@ Change log
 - Removed the explicit activation of pip's 2020 resolver from pip
   invocations, it is the default now.
 - Added ``nine-restart`` to restart the application server.
+- Started executing nodejs binaries using ``npx``.
 
 
 `1.0.20201110`_
