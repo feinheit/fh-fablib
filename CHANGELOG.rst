@@ -11,6 +11,8 @@ Change log
   invocations, it is the default now.
 - Added ``nine-restart`` to restart the application server.
 - Started executing nodejs binaries using ``npx``.
+- Avoided pip 20.3.2 because it downloads too many packages.
+- Added a ``--fast`` switch to ``deploy`` which skips Webpack.
 
 
 `1.0.20201110`_

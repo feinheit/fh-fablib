@@ -632,14 +632,15 @@ def fmt(ctx):
     _fmt_prettier(ctx)
 
 
-@task
-def deploy(ctx):
+@task(auto_shortflags=False, help={"fast": "Skip the Webpack build"})
+def deploy(ctx, fast=False):
     """Deploy once 🔥"""
     _check_branch(ctx)
     _check_no_uncommitted_changes(ctx)
     check(ctx)
     run(ctx, f"git push origin {config.branch}")
-    run(ctx, "NODE_ENV=production npx webpack -p --bail")
+    if not fast:
+        run(ctx, "NODE_ENV=production npx webpack -p --bail")
 
     with Connection(config.host) as conn:
         with conn.cd(config.domain):
@@ -651,11 +652,12 @@ def deploy(ctx):
             run(conn, "venv/bin/python -m pip install -r requirements.txt")
             run(conn, "venv/bin/python manage.py migrate")
             run(conn, "venv/bin/python manage.py check --deploy", warn=True)
-            run(
-                ctx,
-                f"rsync -pthrz --delete --stats"
-                f" static/ {config.host}:{config.domain}/static/",
-            )
+            if not fast:
+                run(
+                    ctx,
+                    f"rsync -pthrz --delete --stats"
+                    f" static/ {config.host}:{config.domain}/static/",
+                )
             run(conn, "venv/bin/python manage.py collectstatic --noinput")
         run(conn, f"systemctl --user restart gunicorn@{config.domain}.service")
 
