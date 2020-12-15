@@ -221,12 +221,16 @@ def _python3():
     return next(filter(None, (shutil.which(v) for v in interpreters)))
 
 
+def _pip_up(c):
+    run(c, "venv/bin/python -m pip install -U 'pip!=20.3.2' wheel setuptools")
+
+
 @task(auto_shortflags=False, help={"stable": "Avoid pre-release versions of packages"})
 def upgrade(ctx, stable=False):
     """Re-create the virtualenv with newest versions of all libraries"""
     run(ctx, "rm -rf venv")
     run(ctx, f"{_python3()} -m venv venv")
-    run(ctx, "venv/bin/python -m pip install -U pip wheel setuptools")
+    _pip_up(ctx)
     extra = "" if stable else "--pre"
     run(ctx, f"venv/bin/python -m pip install -U -r requirements-to-freeze.txt {extra}")
     freeze(ctx)
@@ -249,7 +253,7 @@ def update(ctx):
     venv = config.base / "venv"
     if not venv.exists():
         run(ctx, f"{_python3()} -m venv venv")
-    run(ctx, "venv/bin/python -m pip install -U pip wheel setuptools")
+    _pip_up(ctx)
     run(ctx, "venv/bin/python -m pip install -r requirements.txt")
     run(ctx, 'find . -name "*.pyc" -delete')
     run(ctx, "yarn")
@@ -478,7 +482,7 @@ def nine_venv(ctx):
         with conn.cd(config.domain):
             run(conn, "rm -rf venv")
             run(conn, "PATH=~/.pyenv/shims:$PATH python3 -m venv venv")
-            run(conn, "venv/bin/python -m pip install -U pip wheel setuptools")
+            _pip_up(conn)
             run(conn, "venv/bin/python -m pip install -r requirements.txt")
 
 
@@ -643,7 +647,7 @@ def deploy(ctx):
             run(conn, "git fetch origin")
             run(conn, f"git merge --ff-only origin/{config.branch}")
             run(conn, 'find . -name "*.pyc" -delete')
-            run(conn, "venv/bin/python -m pip install -U pip wheel setuptools")
+            _pip_up(conn)
             run(conn, "venv/bin/python -m pip install -r requirements.txt")
             run(conn, "venv/bin/python manage.py migrate")
             run(conn, "venv/bin/python manage.py check --deploy", warn=True)
