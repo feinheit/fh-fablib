@@ -127,6 +127,12 @@ for job in $(jobs -p); do wait $job; done
         run(ctx, f"bash {f.name}", replace_env=False)
 
 
+@task
+def hook(ctx):
+    """Install the pre-commit hook"""
+    pre_commit_hook()
+
+
 @task(auto_shortflags=False)
 def dev(ctx, host="127.0.0.1", port=8000):
     """Run the development server for the frontend and backend"""
@@ -665,6 +671,7 @@ def deploy(ctx, fast=False):
 
 
 GENERAL = {
+    hook,
     cm,
     dev,
     mm,
