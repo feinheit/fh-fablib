@@ -537,7 +537,7 @@ curl -X POST -v -u {username}:"{password}" -H "content-type: application/json"\
 @task
 def github(ctx):
     """Create a repository on GitHub and push the code"""
-    url = run(ctx, "git config remote.origin.url", hide=True).stdout.strip()
+    url = run(ctx, "git config remote.origin.url", hide=True, warn=True).stdout.strip()
     if url:
         terminate(f"The 'origin' remote already points to '{url}'")
 
