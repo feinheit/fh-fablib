@@ -80,10 +80,10 @@ class Connection(Connection):
         super().__init__(*args, **kwargs)
 
 
-def pre_commit_hook():
+def pre_commit_hook(*, force=False):
     """Install the pre-commit hook running coding style checks"""
     path = config.base / ".git" / "hooks" / "pre-commit"
-    if not path.exists():
+    if not path.exists() or force:
         with path.open("w") as hook:
             hook.write("#!/bin/sh\nfl check\n")
         path.chmod(0o755)
@@ -130,7 +130,7 @@ for job in $(jobs -p); do wait $job; done
 @task
 def hook(ctx):
     """Install the pre-commit hook"""
-    pre_commit_hook()
+    pre_commit_hook(force=True)
 
 
 @task(auto_shortflags=False)
