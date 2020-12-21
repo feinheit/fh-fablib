@@ -5,6 +5,9 @@ Change log
 `Next version`_
 ~~~~~~~~~~~~~~~
 
+`1.0.20201221`_
+~~~~~~~~~~~~~~~
+
 - Added ``fl hook`` to replace the git pre-commit hook.
 - Corrected and updated the examples in the README.
 - Changed ``fl github`` to terminate  with a better error message when
@@ -159,4 +162,5 @@ Change log
 .. _1.0.20201029: https://github.com/feinheit/fh-fablib/compare/1.0.20201005...1.0.20201029
 .. _1.0.20201110: https://github.com/feinheit/fh-fablib/compare/1.0.20201029...1.0.20201110
 .. _1.0.20201215: https://github.com/feinheit/fh-fablib/compare/1.0.20201110...1.0.20201215
-.. _Next version: https://github.com/feinheit/fh-fablib/compare/1.0.20201215...main
+.. _1.0.20201221: https://github.com/feinheit/fh-fablib/compare/1.0.20201215...1.0.20201221
+.. _Next version: https://github.com/feinheit/fh-fablib/compare/1.0.20201221...main

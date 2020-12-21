@@ -11,5 +11,6 @@ fi
 
 set -x
 sed -i -e "s/__version__ =.*/__version__ = \"$VERSION\"/" fh_fablib/__init__.py
+sed -i -e 's/fl.require(".*")/fl.require("'$VERSION'")/' README.rst
 git commit -a -m "fh-fablib $VERSION"
 git tag -m "fh-fablib $VERSION" "$VERSION"
