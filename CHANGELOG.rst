@@ -5,6 +5,11 @@ Change log
 `Next version`_
 ~~~~~~~~~~~~~~~
 
+- Added ``fl hook`` to replace the git pre-commit hook.
+- Corrected and updated the examples in the README.
+- Changed ``fl github`` to terminate  with a better error message when
+  the ``origin`` remote is already setup.
+
 
 `1.0.20201215`_
 ~~~~~~~~~~~~~~~
