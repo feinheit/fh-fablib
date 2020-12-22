@@ -181,8 +181,8 @@ Checks
 Formatters
 ~~~~~~~~~~
 
-- ``_fmt_isort(ctx)``: Run ``isort``
 - ``_fmt_black(ctx)``: Run ``black``
+- ``_fmt_isort(ctx)``: Run ``isort``
 - ``_fmt_prettier(ctx)``: Run ``prettier``
 - ``_fmt_tox_style(ctx)``: Run ``tox -e style``
 

@@ -621,6 +621,10 @@ def _fmt_tox_style(ctx):
     run(ctx, "tox -e style")
 
 
+def _fmt_black(ctx):
+    run(ctx, "pipx run --spec 'black>=20.8b1' black .")
+
+
 def _fmt_isort(ctx):
     run(
         ctx,
@@ -630,15 +634,11 @@ def _fmt_isort(ctx):
     )
 
 
-def _fmt_black(ctx):
-    run(ctx, "pipx run --spec 'black>=20.8b1' black .")
-
-
 @task
 def fmt(ctx):
     """Format the code"""
-    _fmt_isort(ctx)
     _fmt_black(ctx)
+    _fmt_isort(ctx)
     _fmt_prettier(ctx)
 
 
