@@ -199,7 +199,7 @@ def mm(ctx):
     run(
         ctx,
         "venv/bin/python manage.py makemessages -a --add-location file"
-        " -i venv -i htmlcov",
+        " -i venv -i htmlcov -i node_modules -i lib",
         replace_env=False,
     )
     run(
