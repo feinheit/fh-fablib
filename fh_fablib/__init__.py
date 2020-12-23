@@ -586,6 +586,18 @@ def _check_eslint(ctx):
     run(ctx, f'npx eslint "*.js" {config.app}/static')
 
 
+def _check_large_files(ctx, *, limit=500000):
+    out = run(ctx, "git diff-index --cached --name-only HEAD", hide=True).stdout.strip()
+    sizes = ((f, os.stat(f).st_size) for f in out.splitlines())
+    large = {f: size for f, size in sizes if size > limit}
+    if large:
+        files = ", ".join(
+            f"{f} ({size} bytes)"
+            for f, size in sorted(large.items(), key=lambda r: r[1])
+        )
+        terminate(f"Large files detected: {files}")
+
+
 def _check_branch(ctx):
     branch = run(ctx, "git rev-parse --abbrev-ref HEAD", hide=True).stdout.strip()
     if branch != config.branch:
@@ -607,6 +619,7 @@ def check(ctx):
     _check_django(ctx)
     _check_prettier(ctx)
     _check_eslint(ctx)
+    _check_large_files(ctx)
 
 
 def _fmt_prettier(ctx):

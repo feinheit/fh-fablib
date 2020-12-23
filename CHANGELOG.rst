@@ -5,6 +5,9 @@ Change log
 `Next version`_
 ~~~~~~~~~~~~~~~
 
+- Added a check for large files to ``fl check``.
+
+
 `1.0.20201221`_
 ~~~~~~~~~~~~~~~
 
