@@ -5,6 +5,9 @@ Change log
 `Next version`_
 ~~~~~~~~~~~~~~~
 
+`1.0.20201226`_
+~~~~~~~~~~~~~~~
+
 - Fixed the large files check to skip removed files.
 - Changed the large files check to report file sizes in kilobytes.
 
@@ -174,4 +177,5 @@ Change log
 .. _1.0.20201215: https://github.com/feinheit/fh-fablib/compare/1.0.20201110...1.0.20201215
 .. _1.0.20201221: https://github.com/feinheit/fh-fablib/compare/1.0.20201215...1.0.20201221
 .. _1.0.20201223: https://github.com/feinheit/fh-fablib/compare/1.0.20201221...1.0.20201223
-.. _Next version: https://github.com/feinheit/fh-fablib/compare/1.0.20201223...main
+.. _1.0.20201226: https://github.com/feinheit/fh-fablib/compare/1.0.20201223...1.0.20201226
+.. _Next version: https://github.com/feinheit/fh-fablib/compare/1.0.20201226...main
