@@ -5,6 +5,9 @@ Change log
 `Next version`_
 ~~~~~~~~~~~~~~~
 
+- Fixed the large files check to skip removed files.
+- Changed the large files check to report file sizes in kilobytes.
+
 
 `1.0.20201223`_
 ~~~~~~~~~~~~~~~
