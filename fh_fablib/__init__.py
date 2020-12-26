@@ -587,7 +587,9 @@ def _check_eslint(ctx):
 
 
 def _check_large_files(ctx, *, limit=500000):
-    out = run(ctx, "git diff-index --cached --name-only HEAD", hide=True).stdout.strip()
+    out = run(
+        ctx, "git diff-index --cached --name-only --diff-filter=AMT HEAD", hide=True
+    ).stdout.strip()
     sizes = ((f, os.stat(f).st_size) for f in out.splitlines())
     large = {f: size for f, size in sizes if size > limit}
     if large:
