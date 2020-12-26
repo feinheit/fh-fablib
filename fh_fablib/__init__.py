@@ -592,7 +592,7 @@ def _check_large_files(ctx, *, limit=500000):
     large = {f: size for f, size in sizes if size > limit}
     if large:
         files = ", ".join(
-            f"{f} ({size} bytes)"
+            f"{f} ({size // 1000}kb)"
             for f, size in sorted(large.items(), key=lambda r: r[1])
         )
         terminate(f"Large files detected: {files}")
