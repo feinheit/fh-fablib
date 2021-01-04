@@ -228,7 +228,7 @@ def _python3():
 
 
 def _pip_up(c):
-    run(c, "venv/bin/python -m pip install -U 'pip!=20.3.2' wheel setuptools")
+    run(c, "venv/bin/python -m pip install -U pip wheel setuptools")
 
 
 @task(auto_shortflags=False, help={"stable": "Avoid pre-release versions of packages"})
