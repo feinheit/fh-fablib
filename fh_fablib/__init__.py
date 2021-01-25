@@ -534,6 +534,7 @@ def nine_reinit_from(ctx, environment):
             f"rsync -aH --stats {source['domain']}/media/ {config.domain}/media/",
         )
     print(green(f"Success! (A database backup is at {config.domain}/tmp/)"))
+    print(green("You may have to run nine-restart or even deploy once."))
 
 
 @task
