@@ -520,6 +520,7 @@ def nine_reinit_from(ctx, environment):
         target_dsn = target_e("DATABASE_URL")
 
         dbname = _dbname_from_dsn(target_dsn)
+        run(conn, f"pg_dump -Ox {target_dsn} > {config.domain}/tmp/{dbname}.sql")
         run(conn, f'source ~/.profile && psql -c "DROP DATABASE IF EXISTS {dbname}"')
         run(
             conn,
@@ -532,6 +533,7 @@ def nine_reinit_from(ctx, environment):
             conn,
             f"rsync -aH --stats {source['domain']}/media/ {config.domain}/media/",
         )
+    print(green(f"Success! (A database backup is at {config.domain}/tmp/)"))
 
 
 @task
