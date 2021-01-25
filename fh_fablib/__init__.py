@@ -49,6 +49,7 @@ def run(c, *a, **kw):
 
 class Config:
     app = "app"
+    environments = {}
 
     def update(self, **kwargs):
         for key, value in kwargs.items():
@@ -70,6 +71,17 @@ class Config:
 
 #: Defaults
 config = Config()
+
+
+def environment(name, cfg, **kwargs):
+    config.environments[name] = cfg
+
+    @task(name=name, **kwargs)
+    def fn(ctx):
+        config.update(**cfg)
+
+    fn.__doc__ = f'Set the environment to "{name}"'
+    return fn
 
 
 class Connection(Connection):
@@ -165,7 +177,7 @@ def pull_db(ctx):
 
 @task
 def reset_pw(ctx):
-    """Set all user passwords to ``"password"``"""
+    """Set all user passwords to "password" """
     # 'password' encoded with a constant salt. Does not force a login after pull_db
     pw = r"pbkdf2_sha256\$216000\$salt\$xuFh/Jmp9ZyNeO4k67igyjH9t5hHZ84M69rSfrV2W/g="
     run(
