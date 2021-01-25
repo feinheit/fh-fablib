@@ -17,7 +17,7 @@ Usage
 
        import fh_fablib as fl
 
-       fl.require("1.0.20201226")
+       fl.require("1.0.20210125")
        fl.config.update(base=fl.Path(__file__).parent, host="www-data@feinheit06.nine.ch")
        fl.config.update(domain="example.com", branch="main", remote="production")
 

@@ -5,6 +5,14 @@ Change log
 `Next version`_
 ~~~~~~~~~~~~~~~
 
+
+`1.0.20210125`_
+~~~~~~~~~~~~~~~
+
+- Added ``fl nine-reinit-from``.
+- Changed the configuration method for multiple environments.
+
+
 `1.0.20201226`_
 ~~~~~~~~~~~~~~~
 
@@ -178,4 +186,5 @@ Change log
 .. _1.0.20201221: https://github.com/feinheit/fh-fablib/compare/1.0.20201215...1.0.20201221
 .. _1.0.20201223: https://github.com/feinheit/fh-fablib/compare/1.0.20201221...1.0.20201223
 .. _1.0.20201226: https://github.com/feinheit/fh-fablib/compare/1.0.20201223...1.0.20201226
-.. _Next version: https://github.com/feinheit/fh-fablib/compare/1.0.20201226...main
+.. _1.0.20210125: https://github.com/feinheit/fh-fablib/compare/1.0.20201226...1.0.20210125
+.. _Next version: https://github.com/feinheit/fh-fablib/compare/1.0.20210125...main
