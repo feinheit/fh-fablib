@@ -505,6 +505,36 @@ def nine_venv(ctx):
 
 
 @task
+def nine_reinit_from(ctx, environment):
+    """Reinitialize an environment from a different environment"""
+    try:
+        source = config.environments[environment]
+    except KeyError:
+        terminate(f'Unknown source environment "{environment}"')
+
+    with Connection(config.host) as conn:
+        source_e = _srv_env(conn, f"{config.environments[environment]['domain']}/.env")
+        target_e = _srv_env(conn, f"{config.domain}/.env")
+
+        source_dsn = source_e("DATABASE_URL")
+        target_dsn = target_e("DATABASE_URL")
+
+        dbname = _dbname_from_dsn(target_dsn)
+        run(conn, f'source ~/.profile && psql -c "DROP DATABASE IF EXISTS {dbname}"')
+        run(
+            conn,
+            f'source ~/.profile && psql -c "CREATE DATABASE {dbname} WITH'
+            f" OWNER {dbname} TEMPLATE template0 ENCODING 'UTF8'"
+            f'"',
+        )
+        run(conn, f"source ~/.profile && pg_dump -Ox {source_dsn} | psql {target_dsn}")
+        run(
+            conn,
+            f"rsync -aH --stats {source['domain']}/media/ {config.domain}/media/",
+        )
+
+
+@task
 def nine(ctx):
     """Run all nine🌟 setup tasks in order"""
     nine_checkout(ctx)
@@ -730,5 +760,6 @@ NINE = {
     nine_disable,
     nine_checkout,
     nine_venv,
+    nine_reinit_from,
     nine,
 }

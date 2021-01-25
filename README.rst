@@ -37,8 +37,7 @@ Configuration values
 - ``branch``: Branch containing code to be deployed.
 - ``domain``: Primary domain of website. The database name and cache key
   prefix are derived from this value.
-- ``environments``: A list of environments; only used to generate a help
-  text to point users to environments if a configuration key isn't set.
+- ``environments``: A dictionary of environments, see below.
 - ``host``: SSH connection string (``username@server``)
 - ``remote``: git remote name for the server. Only used for the
   ``fetch`` task.
@@ -76,33 +75,40 @@ restarted after deployment. A custom ``deploy`` task follows:
 Multiple environments
 =====================
 
-If you need multiple environments, add tasks which only update
-``fl.config`` as follows:
+If you need multiple environments, add environment tasks as follows:
 
 .. code-block:: python
 
-    from pathlib import Path
-
     import fh_fablib as fl
 
-    fl.require("1.0.20201226")
-    fl.config.update(base=Path(__file__).parent, host="www-data@feinheit06.nine.ch")
-    # Not required, but produces a nicer error message if users forget
-    # to set an environment with which to interact:
-    fl.config.update(environments=["production", "stage"])
+    fl.require("1.0.20210125")
+    fl.config.update(base=fl.Path(__file__).parent, host="www-data@feinheit06.nine.ch")
 
-    @fl.task(aliases=["p"])
-    def production(ctx):
-        fl.config.update(domain="example.com", branch="master", remote="production")
+    environments = [
+        fl.environment(
+            "production",
+            {
+                "domain": "example.com",
+                "branch": "main",
+                "remote": "production",
+            },
+            aliases=["p"],
+        ),
+        fl.environment(
+            "next",
+            {
+                "domain": "next.example.com",
+                "branch": "next",
+                "remote": "next",
+            },
+            aliases=["n"],
+        ),
+    ]
+
+    ns = fl.Collection(*fl.GENERAL, *fl.NINE, *environments)
 
 
-    @fl.task(aliases=["s"])
-    def stage(ctx):
-        fl.config.update(domain="stage.example.com", branch="develop", remote="stage")
-
-    ns = fl.Collection(*fl.GENERAL, *fl.NINE, production, stage)
-
-Now, ``fl production pull-db``, ``fl stage deploy`` and friends should
+Now, ``fl production pull-db``, ``fl next deploy`` and friends should
 work as expected.
 
 
@@ -143,6 +149,7 @@ Available tasks
   peer authentication)
 - ``nine-disable``: Disable a virtual host, dump and remove the DB and
   stop the gunicorn@ unit
+- ``nine-reinit-from``: Reinitialize an environment from a different environment
 - ``nine-restart``: Restart the application server
 - ``nine-ssl``: Activate SSL
 - ``nine-unit``: Start and enable a gunicorn@ unit
