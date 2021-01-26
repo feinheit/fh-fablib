@@ -702,6 +702,12 @@ def fmt(ctx):
     _fmt_prettier(ctx)
 
 
+@task
+def build_frontend(ctx):
+    """Create frontend bundle"""
+    run(ctx, "NODE_ENV=production npx webpack -p --bail")
+
+
 @task(auto_shortflags=False, help={"fast": "Skip the Webpack build"})
 def deploy(ctx, fast=False):
     """Deploy once 🔥"""
@@ -710,7 +716,7 @@ def deploy(ctx, fast=False):
     check(ctx)
     run(ctx, f"git push origin {config.branch}")
     if not fast:
-        run(ctx, "NODE_ENV=production npx webpack -p --bail")
+        build_frontend(ctx)
 
     with Connection(config.host) as conn:
         with conn.cd(config.domain):
@@ -750,6 +756,7 @@ GENERAL = {
     fetch,
     check,
     fmt,
+    build_frontend,
     deploy,
 }
 NINE = {
