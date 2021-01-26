@@ -702,6 +702,25 @@ def fmt(ctx):
     _fmt_prettier(ctx)
 
 
+def _deploy_django(ctx, conn):
+    run(conn, f"git checkout {config.branch}")
+    run(conn, "git fetch origin")
+    run(conn, f"git merge --ff-only origin/{config.branch}")
+    run(conn, 'find . -name "*.pyc" -delete')
+    _pip_up(conn)
+    run(conn, "venv/bin/python -m pip install -r requirements.txt")
+    run(conn, "venv/bin/python manage.py migrate")
+    run(conn, "venv/bin/python manage.py check --deploy", warn=True)
+    run(conn, "venv/bin/python manage.py collectstatic --clear --noinput")
+
+
+def _deploy_static(ctx, conn):
+    run(
+        ctx,
+        f"rsync -pthrz --stats static/ {config.host}:{config.domain}/static/",
+    )
+
+
 @task(auto_shortflags=False, help={"fast": "Skip the Webpack build"})
 def deploy(ctx, fast=False):
     """Deploy once 🔥"""
@@ -712,23 +731,11 @@ def deploy(ctx, fast=False):
     if not fast:
         run(ctx, "NODE_ENV=production npx webpack -p --bail")
 
-    with Connection(config.host) as conn:
-        with conn.cd(config.domain):
-            run(conn, f"git checkout {config.branch}")
-            run(conn, "git fetch origin")
-            run(conn, f"git merge --ff-only origin/{config.branch}")
-            run(conn, 'find . -name "*.pyc" -delete')
-            _pip_up(conn)
-            run(conn, "venv/bin/python -m pip install -r requirements.txt")
-            run(conn, "venv/bin/python manage.py migrate")
-            run(conn, "venv/bin/python manage.py check --deploy", warn=True)
-            if not fast:
-                run(
-                    ctx,
-                    f"rsync -pthrz --delete --stats"
-                    f" static/ {config.host}:{config.domain}/static/",
-                )
-            run(conn, "venv/bin/python manage.py collectstatic --noinput")
+    with Connection(config.host) as conn, conn.cd(config.domain):
+        _deploy_django(ctx, conn)
+        if not fast:
+            _deploy_static(ctx, conn)
+
         run(conn, f"systemctl --user restart gunicorn@{config.domain}.service")
 
     fetch(ctx)
