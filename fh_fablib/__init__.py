@@ -29,6 +29,10 @@ red = ansi("31")
 green = ansi("32")
 
 
+def progress(msg):
+    print(green(msg))
+
+
 def terminate(msg):
     print(red(msg), file=sys.stderr)
     sys.exit(1)
@@ -49,6 +53,7 @@ def run(c, *a, **kw):
 
 class Config:
     app = "app"
+    environment = "default"
     environments = {}
 
     def update(self, **kwargs):
@@ -78,6 +83,7 @@ def environment(name, cfg, **kwargs):
 
     @task(name=name, **kwargs)
     def fn(ctx):
+        cfg["environment"] = name
         config.update(**cfg)
 
     fn.__doc__ = f'Set the environment to "{name}"'
@@ -148,7 +154,7 @@ def hook(ctx):
 @task(auto_shortflags=False)
 def dev(ctx, host="127.0.0.1", port=8000):
     """Run the development server for the frontend and backend"""
-    print(green(f"Starting server at http://{host}:{port}/"))
+    progress(f"Starting server at http://{host}:{port}/")
     _concurrently(
         ctx,
         [
@@ -534,8 +540,8 @@ def nine_reinit_from(ctx, environment):
             conn,
             f"rsync -aH --stats {source['domain']}/media/ {config.domain}/media/",
         )
-    print(green(f"Success! (A database backup is at {config.domain}/tmp/)"))
-    print(green("You may have to run nine-restart or even deploy once."))
+    progress(f"Success! (A database backup is at {config.domain}/tmp/)")
+    progress("You may have to run nine-restart or even deploy once.")
 
 
 @task
@@ -741,6 +747,7 @@ def deploy(ctx, fast=False):
         _nine_restart(conn)
 
     fetch(ctx)
+    progress(f"Successfully deployed the {config.environment} environment.")
 
 
 GENERAL = {

@@ -5,6 +5,10 @@ Change log
 `Next version`_
 ~~~~~~~~~~~~~~~
 
+- Added ``config.environment`` holding the name of the active
+  environment or ``"default"``.
+
+
 `1.0.20210127`_
 ~~~~~~~~~~~~~~~
 

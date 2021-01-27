@@ -38,6 +38,7 @@ Configuration values
 - ``domain``: Primary domain of website. The database name and cache key
   prefix are derived from this value.
 - ``environments``: A dictionary of environments, see below.
+- ``environment``: The name of the active environment or ``"default"``.
 - ``host``: SSH connection string (``username@server``)
 - ``remote``: git remote name for the server. Only used for the
   ``fetch`` task.
