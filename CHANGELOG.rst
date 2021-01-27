@@ -193,5 +193,5 @@ Change log
 .. _1.0.20201223: https://github.com/feinheit/fh-fablib/compare/1.0.20201221...1.0.20201223
 .. _1.0.20201226: https://github.com/feinheit/fh-fablib/compare/1.0.20201223...1.0.20201226
 .. _1.0.20210125: https://github.com/feinheit/fh-fablib/compare/1.0.20201226...1.0.20210125
-.. _1.0.20210125: https://github.com/feinheit/fh-fablib/compare/1.0.20210125...1.0.20210127
+.. _1.0.20210127: https://github.com/feinheit/fh-fablib/compare/1.0.20210125...1.0.20210127
 .. _Next version: https://github.com/feinheit/fh-fablib/compare/1.0.20210127...main
