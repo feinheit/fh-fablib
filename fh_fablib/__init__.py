@@ -317,15 +317,14 @@ def local(ctx):
 @task
 def nine_vhost(ctx):
     """Create a virtual host using nine-manage-vhosts"""
-    with Connection(config.host) as conn:
+    with Connection(config.host) as conn, conn.cd(config.domain):
         run(
             conn,
             f"sudo nine-manage-vhosts virtual-host create {config.domain}"
             " --template=feinheit_cache"
             f" --webroot=/home/www-data/{config.domain}/htdocs",
         )
-        with conn.cd(config.domain):
-            run(conn, "mkdir -p media tmp")
+        run(conn, "mkdir -p media tmp")
 
 
 @task(auto_shortflags=False, help={"include-www": "Include the www. subdomain"})
@@ -455,13 +454,16 @@ def nine_ssl(ctx):
         )
 
 
+def _nine_restart(conn):
+    run(conn, f"systemctl --user restart gunicorn@{config.domain}.service")
+
+
 @task
 def nine_restart(ctx):
     """Restart the application server"""
-    with Connection(config.host) as conn:
-        with conn.cd(config.domain):
-            run(conn, "venv/bin/python manage.py check --deploy")
-        run(conn, f"systemctl --user restart gunicorn@{config.domain}.service")
+    with Connection(config.host) as conn, conn.cd(config.domain):
+        run(conn, "venv/bin/python manage.py check --deploy")
+        _nine_restart(conn)
 
 
 @task
@@ -496,12 +498,11 @@ def nine_checkout(ctx):
 @task
 def nine_venv(ctx):
     """Create a venv and install packages from requirements.txt"""
-    with Connection(config.host) as conn:
-        with conn.cd(config.domain):
-            run(conn, "rm -rf venv")
-            run(conn, "PATH=~/.pyenv/shims:$PATH python3 -m venv venv")
-            _pip_up(conn)
-            run(conn, "venv/bin/python -m pip install -r requirements.txt")
+    with Connection(config.host) as conn, conn.cd(config.domain):
+        run(conn, "rm -rf venv")
+        run(conn, "PATH=~/.pyenv/shims:$PATH python3 -m venv venv")
+        _pip_up(conn)
+        run(conn, "venv/bin/python -m pip install -r requirements.txt")
 
 
 @task
@@ -652,11 +653,10 @@ def _check_branch(ctx):
 
 
 def _check_no_uncommitted_changes(ctx):
-    with Connection(config.host) as conn:
-        with conn.cd(config.domain):
-            result = run(conn, "git status --porcelain").stdout.strip()
-            if result:
-                terminate("Terminating because of uncommitted changes on server")
+    with Connection(config.host) as conn, conn.cd(config.domain):
+        result = run(conn, "git status --porcelain").stdout.strip()
+        if result:
+            terminate("Terminating because of uncommitted changes on server")
 
 
 @task
@@ -702,7 +702,7 @@ def fmt(ctx):
     _fmt_prettier(ctx)
 
 
-def _deploy_django(ctx, conn):
+def _deploy_django(conn):
     run(conn, f"git checkout {config.branch}")
     run(conn, "git fetch origin")
     run(conn, f"git merge --ff-only origin/{config.branch}")
@@ -711,14 +711,16 @@ def _deploy_django(ctx, conn):
     run(conn, "venv/bin/python -m pip install -r requirements.txt")
     run(conn, "venv/bin/python manage.py migrate")
     run(conn, "venv/bin/python manage.py check --deploy", warn=True)
-    run(conn, "venv/bin/python manage.py collectstatic --clear --noinput")
 
 
-def _deploy_static(ctx, conn):
-    run(
-        ctx,
-        f"rsync -pthrz --stats static/ {config.host}:{config.domain}/static/",
-    )
+def _deploy_staticfiles(conn):
+    run(conn, "venv/bin/python manage.py collectstatic --noinput")
+
+
+def _rsync_static(ctx, *, delete=False):
+    flags = "-pthrz --stats"
+    delete = " --delete" if delete else ""
+    run(ctx, f"rsync {flags}{delete} static/ {config.host}:{config.domain}/static/")
 
 
 @task(auto_shortflags=False, help={"fast": "Skip the Webpack build"})
@@ -732,11 +734,11 @@ def deploy(ctx, fast=False):
         run(ctx, "NODE_ENV=production npx webpack -p --bail")
 
     with Connection(config.host) as conn, conn.cd(config.domain):
-        _deploy_django(ctx, conn)
+        _deploy_django(conn)
         if not fast:
-            _deploy_static(ctx, conn)
-
-        run(conn, f"systemctl --user restart gunicorn@{config.domain}.service")
+            _rsync_static(ctx, delete=True)
+        _deploy_staticfiles(conn)
+        _nine_restart(conn)
 
     fetch(ctx)
 

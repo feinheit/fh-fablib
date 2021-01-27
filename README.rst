@@ -218,6 +218,16 @@ Helpers
 - ``terminate(msg)``: Terminate processing with an error message.
 
 
+Deployment
+~~~~~~~~~~
+
+- ``_deploy_django``: Update the Git checkout, update the virtualenv.
+- ``_deploy_staticfiles``: Collect staticfiles.
+- ``_rsync_static``: rsync the local ``static/`` folder to the remote,
+  optionally deleting everything which doesn't exist locally.
+- ``_nine_restart``: Restart the systemd control unit.
+
+
 Recommended configuration files
 ===============================
 
