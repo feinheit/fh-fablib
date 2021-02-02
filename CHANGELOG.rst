@@ -5,6 +5,10 @@ Change log
 `Next version`_
 ~~~~~~~~~~~~~~~
 
+
+`1.0.20210202`_
+~~~~~~~~~~~~~~~
+
 - Added ``config.environment`` holding the name of the active
   environment or ``"default"``.
 
@@ -198,4 +202,5 @@ Change log
 .. _1.0.20201226: https://github.com/feinheit/fh-fablib/compare/1.0.20201223...1.0.20201226
 .. _1.0.20210125: https://github.com/feinheit/fh-fablib/compare/1.0.20201226...1.0.20210125
 .. _1.0.20210127: https://github.com/feinheit/fh-fablib/compare/1.0.20210125...1.0.20210127
-.. _Next version: https://github.com/feinheit/fh-fablib/compare/1.0.20210127...main
+.. _1.0.20210202: https://github.com/feinheit/fh-fablib/compare/1.0.20210127...1.0.20210202
+.. _Next version: https://github.com/feinheit/fh-fablib/compare/1.0.20210202...main

@@ -17,7 +17,7 @@ Usage
 
        import fh_fablib as fl
 
-       fl.require("1.0.20210127")
+       fl.require("1.0.20210202")
        fl.config.update(base=fl.Path(__file__).parent, host="www-data@feinheit06.nine.ch")
        fl.config.update(domain="example.com", branch="main", remote="production")
 
@@ -82,7 +82,7 @@ If you need multiple environments, add environment tasks as follows:
 
     import fh_fablib as fl
 
-    fl.require("1.0.20210127")
+    fl.require("1.0.20210202")
     fl.config.update(base=fl.Path(__file__).parent, host="www-data@feinheit06.nine.ch")
 
     environments = [
