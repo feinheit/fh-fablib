@@ -709,9 +709,14 @@ def fmt(ctx):
 
 
 def _deploy_django(conn):
-    run(conn, f"git checkout {config.branch}")
     run(conn, "git fetch origin")
-    run(conn, f"git merge --ff-only origin/{config.branch}")
+    run(conn, f"git checkout {config.branch}")
+
+    result = run(conn, "git status --porcelain").stdout.strip()
+    if result:
+        terminate("Terminating because of uncommitted changes on server")
+
+    run(conn, f"git reset --hard origin/{config.branch}")
     run(conn, 'find . -name "*.pyc" -delete')
     _pip_up(conn)
     run(conn, "venv/bin/python -m pip install -r requirements.txt")

@@ -5,6 +5,11 @@ Change log
 `Next version`_
 ~~~~~~~~~~~~~~~
 
+- Changed ``_deploy_django`` (and therefore the default deployment) to use hard
+  resets to update the code on the server instead of ff-only merges, but add an
+  additional check for uncommitted changes right before resetting as a safety
+  measure.
+
 
 `1.0.20210202`_
 ~~~~~~~~~~~~~~~
