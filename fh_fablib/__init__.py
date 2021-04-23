@@ -27,10 +27,15 @@ def ansi(code):
 # underline = ansi("4")
 red = ansi("31")
 green = ansi("32")
+purple = ansi("35")
 
 
 def progress(msg):
     print(green(msg))
+
+
+def info(msg):
+    print(purple(msg))
 
 
 def terminate(msg):
@@ -41,6 +46,11 @@ def terminate(msg):
 def require(version):
     if __version__ < version:
         terminate(f"fh_fablib version {version} required (you have {__version__})")
+    if __version__ > version:
+        info(
+            f"fh_fablib version is {__version__}, project requires only {version}."
+            " Maybe update the project's fabfile?"
+        )
 
 
 def run(c, *a, **kw):
