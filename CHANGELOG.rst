@@ -5,6 +5,9 @@ Change log
 `Next version`_
 ~~~~~~~~~~~~~~~
 
+`1.0.20210423`_
+~~~~~~~~~~~~~~~
+
 - Changed ``_deploy_django`` (and therefore the default deployment) to use hard
   resets to update the code on the server instead of ff-only merges, but add an
   additional check for uncommitted changes right before resetting as a safety
@@ -208,4 +211,6 @@ Change log
 .. _1.0.20210125: https://github.com/feinheit/fh-fablib/compare/1.0.20201226...1.0.20210125
 .. _1.0.20210127: https://github.com/feinheit/fh-fablib/compare/1.0.20210125...1.0.20210127
 .. _1.0.20210202: https://github.com/feinheit/fh-fablib/compare/1.0.20210127...1.0.20210202
-.. _Next version: https://github.com/feinheit/fh-fablib/compare/1.0.20210202...main
+.. _1.0.20210202: https://github.com/feinheit/fh-fablib/compare/1.0.20210127...1.0.20210202
+.. _1.0.20210423: https://github.com/feinheit/fh-fablib/compare/1.0.20210202...1.0.20210423
+.. _Next version: https://github.com/feinheit/fh-fablib/compare/1.0.20210423...main
