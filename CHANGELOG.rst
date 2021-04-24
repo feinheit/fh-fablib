@@ -5,6 +5,14 @@ Change log
 `Next version`_
 ~~~~~~~~~~~~~~~
 
+
+`1.0.20210424`_
+~~~~~~~~~~~~~~~
+
+- Added an info message when the fh-fablib version is newer than the required
+  version (so that projects' fabfiles are updated more often).
+
+
 `1.0.20210423`_
 ~~~~~~~~~~~~~~~
 
@@ -211,6 +219,6 @@ Change log
 .. _1.0.20210125: https://github.com/feinheit/fh-fablib/compare/1.0.20201226...1.0.20210125
 .. _1.0.20210127: https://github.com/feinheit/fh-fablib/compare/1.0.20210125...1.0.20210127
 .. _1.0.20210202: https://github.com/feinheit/fh-fablib/compare/1.0.20210127...1.0.20210202
-.. _1.0.20210202: https://github.com/feinheit/fh-fablib/compare/1.0.20210127...1.0.20210202
 .. _1.0.20210423: https://github.com/feinheit/fh-fablib/compare/1.0.20210202...1.0.20210423
-.. _Next version: https://github.com/feinheit/fh-fablib/compare/1.0.20210423...main
+.. _1.0.20210424: https://github.com/feinheit/fh-fablib/compare/1.0.20210423...1.0.20210424
+.. _Next version: https://github.com/feinheit/fh-fablib/compare/1.0.20210424...main
