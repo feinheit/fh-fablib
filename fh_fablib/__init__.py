@@ -191,6 +191,14 @@ def pull_db(ctx):
     reset_pw(ctx)
 
 
+@task(auto_shortflags=False)
+def pull_media(ctx, folder="media"):
+    """Rsync a folder from the remote to the local environment"""
+    flags = "-pthrz --stats"
+    folder = folder.strip("/")
+    run(ctx, f"rsync {flags} {config.host}:{config.domain}/{folder}/ {folder}/")
+
+
 @task
 def reset_pw(ctx):
     """Set all user passwords to "password" """
@@ -774,6 +782,7 @@ GENERAL = {
     freeze,
     update,
     pull_db,
+    pull_media,
     reset_pw,
     local,
     bitbucket,

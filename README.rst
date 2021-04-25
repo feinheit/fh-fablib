@@ -132,6 +132,7 @@ Available tasks
 - ``local``: Local environment setup
 - ``mm``: Update the translation catalogs
 - ``pull-db``: Pull a local copy of the remote DB and reset all passwords
+- ``pull-media``: Rsync a folder from the remote to the local environment
 - ``reset-pw``: Set all user passwords to ``"password"``
 - ``update``: Update virtualenv and node_modules to match the lockfiles
 - ``upgrade``: Re-create the virtualenv with newest versions of all libraries

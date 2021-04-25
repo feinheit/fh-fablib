@@ -5,6 +5,8 @@ Change log
 `Next version`_
 ~~~~~~~~~~~~~~~
 
+- Added a ``pull_media`` task.
+
 
 `1.0.20210424`_
 ~~~~~~~~~~~~~~~
