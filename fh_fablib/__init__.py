@@ -637,7 +637,7 @@ def fetch(ctx):
 
 
 def _check_flake8(ctx):
-    run(ctx, "pipx run --spec 'flake8>=3.8.3' flake8 .")
+    run(ctx, "pipx run flake8 .")
 
 
 def _check_django(ctx):
@@ -706,13 +706,13 @@ def _fmt_tox_style(ctx):
 
 
 def _fmt_black(ctx):
-    run(ctx, "pipx run --spec 'black>=20.8b1' black .")
+    run(ctx, "pipx run black .")
 
 
 def _fmt_isort(ctx):
     run(
         ctx,
-        "pipx run --spec 'isort>=5.4' isort"
+        "pipx run isort"
         " --virtual-env venv --profile=black --lines-after-imports=2 --combine-as"
         " .",
     )

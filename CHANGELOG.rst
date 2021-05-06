@@ -6,6 +6,9 @@ Change log
 ~~~~~~~~~~~~~~~
 
 - Added a ``pull_media`` task.
+- Dropped ``--spec`` arguments from ``pipx run`` invocations. The temporary
+  virtual environments will be cached for a maximum of 14 days anyway, so they
+  should always be recent enough.
 
 
 `1.0.20210424`_
