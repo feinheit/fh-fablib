@@ -5,6 +5,10 @@ Change log
 `Next version`_
 ~~~~~~~~~~~~~~~
 
+
+`1.0.20210506`_
+~~~~~~~~~~~~~~~
+
 - Added a ``pull_media`` task.
 - Dropped ``--spec`` arguments from ``pipx run`` invocations. The temporary
   virtual environments will be cached for a maximum of 14 days anyway, so they
@@ -226,4 +230,5 @@ Change log
 .. _1.0.20210202: https://github.com/feinheit/fh-fablib/compare/1.0.20210127...1.0.20210202
 .. _1.0.20210423: https://github.com/feinheit/fh-fablib/compare/1.0.20210202...1.0.20210423
 .. _1.0.20210424: https://github.com/feinheit/fh-fablib/compare/1.0.20210423...1.0.20210424
-.. _Next version: https://github.com/feinheit/fh-fablib/compare/1.0.20210424...main
+.. _1.0.20210506: https://github.com/feinheit/fh-fablib/compare/1.0.20210424...1.0.20210506
+.. _Next version: https://github.com/feinheit/fh-fablib/compare/1.0.20210506...main
