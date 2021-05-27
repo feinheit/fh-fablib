@@ -19,9 +19,20 @@ Usage
 
        fl.require("1.0.20210506")
        fl.config.update(base=fl.Path(__file__).parent, host="www-data@feinheit06.nine.ch")
-       fl.config.update(domain="example.com", branch="main", remote="production")
 
-       ns = fl.Collection(*fl.GENERAL, *fl.NINE)
+       environments = [
+           fl.environment(
+               "production",
+               {
+                   "domain": "example.com",
+                   "branch": "main",
+                   "remote": "production",
+               },
+               aliases=["p"],
+           ),
+       ]
+
+       ns = fl.Collection(*fl.GENERAL, *fl.NINE, *environments)
 
 4. Run ``fl --list`` to get a list of commands.
 
