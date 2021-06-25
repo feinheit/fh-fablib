@@ -752,13 +752,17 @@ def _rsync_static(ctx, *, delete=False):
     run(ctx, f"rsync {flags}{delete} static/ {config.host}:{config.domain}/static/")
 
 
-@task(auto_shortflags=False, help={"fast": "Skip the Webpack build"})
-def deploy(ctx, fast=False):
+@task(
+    auto_shortflags=False,
+    help={"fast": "Skip the Webpack build", "force": "Force the git push"},
+)
+def deploy(ctx, fast=False, force=False):
     """Deploy once 🔥"""
     _check_branch(ctx)
     _check_no_uncommitted_changes(ctx)
     check(ctx)
-    run(ctx, f"git push origin {config.branch}")
+    force = "+" if force else ""
+    run(ctx, f"git push origin {force}{config.branch}")
     if not fast:
         run(ctx, "NODE_ENV=production npx webpack -p --bail")
 

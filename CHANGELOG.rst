@@ -5,6 +5,10 @@ Change log
 `Next version`_
 ~~~~~~~~~~~~~~~
 
+- Added ``--force`` to ``fl deploy`` to make ``git push`` use a force-push.
+  This is especially useful to deploy e.g. staging branches which are rewound
+  often.
+
 
 `1.0.20210506`_
 ~~~~~~~~~~~~~~~
