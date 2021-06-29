@@ -9,7 +9,8 @@ Usage
 2. Install fh-fablib
 
    a. ``pipx install fh_fablib`` if you're happy with the packaged version
-   b. ``pipx install --editable git+ssh://git@github.com/feinheit/fh-fablib.git@main#egg=fh_fablib`` otherwise
+   b. ``pipx install ~/Projects/fh-fablib`` if you have a local git checkout
+      you want to install from
 
 3. Add a ``fabfile.py`` to your project. A minimal example follows:
 
