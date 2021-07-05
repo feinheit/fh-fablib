@@ -5,6 +5,9 @@ Change log
 `Next version`_
 ~~~~~~~~~~~~~~~
 
+`1.0.20210705`_
+~~~~~~~~~~~~~~~
+
 - Added ``--force`` to ``fl deploy`` to make ``git push`` use a force-push.
   This is especially useful to deploy e.g. staging branches which are rewound
   often.
@@ -236,4 +239,5 @@ Change log
 .. _1.0.20210423: https://github.com/feinheit/fh-fablib/compare/1.0.20210202...1.0.20210423
 .. _1.0.20210424: https://github.com/feinheit/fh-fablib/compare/1.0.20210423...1.0.20210424
 .. _1.0.20210506: https://github.com/feinheit/fh-fablib/compare/1.0.20210424...1.0.20210506
-.. _Next version: https://github.com/feinheit/fh-fablib/compare/1.0.20210506...main
+.. _1.0.20210705: https://github.com/feinheit/fh-fablib/compare/1.0.20210506...1.0.20210705
+.. _Next version: https://github.com/feinheit/fh-fablib/compare/1.0.20210705...main
