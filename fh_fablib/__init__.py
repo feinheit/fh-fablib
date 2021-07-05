@@ -320,6 +320,7 @@ SECRET_KEY={secret_key}
 ALLOWED_HOSTS=["*"]
 
 SENTRY_DSN=
+SENTRY_ENVIRONMENT=
 """
         )
 
@@ -451,7 +452,9 @@ ALLOWED_HOSTS=[".{config.domain}", ".{conn.host}"]
 
 GOOGLE_CLIENT_ID=
 GOOGLE_CLIENT_SECRET=
+
 SENTRY_DSN=
+SENTRY_ENVIRONMENT=
 
 # LIVE=True
 # CANONICAL_DOMAIN={config.domain}
