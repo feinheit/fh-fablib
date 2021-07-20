@@ -302,7 +302,7 @@ def update(ctx):
     run(ctx, "venv/bin/python -m pip install -r requirements.txt")
     run(ctx, 'find . -name "*.pyc" -delete')
     run(ctx, "yarn")
-    run(ctx, "venv/bin/python manage.py migrate")
+    run(ctx, "venv/bin/python manage.py migrate", warn=True)
 
 
 def _local_dotenv_if_not_exists():

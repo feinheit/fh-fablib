@@ -6,6 +6,8 @@ Change log
 ~~~~~~~~~~~~~~~
 
 - Switch from ``npx`` to ``yarn run``.
+- Changed the ``update`` task to not fail when running migrations fails. This
+  allows ``fl update pull-db`` to continue.
 
 
 `1.0.20210705`_
