@@ -5,6 +5,9 @@ Change log
 `Next version`_
 ~~~~~~~~~~~~~~~
 
+- Switch from ``npx`` to ``yarn run``.
+
+
 `1.0.20210705`_
 ~~~~~~~~~~~~~~~
 
