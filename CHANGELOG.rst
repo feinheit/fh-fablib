@@ -5,6 +5,9 @@ Change log
 `Next version`_
 ~~~~~~~~~~~~~~~
 
+`1.0.20210721`_
+~~~~~~~~~~~~~~~
+
 - Switch from ``npx`` to ``yarn run``.
 - Changed the ``update`` task to not fail when running migrations fails. This
   allows ``fl update pull-db`` to continue.
@@ -246,4 +249,5 @@ Change log
 .. _1.0.20210424: https://github.com/feinheit/fh-fablib/compare/1.0.20210423...1.0.20210424
 .. _1.0.20210506: https://github.com/feinheit/fh-fablib/compare/1.0.20210424...1.0.20210506
 .. _1.0.20210705: https://github.com/feinheit/fh-fablib/compare/1.0.20210506...1.0.20210705
-.. _Next version: https://github.com/feinheit/fh-fablib/compare/1.0.20210705...main
+.. _1.0.20210721: https://github.com/feinheit/fh-fablib/compare/1.0.20210705...1.0.20210721
+.. _Next version: https://github.com/feinheit/fh-fablib/compare/1.0.20210721...main
