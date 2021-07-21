@@ -8,6 +8,7 @@ Change log
 - Switch from ``npx`` to ``yarn run``.
 - Changed the ``update`` task to not fail when running migrations fails. This
   allows ``fl update pull-db`` to continue.
+- Added ``dist`` to the list of folders to skip when running ``makemessages``.
 
 
 `1.0.20210705`_
