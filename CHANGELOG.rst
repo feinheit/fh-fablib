@@ -5,6 +5,10 @@ Change log
 `Next version`_
 ~~~~~~~~~~~~~~~
 
+
+`1.0.20210816`_
+~~~~~~~~~~~~~~~
+
 - Changed the ``pkg-resources``-exclusion in ``fl freeze`` to also match
   ``pkg_resources``.
 - Added a ``--language`` flag to ``fl mm`` which is especially useful when
@@ -257,4 +261,5 @@ Change log
 .. _1.0.20210506: https://github.com/feinheit/fh-fablib/compare/1.0.20210424...1.0.20210506
 .. _1.0.20210705: https://github.com/feinheit/fh-fablib/compare/1.0.20210506...1.0.20210705
 .. _1.0.20210721: https://github.com/feinheit/fh-fablib/compare/1.0.20210705...1.0.20210721
-.. _Next version: https://github.com/feinheit/fh-fablib/compare/1.0.20210721...main
+.. _1.0.20210816: https://github.com/feinheit/fh-fablib/compare/1.0.20210721...1.0.20210816
+.. _Next version: https://github.com/feinheit/fh-fablib/compare/1.0.20210816...main
