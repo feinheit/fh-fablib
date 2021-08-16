@@ -243,6 +243,7 @@ def mm(ctx, language=None):
 
     with io.open("conf/strings.js", "w", encoding="utf-8") as f:
         f.write(generate_strings())
+        f.write("\n")
 
     language = f"-l {language}" if language else "-a"
     run(
