@@ -5,6 +5,10 @@ Change log
 `Next version`_
 ~~~~~~~~~~~~~~~
 
+- Changed the ``pkg-resources``-exclusion in ``fl freeze`` to also match
+  ``pkg_resources``.
+
+
 `1.0.20210721`_
 ~~~~~~~~~~~~~~~
 
