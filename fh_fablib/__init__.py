@@ -12,6 +12,8 @@ import speckenv
 from fabric import Connection, task
 from invoke import Collection  # noqa, re-export
 
+from fh_fablib.extract_js_gettext_strings import generate_strings
+
 
 __version__ = "1.0.20210721"
 
@@ -238,6 +240,10 @@ def _srv_env(conn, path):
 )
 def mm(ctx, language=None):
     """Update the translation catalogs"""
+
+    with io.open("conf/strings.js", "w", encoding="utf-8") as f:
+        f.write(generate_strings())
+
     language = f"-l {language}" if language else "-a"
     run(
         ctx,

@@ -9,6 +9,7 @@ Change log
   ``pkg_resources``.
 - Added a ``--language`` flag to ``fl mm`` which is especially useful when
   adding a new language.
+- Integrated the gettext string extraction script into ``fl mm``.
 
 
 `1.0.20210721`_
