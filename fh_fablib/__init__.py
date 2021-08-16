@@ -232,18 +232,22 @@ def _srv_env(conn, path):
     return lambda *a, **kw: speckenv.env(*a, **kw, mapping=mapping)
 
 
-@task
-def mm(ctx):
+@task(
+    auto_shortflags=False,
+    help={"language": "Generate catalogs for a specific language"},
+)
+def mm(ctx, language=None):
     """Update the translation catalogs"""
+    language = f"-l {language}" if language else "-a"
     run(
         ctx,
-        "venv/bin/python manage.py makemessages -a --add-location file"
+        f"venv/bin/python manage.py makemessages {language} --add-location file"
         " -i venv -i htmlcov -i node_modules -i lib -i dist",
         replace_env=False,
     )
     run(
         ctx,
-        "venv/bin/python manage.py makemessages -a --add-location file"
+        f"venv/bin/python manage.py makemessages {language} --add-location file"
         " -i venv -i htmlcov -i node_modules -i lib -i dist"
         " -d djangojs",
         replace_env=False,

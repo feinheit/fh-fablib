@@ -7,6 +7,8 @@ Change log
 
 - Changed the ``pkg-resources``-exclusion in ``fl freeze`` to also match
   ``pkg_resources``.
+- Added a ``--language`` flag to ``fl mm`` which is especially useful when
+  adding a new language.
 
 
 `1.0.20210721`_
