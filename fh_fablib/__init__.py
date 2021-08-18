@@ -242,8 +242,7 @@ def mm(ctx, language=None):
     """Update the translation catalogs"""
 
     with io.open("conf/strings.js", "w", encoding="utf-8") as f:
-        f.write(generate_strings())
-        f.write("\n")
+        f.write("".join(f"{str}\n" for str in generate_strings()))
 
     language = f"-l {language}" if language else "-a"
     run(

@@ -81,7 +81,7 @@ def generate_strings():
     for file in js_files():
         with open(file, encoding="utf-8") as f:
             calls |= set(gettext_calls(f.read()))
-    return "\n".join(sorted(calls, key=lambda c: c.lower()))
+    return sorted(calls, key=lambda c: c.lower())
 
 
 if __name__ == "__main__":
