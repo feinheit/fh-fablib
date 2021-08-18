@@ -5,6 +5,11 @@ Change log
 `Next version`_
 ~~~~~~~~~~~~~~~
 
+`1.0.20210818`_
+~~~~~~~~~~~~~~~
+
+- Fixed the final newline behavior of ``fl mm``'s string extraction.
+
 
 `1.0.20210816`_
 ~~~~~~~~~~~~~~~
@@ -262,4 +267,5 @@ Change log
 .. _1.0.20210705: https://github.com/feinheit/fh-fablib/compare/1.0.20210506...1.0.20210705
 .. _1.0.20210721: https://github.com/feinheit/fh-fablib/compare/1.0.20210705...1.0.20210721
 .. _1.0.20210816: https://github.com/feinheit/fh-fablib/compare/1.0.20210721...1.0.20210816
-.. _Next version: https://github.com/feinheit/fh-fablib/compare/1.0.20210816...main
+.. _1.0.20210818: https://github.com/feinheit/fh-fablib/compare/1.0.20210816...1.0.20210818
+.. _Next version: https://github.com/feinheit/fh-fablib/compare/1.0.20210818...main
