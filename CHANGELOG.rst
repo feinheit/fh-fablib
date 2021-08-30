@@ -5,6 +5,10 @@ Change log
 `Next version`_
 ~~~~~~~~~~~~~~~
 
+- Added ``.feinheit.dev`` to the list of ``ALLOWED_HOSTS`` in
+  ``nine-db-dotenv``.
+
+
 `1.0.20210818`_
 ~~~~~~~~~~~~~~~
 

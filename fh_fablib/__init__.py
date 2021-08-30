@@ -461,7 +461,7 @@ DEBUG=False
 DATABASE_URL=postgres://{dbname}:{password}@localhost:5432/{dbname}
 CACHE_URL=hiredis://localhost:6379/1/?key_prefix={dbname}
 SECRET_KEY={secret_key}
-ALLOWED_HOSTS=[".{config.domain}", ".{conn.host}"]
+ALLOWED_HOSTS=[".{config.domain}", ".{conn.host}", ".feinheit.dev"]
 
 GOOGLE_CLIENT_ID=
 GOOGLE_CLIENT_SECRET=
