@@ -343,10 +343,14 @@ def _local_dbname():
     return _dbname_from_dsn(_local_env()("DATABASE_URL"))
 
 
-@task
-def local(ctx):
+@task(
+    auto_shortflags=False,
+    help={"clobber": "Clobber pre-existing node_modules and venv folders"},
+)
+def local(ctx, clobber=False):
     """Local environment setup"""
-    run(ctx, "rm -rf node_modules venv")
+    if clobber:
+        run(ctx, "rm -rf node_modules venv")
     dbname = _local_dbname()
     run(ctx, f"createdb {dbname}", warn=True)
     update(ctx)
