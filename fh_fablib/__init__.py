@@ -738,11 +738,16 @@ def _fmt_isort(ctx):
     )
 
 
+def _fmt_djlint(ctx):
+    run(ctx, f"pipx run djlint {config.app}")
+
+
 @task
 def fmt(ctx):
     """Format the code"""
     _fmt_black(ctx)
     _fmt_isort(ctx)
+    _fmt_djlint(ctx)
     _fmt_prettier(ctx)
 
 
