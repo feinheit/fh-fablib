@@ -739,7 +739,7 @@ def _fmt_isort(ctx):
 
 
 def _fmt_djlint(ctx):
-    run(ctx, f"pipx run djlint {config.app}")
+    run(ctx, f"pipx run djlint --reformat --quiet {config.app}")
 
 
 @task
