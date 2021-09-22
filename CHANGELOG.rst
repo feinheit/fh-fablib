@@ -5,6 +5,11 @@ Change log
 `Next version`_
 ~~~~~~~~~~~~~~~
 
+`1.0.20210923`_
+~~~~~~~~~~~~~~~
+
+- Fixed the ``djlint`` invocation to actually reformat files.
+
 
 `1.0.20210922`_
 ~~~~~~~~~~~~~~~
@@ -280,4 +285,5 @@ Change log
 .. _1.0.20210816: https://github.com/feinheit/fh-fablib/compare/1.0.20210721...1.0.20210816
 .. _1.0.20210818: https://github.com/feinheit/fh-fablib/compare/1.0.20210816...1.0.20210818
 .. _1.0.20210922: https://github.com/feinheit/fh-fablib/compare/1.0.20210818...1.0.20210922
-.. _Next version: https://github.com/feinheit/fh-fablib/compare/1.0.20210922...main
+.. _1.0.20210923: https://github.com/feinheit/fh-fablib/compare/1.0.20210822...1.0.20210923
+.. _Next version: https://github.com/feinheit/fh-fablib/compare/1.0.20210923...main
