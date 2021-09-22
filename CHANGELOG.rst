@@ -5,8 +5,15 @@ Change log
 `Next version`_
 ~~~~~~~~~~~~~~~
 
+
+`1.0.20210922`_
+~~~~~~~~~~~~~~~
+
 - Added ``.feinheit.dev`` to the list of ``ALLOWED_HOSTS`` in
   ``nine-db-dotenv``.
+- Added ``build`` to the list of ignores.
+- Added ``djlint`` invocations to ``fl fmt``.
+- Added a ``--clobber`` argument to ``fl local``.
 
 
 `1.0.20210818`_
@@ -272,4 +279,5 @@ Change log
 .. _1.0.20210721: https://github.com/feinheit/fh-fablib/compare/1.0.20210705...1.0.20210721
 .. _1.0.20210816: https://github.com/feinheit/fh-fablib/compare/1.0.20210721...1.0.20210816
 .. _1.0.20210818: https://github.com/feinheit/fh-fablib/compare/1.0.20210816...1.0.20210818
-.. _Next version: https://github.com/feinheit/fh-fablib/compare/1.0.20210818...main
+.. _1.0.20210922: https://github.com/feinheit/fh-fablib/compare/1.0.20210818...1.0.20210922
+.. _Next version: https://github.com/feinheit/fh-fablib/compare/1.0.20210922...main
