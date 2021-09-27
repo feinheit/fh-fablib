@@ -718,19 +718,20 @@ def _fmt_prettier(ctx):
         ctx,
         f"yarn run prettier --write --no-semi"
         f' "*.js" "{config.app}/static/**/*.js" "{config.app}/static/**/*.scss"',
+        warn=True,
     )
 
 
 def _fmt_tox_style(ctx):
-    run(ctx, "tox -e style")
+    run(ctx, "tox -e style", warn=True)
 
 
 def _fmt_pyupgrade(ctx):
-    run(ctx, "pipx run pyupgrade --py36-plus $(git ls-files '*.py')")
+    run(ctx, "pipx run pyupgrade --py36-plus $(git ls-files '*.py')", warn=True)
 
 
 def _fmt_black(ctx):
-    run(ctx, "pipx run black .")
+    run(ctx, "pipx run black .", warn=True)
 
 
 def _fmt_isort(ctx):
@@ -739,11 +740,12 @@ def _fmt_isort(ctx):
         "pipx run isort"
         " --virtual-env venv --profile=black --lines-after-imports=2 --combine-as"
         " .",
+        warn=True,
     )
 
 
 def _fmt_djlint(ctx):
-    run(ctx, f"pipx run djlint --reformat --quiet {config.app}")
+    run(ctx, f"pipx run djlint --reformat --quiet {config.app}", warn=True)
 
 
 @task

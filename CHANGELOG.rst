@@ -5,6 +5,10 @@ Change log
 `Next version`_
 ~~~~~~~~~~~~~~~
 
+- Added ``pyupgrade`` invocations to ``fl fmt``.
+- Changed all ``_fmt_*`` utilities to not stop on errors.
+
+
 `1.0.20210923`_
 ~~~~~~~~~~~~~~~
 
