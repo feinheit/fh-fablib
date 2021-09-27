@@ -725,6 +725,10 @@ def _fmt_tox_style(ctx):
     run(ctx, "tox -e style")
 
 
+def _fmt_pyupgrade(ctx):
+    run(ctx, "pipx run pyupgrade --py36-plus $(git ls-files '*.py')")
+
+
 def _fmt_black(ctx):
     run(ctx, "pipx run black .")
 
@@ -745,6 +749,7 @@ def _fmt_djlint(ctx):
 @task
 def fmt(ctx):
     """Format the code"""
+    _fmt_pyupgrade(ctx)
     _fmt_black(ctx)
     _fmt_isort(ctx)
     _fmt_djlint(ctx)
