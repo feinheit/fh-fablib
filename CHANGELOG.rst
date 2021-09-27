@@ -5,6 +5,10 @@ Change log
 `Next version`_
 ~~~~~~~~~~~~~~~
 
+
+`1.0.20210927`_
+~~~~~~~~~~~~~~~
+
 - Added ``pyupgrade`` invocations to ``fl fmt``.
 - Changed all ``_fmt_*`` utilities to not stop on errors.
 
@@ -290,4 +294,5 @@ Change log
 .. _1.0.20210818: https://github.com/feinheit/fh-fablib/compare/1.0.20210816...1.0.20210818
 .. _1.0.20210922: https://github.com/feinheit/fh-fablib/compare/1.0.20210818...1.0.20210922
 .. _1.0.20210923: https://github.com/feinheit/fh-fablib/compare/1.0.20210822...1.0.20210923
-.. _Next version: https://github.com/feinheit/fh-fablib/compare/1.0.20210923...main
+.. _1.0.20210927: https://github.com/feinheit/fh-fablib/compare/1.0.20210923...1.0.20210927
+.. _Next version: https://github.com/feinheit/fh-fablib/compare/1.0.20210927...main
