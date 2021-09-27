@@ -5,6 +5,8 @@ Change log
 `Next version`_
 ~~~~~~~~~~~~~~~
 
+- Added auto-updating of ``fl.require`` statements in projects.
+
 
 `1.0.20210927`_
 ~~~~~~~~~~~~~~~

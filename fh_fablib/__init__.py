@@ -49,10 +49,23 @@ def require(version):
     if __version__ < version:
         terminate(f"fh_fablib version {version} required (you have {__version__})")
     if __version__ > version:
-        info(
-            f"fh_fablib version is {__version__}, project requires only {version}."
-            " Maybe update the project's fabfile?"
-        )
+        path = Path.cwd() / "fabfile.py"
+        if path.is_file() and (old := path.read_text()):
+            new = "".join(
+                f'fl.require("{__version__}")\n'
+                if line.startswith("fl.require")
+                else line
+                for line in old.splitlines(keepends=True)
+            )
+            if new != old:
+                path.write_text(new)
+                info(
+                    "The fabfile has been updated automatically with your"
+                    " local fh_fablib version."
+                )
+                return
+
+        info(f"fh_fablib version is {__version__}, project requires only {version}.")
 
 
 def run(c, *a, **kw):
