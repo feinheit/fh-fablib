@@ -5,6 +5,10 @@ Change log
 `Next version`_
 ~~~~~~~~~~~~~~~
 
+
+`1.0.20210928`_
+~~~~~~~~~~~~~~~
+
 - Added auto-updating of ``fl.require`` statements in projects.
 
 
@@ -297,4 +301,5 @@ Change log
 .. _1.0.20210922: https://github.com/feinheit/fh-fablib/compare/1.0.20210818...1.0.20210922
 .. _1.0.20210923: https://github.com/feinheit/fh-fablib/compare/1.0.20210822...1.0.20210923
 .. _1.0.20210927: https://github.com/feinheit/fh-fablib/compare/1.0.20210923...1.0.20210927
-.. _Next version: https://github.com/feinheit/fh-fablib/compare/1.0.20210927...main
+.. _1.0.20210928: https://github.com/feinheit/fh-fablib/compare/1.0.20210927...1.0.20210928
+.. _Next version: https://github.com/feinheit/fh-fablib/compare/1.0.20210928...main
