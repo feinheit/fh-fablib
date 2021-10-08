@@ -204,8 +204,10 @@ Checks
 Formatters
 ~~~~~~~~~~
 
+- ``_fmt_pyupgrade(ctx)``: Run ``pyupgrade``
 - ``_fmt_black(ctx)``: Run ``black``
 - ``_fmt_isort(ctx)``: Run ``isort``
+- ``_fmt_djlint(ctx)``: Run ``djLint``
 - ``_fmt_prettier(ctx)``: Run ``prettier``
 - ``_fmt_tox_style(ctx)``: Run ``tox -e style``
 
