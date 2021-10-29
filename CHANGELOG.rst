@@ -5,6 +5,12 @@ Change log
 `Next version`_
 ~~~~~~~~~~~~~~~
 
+`1.0.20211029`_
+~~~~~~~~~~~~~~~
+
+- Added a configuration flag to always use force pushes for select
+  environments.
+
 
 `1.0.20210928`_
 ~~~~~~~~~~~~~~~
@@ -302,4 +308,5 @@ Change log
 .. _1.0.20210923: https://github.com/feinheit/fh-fablib/compare/1.0.20210822...1.0.20210923
 .. _1.0.20210927: https://github.com/feinheit/fh-fablib/compare/1.0.20210923...1.0.20210927
 .. _1.0.20210928: https://github.com/feinheit/fh-fablib/compare/1.0.20210927...1.0.20210928
-.. _Next version: https://github.com/feinheit/fh-fablib/compare/1.0.20210928...main
+.. _1.0.20211029: https://github.com/feinheit/fh-fablib/compare/1.0.20210928...1.0.20211029
+.. _Next version: https://github.com/feinheit/fh-fablib/compare/1.0.20211029...main
