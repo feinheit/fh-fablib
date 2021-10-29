@@ -51,6 +51,7 @@ Configuration values
   prefix are derived from this value.
 - ``environments``: A dictionary of environments, see below.
 - ``environment``: The name of the active environment or ``"default"``.
+- ``force``: Always force-push when deploying.
 - ``host``: SSH connection string (``username@server``)
 - ``remote``: git remote name for the server. Only used for the
   ``fetch`` task.

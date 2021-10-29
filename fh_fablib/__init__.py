@@ -80,6 +80,7 @@ class Config:
     app = "app"
     environment = "default"
     environments = {}
+    force = False
 
     def update(self, **kwargs):
         for key, value in kwargs.items():
@@ -806,7 +807,7 @@ def deploy(ctx, fast=False, force=False):
     _check_branch(ctx)
     _check_no_uncommitted_changes(ctx)
     check(ctx)
-    force = "+" if force else ""
+    force = "+" if (force or config.force) else ""
     run(ctx, f"git push origin {force}{config.branch}")
     if not fast:
         run(ctx, "NODE_ENV=production yarn run webpack -p --bail")
