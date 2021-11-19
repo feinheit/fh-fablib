@@ -768,7 +768,7 @@ def fmt(ctx):
     _fmt_pyupgrade(ctx)
     _fmt_black(ctx)
     _fmt_isort(ctx)
-    _fmt_djlint(ctx)
+    # _fmt_djlint(ctx)
     _fmt_prettier(ctx)
 
 
