@@ -37,8 +37,9 @@ Usage
 
 4. Run ``fl --list`` to get a list of commands.
 
-Loading the ``fh_fablib`` module automatically creates
-``.git/hooks/pre-commit`` which runs ``fl check`` before each commit.
+Project setup with ``fh_fablib`` automatically adds a
+`pre-commit <https://pre-commit.com/>`__
+configuration and the corresponding pre-commit git hook.
 
 
 Configuration values

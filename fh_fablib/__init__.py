@@ -82,12 +82,15 @@ class Config:
     environments = {}
     force = False
 
-    def update(self, **kwargs):
+    def update(self, ctx=None, **kwargs):
         for key, value in kwargs.items():
             setattr(self, key, value)
 
         os.chdir(self.base)
-        pre_commit_hook()
+
+        # TODO: check/add hook on every config initialization
+        if ctx:
+            hook(ctx)
 
     def __getattr__(self, key):
         environments = getattr(self, "environments", None)
@@ -110,7 +113,7 @@ def environment(name, cfg, **kwargs):
     @task(name=name, **kwargs)
     def fn(ctx):
         cfg["environment"] = name
-        config.update(**cfg)
+        config.update(ctx, **cfg)
 
     fn.__doc__ = f'Set the environment to "{name}"'
     return fn
@@ -122,15 +125,6 @@ class Connection(Connection):
     def __init__(self, *args, **kwargs):
         kwargs.setdefault("forward_agent", True)
         super().__init__(*args, **kwargs)
-
-
-def pre_commit_hook(*, force=False):
-    """Install the pre-commit hook running coding style checks"""
-    path = config.base / ".git" / "hooks" / "pre-commit"
-    if not path.exists() or force:
-        with path.open("w") as hook:
-            hook.write("#!/bin/sh\nfl check\n")
-        path.chmod(0o755)
 
 
 def _random_string(length, *, chars=None):
@@ -173,8 +167,22 @@ for job in $(jobs -p); do wait $job; done
 
 @task
 def hook(ctx):
-    """Install the pre-commit hook"""
-    pre_commit_hook(force=True)
+    """Install the pre-commit hook running coding style checks"""
+    # shutil.copy(
+    #     Path(__file__).parent / "pre-commit-defaults.yaml",
+    #     config.base / ".pre-commit-config.yaml"
+    # )
+
+    defaults = Path(__file__).parent / "pre-commit-defaults.yaml"
+    pre_commit_config = config.base / ".pre-commit-config.yaml"
+    pre_commit_config.write_text(
+        defaults.read_text().replace(
+            "###FRONTEND_STATIC_PATTERN###",
+            f"{config.app}/static/.*$"
+        )
+    )
+
+    run(ctx, "pipx run pre-commit install -f")
 
 
 @task(auto_shortflags=False)
@@ -327,6 +335,7 @@ def update(ctx):
     run(ctx, 'find . -name "*.pyc" -delete')
     run(ctx, "yarn")
     run(ctx, "venv/bin/python manage.py migrate", warn=True)
+    hook(ctx)
 
 
 def _local_dotenv_if_not_exists():
@@ -670,14 +679,17 @@ def fetch(ctx):
     run(ctx, f"git fetch {config.remote}")
 
 
+# legacy
 def _check_flake8(ctx):
     run(ctx, "pipx run flake8 .")
 
 
+# legacy
 def _check_django(ctx):
     run(ctx, "venv/bin/python manage.py check")
 
 
+# legacy
 def _check_prettier(ctx):
     run(
         ctx,
@@ -686,10 +698,12 @@ def _check_prettier(ctx):
     )
 
 
+# legacy
 def _check_eslint(ctx):
     run(ctx, f'yarn run eslint "*.js" {config.app}/static')
 
 
+# legacy
 def _check_large_files(ctx, *, limit=500000):
     out = run(
         ctx, "git diff-index --cached --name-only --diff-filter=AMT HEAD", hide=True
@@ -719,12 +733,8 @@ def _check_no_uncommitted_changes(ctx):
 
 @task
 def check(ctx):
-    """Check the coding style"""
-    _check_flake8(ctx)
-    _check_django(ctx)
-    _check_prettier(ctx)
-    _check_eslint(ctx)
-    _check_large_files(ctx)
+    """Check the coding style of staged files"""
+    run(ctx, "pipx run pre-commit run")
 
 
 def _fmt_prettier(ctx):
