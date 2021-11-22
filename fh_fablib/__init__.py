@@ -82,15 +82,13 @@ class Config:
     environments = {}
     force = False
 
-    def update(self, ctx=None, **kwargs):
+    def update(self, **kwargs):
         for key, value in kwargs.items():
             setattr(self, key, value)
 
         os.chdir(self.base)
 
         # TODO: check/add hook on every config initialization
-        if ctx:
-            hook(ctx)
 
     def __getattr__(self, key):
         environments = getattr(self, "environments", None)
@@ -113,7 +111,7 @@ def environment(name, cfg, **kwargs):
     @task(name=name, **kwargs)
     def fn(ctx):
         cfg["environment"] = name
-        config.update(ctx, **cfg)
+        config.update(**cfg)
 
     fn.__doc__ = f'Set the environment to "{name}"'
     return fn
@@ -167,7 +165,9 @@ for job in $(jobs -p); do wait $job; done
 
 @task
 def hook(ctx):
-    """Install the pre-commit hook running coding style checks"""
+    """
+    Add default pre-commit configuration and install hook running coding style checks
+    """
     # shutil.copy(
     #     Path(__file__).parent / "pre-commit-defaults.yaml",
     #     config.base / ".pre-commit-config.yaml"
@@ -335,7 +335,6 @@ def update(ctx):
     run(ctx, 'find . -name "*.pyc" -delete')
     run(ctx, "yarn")
     run(ctx, "venv/bin/python manage.py migrate", warn=True)
-    hook(ctx)
 
 
 def _local_dotenv_if_not_exists():

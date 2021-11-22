@@ -35,11 +35,10 @@ Usage
 
        ns = fl.Collection(*fl.GENERAL, *fl.NINE, *environments)
 
-4. Run ``fl --list`` to get a list of commands.
+4. Run ``fl hook`` to provide a default
+`pre-commit <https://pre-commit.com/>`__ configuration.
 
-Project setup with ``fh_fablib`` automatically adds a
-`pre-commit <https://pre-commit.com/>`__
-configuration and the corresponding pre-commit git hook.
+5. Run ``fl --list`` to get a list of commands.
 
 
 Configuration values
