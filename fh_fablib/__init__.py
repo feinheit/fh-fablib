@@ -182,7 +182,7 @@ def hook(ctx):
         )
     )
 
-    run(ctx, "pipx run pre-commit install -f")
+    run(ctx, "pre-commit install -f")
 
 
 @task(auto_shortflags=False)
@@ -733,7 +733,7 @@ def _check_no_uncommitted_changes(ctx):
 @task
 def check(ctx):
     """Check the coding style of staged files"""
-    run(ctx, "pipx run pre-commit run")
+    run(ctx, "pre-commit run")
 
 
 def _fmt_prettier(ctx):
