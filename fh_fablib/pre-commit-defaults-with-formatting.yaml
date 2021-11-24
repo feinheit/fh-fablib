@@ -37,7 +37,7 @@ repos:
           - id: prettier
             args: [--list-different]
             files: "###FRONTEND_STATIC_PATTERN###"
-            types_or: [css, javascript]
+            types_or: [css, javascript, scss]
     - repo: https://github.com/pre-commit/mirrors-eslint
       rev: v8.2.0
       hooks:
