@@ -32,7 +32,13 @@ repos:
       rev: 5.10.1
       hooks:
           - id: isort
-            args: [--profile=black, --lines-after-imports=2, --combine-as]
+            args:
+                [
+                    --virtual-env=venv,
+                    --profile=black,
+                    --lines-after-imports=2,
+                    --combine-as,
+                ]
     - repo: https://github.com/pycqa/flake8
       rev: 4.0.1
       hooks:
