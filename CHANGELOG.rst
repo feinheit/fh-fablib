@@ -5,6 +5,8 @@ Change log
 `Next version`_
 ~~~~~~~~~~~~~~~
 
+- Changed ``fl mm`` to disable ESLint on the generated ``strings.js`` file.
+
 
 `1.0.20211124`_
 ~~~~~~~~~~~~~~~
