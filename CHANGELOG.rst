@@ -6,6 +6,7 @@ Change log
 ~~~~~~~~~~~~~~~
 
 - Changed ``fl mm`` to disable ESLint on the generated ``strings.js`` file.
+- Added ``*jsx`` files to the gettext extractor.
 
 
 `1.0.20211124`_
