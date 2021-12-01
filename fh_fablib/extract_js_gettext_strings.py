@@ -18,7 +18,7 @@ from collections import deque
 
 def js_files():
     res = subprocess.run(
-        ["git", "ls-files", "*js", "*mjs"],
+        ["git", "ls-files", "*js", "*mjs", "*jsx"],
         capture_output=True,
         encoding="utf-8",
     )
