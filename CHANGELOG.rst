@@ -5,8 +5,12 @@ Change log
 `Next version`_
 ~~~~~~~~~~~~~~~
 
+`1.0.20211201`_
+~~~~~~~~~~~~~~~
+
 - Changed ``fl mm`` to disable ESLint on the generated ``strings.js`` file.
 - Added ``*jsx`` files to the gettext extractor.
+- Tweaked the pre-commit configuration.
 
 
 `1.0.20211124`_
@@ -320,4 +324,5 @@ Change log
 .. _1.0.20210928: https://github.com/feinheit/fh-fablib/compare/1.0.20210927...1.0.20210928
 .. _1.0.20211029: https://github.com/feinheit/fh-fablib/compare/1.0.20210928...1.0.20211029
 .. _1.0.20211124: https://github.com/feinheit/fh-fablib/compare/1.0.20211029...1.0.20211124
-.. _Next version: https://github.com/feinheit/fh-fablib/compare/1.0.20211124...main
+.. _1.0.20211201: https://github.com/feinheit/fh-fablib/compare/1.0.20211124...1.0.20211201
+.. _Next version: https://github.com/feinheit/fh-fablib/compare/1.0.20211201...main
