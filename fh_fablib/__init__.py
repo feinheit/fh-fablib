@@ -23,7 +23,7 @@ warnings.simplefilter("ignore", category=ResourceWarning)
 
 
 def ansi(code):
-    return lambda s: "\033[{}m{}\033[0m".format(code, s)
+    return lambda s: f"\033[{code}m{s}\033[0m"
 
 
 # underline = ansi("4")
@@ -169,7 +169,7 @@ def hook(ctx):
     Add default pre-commit configuration and install hook running coding style checks
     """
     shutil.copy(
-        Path(__file__).parent / "pre-commit-defaults.yaml",
+        Path(__file__).parent.parent / ".pre-commit-config.yaml",
         config.base / ".pre-commit-config.yaml",
     )
     run(ctx, "pre-commit install -f")
@@ -253,7 +253,7 @@ def _srv_env(conn, path):
 def mm(ctx, language=None):
     """Update the translation catalogs"""
 
-    with io.open("conf/strings.js", "w", encoding="utf-8") as f:
+    with open("conf/strings.js", "w", encoding="utf-8") as f:
         f.write("/* eslint-disable */\n")
         f.write("".join(f"{str}\n" for str in generate_strings()))
 
