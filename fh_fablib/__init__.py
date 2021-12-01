@@ -168,20 +168,10 @@ def hook(ctx):
     """
     Add default pre-commit configuration and install hook running coding style checks
     """
-    # shutil.copy(
-    #     Path(__file__).parent / "pre-commit-defaults.yaml",
-    #     config.base / ".pre-commit-config.yaml"
-    # )
-
-    defaults = Path(__file__).parent / "pre-commit-defaults.yaml"
-    pre_commit_config = config.base / ".pre-commit-config.yaml"
-    pre_commit_config.write_text(
-        defaults.read_text().replace(
-            "###FRONTEND_STATIC_PATTERN###",
-            f"{config.app}/static/.*$"
-        )
+    shutil.copy(
+        Path(__file__).parent / "pre-commit-defaults.yaml",
+        config.base / ".pre-commit-config.yaml",
     )
-
     run(ctx, "pre-commit install -f")
 
 
