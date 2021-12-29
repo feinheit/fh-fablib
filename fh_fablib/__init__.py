@@ -422,8 +422,7 @@ def nine_alias_remove(ctx, alias, include_www=False):
 def nine_unit(ctx):
     """Start and enable a gunicorn@ unit"""
     with Connection(config.host) as conn:
-        run(conn, f"systemctl --user start gunicorn@{config.domain}.service")
-        run(conn, f"systemctl --user enable gunicorn@{config.domain}.service")
+        run(conn, f"systemctl --user enable --now gunicorn@{config.domain}.service")
 
 
 def _nine_has_manage_databases(conn):
@@ -528,8 +527,7 @@ def nine_disable(ctx):
     """Disable a virtual host, dump and remove the DB and stop the gunicorn@ unit"""
     with Connection(config.host) as conn:
         run(conn, f"sudo nine-manage-vhosts virtual-host remove {config.domain}")
-        run(conn, f"systemctl --user stop gunicorn@{config.domain}.service")
-        run(conn, f"systemctl --user disable gunicorn@{config.domain}.service")
+        run(conn, f"systemctl --user disable --now gunicorn@{config.domain}.service")
 
         e = _srv_env(conn, f"{config.domain}/.env")
         srv_dsn = e("DATABASE_URL")

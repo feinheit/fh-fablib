@@ -5,6 +5,10 @@ Change log
 `Next version`_
 ~~~~~~~~~~~~~~~
 
+- Changed ``systemctl`` invocations to use the ``--now`` switch to immediately
+  enable or disable services.
+
+
 `1.0.20211201`_
 ~~~~~~~~~~~~~~~
 
