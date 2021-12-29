@@ -7,6 +7,8 @@ Change log
 
 - Changed ``systemctl`` invocations to use the ``--now`` switch to immediately
   enable or disable services.
+- Added a ``--python3`` argument to ``nine-venv`` which allows overriding the
+  Python executable.
 
 
 `1.0.20211201`_

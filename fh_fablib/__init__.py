@@ -550,12 +550,15 @@ def nine_checkout(ctx):
         run(conn, f"git clone {repo} {config.domain} -b {config.branch}")
 
 
-@task
-def nine_venv(ctx):
+@task(
+    auto_shortflags=False,
+    help={"python3": "Python executable"},
+)
+def nine_venv(ctx, python3="python3"):
     """Create a venv and install packages from requirements.txt"""
     with Connection(config.host) as conn, conn.cd(config.domain):
         run(conn, "rm -rf venv")
-        run(conn, "PATH=~/.pyenv/shims:$PATH python3 -m venv venv")
+        run(conn, f"PATH=~/.pyenv/shims:$PATH {python3} -m venv venv")
         _pip_up(conn)
         run(conn, "venv/bin/python -m pip install -r requirements.txt")
 
