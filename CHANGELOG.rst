@@ -9,6 +9,7 @@ Change log
   enable or disable services.
 - Added a ``--python3`` argument to ``nine-venv`` which allows overriding the
   Python executable.
+- Stop wrapping long lines in pofiles.
 
 
 `1.0.20211201`_

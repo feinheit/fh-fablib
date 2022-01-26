@@ -261,13 +261,13 @@ def mm(ctx, language=None):
     run(
         ctx,
         f"venv/bin/python manage.py makemessages {language} --add-location file"
-        " -i venv -i htmlcov -i node_modules -i lib -i build -i dist",
+        " -i venv -i htmlcov -i node_modules -i lib -i build -i dist --no-wrap",
         replace_env=False,
     )
     run(
         ctx,
         f"venv/bin/python manage.py makemessages {language} --add-location file"
-        " -i venv -i htmlcov -i node_modules -i lib -i build -i dist"
+        " -i venv -i htmlcov -i node_modules -i lib -i build -i dist --no-wrap"
         " -d djangojs",
         replace_env=False,
     )
