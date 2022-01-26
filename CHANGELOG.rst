@@ -5,6 +5,10 @@ Change log
 `Next version`_
 ~~~~~~~~~~~~~~~
 
+
+`1.0.20220126`_
+~~~~~~~~~~~~~~~
+
 - Changed ``systemctl`` invocations to use the ``--now`` switch to immediately
   enable or disable services.
 - Added a ``--python3`` argument to ``nine-venv`` which allows overriding the
@@ -332,4 +336,5 @@ Change log
 .. _1.0.20211029: https://github.com/feinheit/fh-fablib/compare/1.0.20210928...1.0.20211029
 .. _1.0.20211124: https://github.com/feinheit/fh-fablib/compare/1.0.20211029...1.0.20211124
 .. _1.0.20211201: https://github.com/feinheit/fh-fablib/compare/1.0.20211124...1.0.20211201
-.. _Next version: https://github.com/feinheit/fh-fablib/compare/1.0.20211201...main
+.. _1.0.20220126: https://github.com/feinheit/fh-fablib/compare/1.0.20211201...1.0.20220126
+.. _Next version: https://github.com/feinheit/fh-fablib/compare/1.0.20220126...main
