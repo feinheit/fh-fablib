@@ -811,7 +811,7 @@ def deploy(ctx, fast=False, force=False):
     force = "+" if (force or config.force) else ""
     run(ctx, f"git push origin {force}{config.branch}")
     if not fast:
-        run(ctx, "NODE_ENV=production yarn run webpack -p --bail")
+        run(ctx, "NODE_ENV=production yarn run webpack --mode production --bail")
 
     with Connection(config.host) as conn, conn.cd(config.domain):
         _deploy_django(conn)
