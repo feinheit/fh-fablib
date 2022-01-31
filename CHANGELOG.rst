@@ -5,6 +5,11 @@ Change log
 `Next version`_
 ~~~~~~~~~~~~~~~
 
+- Better defaults in the ``.env``: Add ``.localhost`` to the local
+  ``ALLOWED_HOSTS`` setting.
+- Generate the standard ``SECURE_SSL_*`` settings instead of
+  ``CANONICAL_DOMAIN*``.
+
 
 `1.0.20220126`_
 ~~~~~~~~~~~~~~~

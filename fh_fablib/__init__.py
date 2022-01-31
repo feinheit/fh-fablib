@@ -343,7 +343,7 @@ DEBUG=True
 DATABASE_URL=postgres://localhost:5432/{dbname}
 CACHE_URL=hiredis://localhost:6379/1/?key_prefix={dbname}
 SECRET_KEY={secret_key}
-ALLOWED_HOSTS=["*"]
+ALLOWED_HOSTS=["*", ".localhost"]
 
 SENTRY_DSN=
 SENTRY_ENVIRONMENT=
@@ -486,8 +486,8 @@ SENTRY_DSN=
 SENTRY_ENVIRONMENT=
 
 # LIVE=True
-# CANONICAL_DOMAIN={config.domain}
-# CANONICAL_DOMAIN_SECURE=True
+# SECURE_SSL_HOST={config.domain}
+# SECURE_SSL_REDIRECT=True
 """
             ),
             f"{config.domain}/.env",
