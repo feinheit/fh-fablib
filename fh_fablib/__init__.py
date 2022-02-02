@@ -333,7 +333,7 @@ def _local_dotenv_if_not_exists():
     if dotenv.exists():
         return
 
-    secret_key = _random_string(50)
+    secret_key = _random_string(70)
     dbname = _dbname_from_domain(config.domain)
 
     with dotenv.open("w") as f:
@@ -441,7 +441,7 @@ def nine_db_dotenv(ctx):
             terminate(f"'{config.domain}/.env' already exists on the server")
 
         password = _random_string(20, chars="abcdefghijklmnopqrstuvwxyz0123456789")
-        secret_key = _random_string(50)
+        secret_key = _random_string(70)
         dbname = _dbname_from_domain(config.domain)
 
         if _nine_has_manage_databases(conn):
