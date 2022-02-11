@@ -9,6 +9,7 @@ Change log
   ``ALLOWED_HOSTS`` setting.
 - Generate the standard ``SECURE_SSL_*`` settings instead of
   ``CANONICAL_DOMAIN*``.
+- Changed force pushes to use ``--force-with-lease``.
 
 
 `1.0.20220126`_

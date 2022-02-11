@@ -808,7 +808,7 @@ def deploy(ctx, fast=False, force=False):
     _check_branch(ctx)
     _check_no_uncommitted_changes(ctx)
     check(ctx)
-    force = "+" if (force or config.force) else ""
+    force = "--force-with-lease " if (force or config.force) else ""
     run(ctx, f"git push origin {force}{config.branch}")
     if not fast:
         run(ctx, "NODE_ENV=production yarn run webpack --mode production --bail")
