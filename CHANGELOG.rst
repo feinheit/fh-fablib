@@ -5,6 +5,14 @@ Change log
 `Next version`_
 ~~~~~~~~~~~~~~~
 
+.. _Next version: https://github.com/feinheit/fh-fablib/compare/1.0.20220211...main
+
+
+`1.0.20220211`_
+~~~~~~~~~~~~~~~
+
+.. _1.0.20220211: https://github.com/feinheit/fh-fablib/compare/1.0.20220126...1.0.20220211
+
 - Better defaults in the ``.env``: Add ``.localhost`` to the local
   ``ALLOWED_HOSTS`` setting.
 - Generate the standard ``SECURE_SSL_*`` settings instead of
@@ -14,6 +22,8 @@ Change log
 
 `1.0.20220126`_
 ~~~~~~~~~~~~~~~
+
+.. _1.0.20220126: https://github.com/feinheit/fh-fablib/compare/1.0.20211201...1.0.20220126
 
 - Changed ``systemctl`` invocations to use the ``--now`` switch to immediately
   enable or disable services.
@@ -342,5 +352,3 @@ Change log
 .. _1.0.20211029: https://github.com/feinheit/fh-fablib/compare/1.0.20210928...1.0.20211029
 .. _1.0.20211124: https://github.com/feinheit/fh-fablib/compare/1.0.20211029...1.0.20211124
 .. _1.0.20211201: https://github.com/feinheit/fh-fablib/compare/1.0.20211124...1.0.20211201
-.. _1.0.20220126: https://github.com/feinheit/fh-fablib/compare/1.0.20211201...1.0.20220126
-.. _Next version: https://github.com/feinheit/fh-fablib/compare/1.0.20220126...main
