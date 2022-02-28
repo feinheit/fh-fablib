@@ -194,6 +194,8 @@ def dev(ctx, host="127.0.0.1", port=8000):
 @task
 def pull_db(ctx):
     """Pull a local copy of the remote DB and reset all passwords"""
+    _local_dotenv_if_not_exists()
+
     with Connection(config.host) as conn:
         e = _srv_env(conn, f"{config.domain}/.env")
 
