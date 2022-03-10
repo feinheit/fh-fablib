@@ -8,6 +8,7 @@ Change log
 .. _Next version: https://github.com/feinheit/fh-fablib/compare/1.0.20220211...main
 
 - Changed ``pull-db`` to create a local ``.env`` if it does not exist already.
+- Restored the automatic installation of the pre-commit hook.
 
 
 `1.0.20220211`_

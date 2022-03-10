@@ -88,8 +88,6 @@ class Config:
 
         os.chdir(self.base)
 
-        # TODO: check/add hook on every config initialization
-
     def __getattr__(self, key):
         environments = getattr(self, "environments", None)
         if environments:
@@ -168,10 +166,9 @@ def hook(ctx):
     """
     Add default pre-commit configuration and install hook running coding style checks
     """
-    shutil.copy(
-        Path(__file__).parent / "pre-commit-defaults.yaml",
-        config.base / ".pre-commit-config.yaml",
-    )
+    target = config.base / ".pre-commit-config.yaml"
+    if not target.exists():
+        shutil.copy(Path(__file__).parent / "pre-commit-defaults.yaml", target)
     run(ctx, "pre-commit install -f")
 
 
@@ -304,6 +301,7 @@ def upgrade(ctx, stable=False):
     extra = "" if stable else "--pre"
     run(ctx, f"venv/bin/python -m pip install -U -r requirements-to-freeze.txt {extra}")
     freeze(ctx)
+    hook(ctx)
 
 
 @task
@@ -328,6 +326,7 @@ def update(ctx):
     run(ctx, 'find . -name "*.pyc" -delete')
     run(ctx, "yarn")
     run(ctx, "venv/bin/python manage.py migrate", warn=True)
+    hook(ctx)
 
 
 def _local_dotenv_if_not_exists():
