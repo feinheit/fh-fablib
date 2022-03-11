@@ -7,6 +7,9 @@ Change log
 
 .. _Next version: https://github.com/feinheit/fh-fablib/compare/1.0.20220311...main
 
+- Added ``verbose: true`` to the ESLint hook configuration so that ESLint
+  warnings are shown even if ESLint doesn't find any errors.
+
 
 `1.0.20220311`_
 ~~~~~~~~~~~~~~~

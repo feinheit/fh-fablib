@@ -52,6 +52,7 @@ repos:
     hooks:
       - id: eslint
         types_or: [css, scss, javascript]
+        verbose: true
         additional_dependencies:
           - eslint@^8.10.0
           - eslint-config-prettier@^8.5.0
