@@ -65,5 +65,6 @@ repos:
           - "@babel/eslint-parser"
           - "@babel/preset-env"
           - "@babel/preset-react"
+          - "@babel/plugin-syntax-class-properties"
           - "@babel/plugin-syntax-decorators"
           - jest
