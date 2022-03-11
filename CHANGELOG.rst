@@ -9,6 +9,10 @@ Change log
 
 - Changed ``pull-db`` to create a local ``.env`` if it does not exist already.
 - Restored the automatic installation of the pre-commit hook.
+- Extended ``hook`` with a ``--force`` argument to allow overwriting
+  pre-existing files in the project.
+- Added ``.editorconfig`` and ``.eslintrc.js`` defaults to ``hook``. Updated
+  the ``pre-commit`` configuration.
 
 
 `1.0.20220211`_

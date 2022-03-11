@@ -161,14 +161,18 @@ for job in $(jobs -p); do wait $job; done
         run(ctx, f"bash {f.name}", replace_env=False)
 
 
-@task
-def hook(ctx):
+@task(auto_shortflags=False, help={"force": "Overwrite existing pre-commit files"})
+def hook(ctx, force=False):
     """
     Add default pre-commit configuration and install hook running coding style checks
     """
-    target = config.base / ".pre-commit-config.yaml"
-    if not target.exists():
-        shutil.copy(Path(__file__).parent / "pre-commit-defaults.yaml", target)
+    source = Path(__file__).parent / "dotfiles"
+    target = config.base
+    for s in source.glob(".*"):
+        t = target / s.name
+        if force or not t.exists():
+            shutil.copy(s, t)
+            info(f"Copying {s.name} into project...")
     run(ctx, "pre-commit install -f")
 
 
