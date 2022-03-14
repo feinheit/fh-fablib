@@ -53,6 +53,7 @@ repos:
     rev: v8.10.0
     hooks:
       - id: eslint
+        args: [--fix]
         types_or: [css, scss, javascript]
         verbose: true
         additional_dependencies:
