@@ -232,6 +232,37 @@ def reset_pw(ctx):
     )
 
 
+@task
+def reset_sq(ctx):
+    """Reset all PostgreSQL sequences"""
+
+    SQL = """
+SELECT 'SELECT SETVAL(' ||
+       quote_literal(quote_ident(PGT.schemaname) || '.' || quote_ident(S.relname)) ||
+       ', COALESCE(MAX(' ||quote_ident(C.attname)|| '), 1) ) FROM ' ||
+       quote_ident(PGT.schemaname)|| '.'||quote_ident(T.relname)|| ';'
+FROM pg_class AS S,
+     pg_depend AS D,
+     pg_class AS T,
+     pg_attribute AS C,
+     pg_tables AS PGT
+WHERE S.relkind = 'S'
+    AND S.oid = D.objid
+    AND D.refobjid = T.oid
+    AND D.refobjid = C.attrelid
+    AND D.refobjsubid = C.attnum
+    AND T.relname = PGT.tablename
+ORDER BY S.relname;
+    """
+
+    dsn = _local_env()("DATABASE_URL")
+
+    with tempfile.NamedTemporaryFile("w") as f:
+        f.write(SQL)
+        f.seek(0)
+        ctx.run(f"psql -Atq -f {f.name} {dsn} | psql -a {dsn}")
+
+
 def _local_env(path=".env"):
     mapping = {}
     speckenv.read_speckenv(config.base / path, mapping=mapping)
@@ -756,6 +787,7 @@ GENERAL = {
     pull_db,
     pull_media,
     reset_pw,
+    reset_sq,
     local,
     bitbucket,
     github,

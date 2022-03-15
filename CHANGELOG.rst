@@ -11,6 +11,8 @@ Change log
 - Reversed the default order of ESLint and prettier. ESLint doesn't complain
   about missing prettier formatting, and prettier can cleanup the results of
   ``eslint --fix``.
+- Added a ``reset-sq`` task for resetting all PostgreSQL sequences in a
+  database.
 
 
 `1.0.20220315`_
