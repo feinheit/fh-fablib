@@ -9,6 +9,8 @@ Change log
 
 - Added ``verbose: true`` to the ESLint hook configuration so that ESLint
   warnings are shown even if ESLint doesn't find any errors.
+- Dropped a few legacy check methods; reimplement them in your own fabfile if
+  you still need them (or better yet, move to pre-commit).
 
 
 `1.0.20220311`_

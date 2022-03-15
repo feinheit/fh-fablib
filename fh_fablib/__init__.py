@@ -675,45 +675,6 @@ def fetch(ctx):
     run(ctx, f"git fetch {config.remote}")
 
 
-# legacy
-def _check_flake8(ctx):
-    run(ctx, "pipx run flake8 .")
-
-
-# legacy
-def _check_django(ctx):
-    run(ctx, "venv/bin/python manage.py check")
-
-
-# legacy
-def _check_prettier(ctx):
-    run(
-        ctx,
-        f"yarn run prettier --list-different --no-semi"
-        f' "*.js" "{config.app}/static/**/*.js" "{config.app}/static/**/*.scss"',
-    )
-
-
-# legacy
-def _check_eslint(ctx):
-    run(ctx, f'yarn run eslint "*.js" {config.app}/static')
-
-
-# legacy
-def _check_large_files(ctx, *, limit=500000):
-    out = run(
-        ctx, "git diff-index --cached --name-only --diff-filter=AMT HEAD", hide=True
-    ).stdout.strip()
-    sizes = ((f, os.stat(f).st_size) for f in out.splitlines())
-    large = {f: size for f, size in sizes if size > limit}
-    if large:
-        files = ", ".join(
-            f"{f} ({size // 1000}kb)"
-            for f, size in sorted(large.items(), key=lambda r: r[1])
-        )
-        terminate(f"Large files detected: {files}")
-
-
 def _check_branch(ctx):
     branch = run(ctx, "git rev-parse --abbrev-ref HEAD", hide=True).stdout.strip()
     if branch != config.branch:

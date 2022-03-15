@@ -189,13 +189,6 @@ Running commands
 Checks
 ~~~~~~
 
-- ``_check_flake8(ctx)``: Run ``venv/bin/flake8``
-- ``_check_django(ctx)``: Run Django's checks
-- ``_check_prettier(ctx)``: Check whether the frontend code conforms to
-  prettier's formatting
-- ``_check_eslint(ctx)``: Run ESLint
-- ``_check_large_files(ctx)``: Check whether the commit would add large
-  files.
 - ``_check_branch(ctx)``: Terminates if checked out branch does not
   match configuration.
 - ``_check_no_uncommitted_changes(ctx)``: Terminates if there are
