@@ -5,13 +5,23 @@ Change log
 `Next version`_
 ~~~~~~~~~~~~~~~
 
-.. _Next version: https://github.com/feinheit/fh-fablib/compare/1.0.20220311...main
+.. _Next version: https://github.com/feinheit/fh-fablib/compare/1.0.20220315...main
+
+
+`1.0.20220315`_
+~~~~~~~~~~~~~~~
+
+.. _1.0.20220315: https://github.com/feinheit/fh-fablib/compare/1.0.20220311...1.0.20220315
 
 - Added ``verbose: true`` to the ESLint hook configuration so that ESLint
   warnings are shown even if ESLint doesn't find any errors.
+- Added a missing babel dependency.
+- Added a hook to sort ``.gitignore``.
+- Made ESLint automatically apply some fixes.
 - Dropped a few legacy check methods; reimplement them in your own fabfile if
   you still need them (or better yet, move to pre-commit).
 - Dropped the ``fmt`` task and all utilities. Use pre-commit instead.
+- Updated our own pre-commit hooks.
 
 
 `1.0.20220311`_
