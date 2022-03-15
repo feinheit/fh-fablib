@@ -7,6 +7,11 @@ Change log
 
 .. _Next version: https://github.com/feinheit/fh-fablib/compare/1.0.20220315...main
 
+- Added yet another missing babel plugin.
+- Reversed the default order of ESLint and prettier. ESLint doesn't complain
+  about missing prettier formatting, and prettier can cleanup the results of
+  ``eslint --fix``.
+
 
 `1.0.20220315`_
 ~~~~~~~~~~~~~~~
