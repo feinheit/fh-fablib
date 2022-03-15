@@ -11,6 +11,7 @@ Change log
   warnings are shown even if ESLint doesn't find any errors.
 - Dropped a few legacy check methods; reimplement them in your own fabfile if
   you still need them (or better yet, move to pre-commit).
+- Dropped the ``fmt`` task and all utilities. Use pre-commit instead.
 
 
 `1.0.20220311`_

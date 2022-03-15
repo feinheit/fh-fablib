@@ -694,51 +694,6 @@ def check(ctx):
     run(ctx, "pre-commit run")
 
 
-def _fmt_prettier(ctx):
-    run(
-        ctx,
-        f"yarn run prettier --write --no-semi"
-        f' "*.js" "{config.app}/static/**/*.js" "{config.app}/static/**/*.scss"',
-        warn=True,
-    )
-
-
-def _fmt_tox_style(ctx):
-    run(ctx, "tox -e style", warn=True)
-
-
-def _fmt_pyupgrade(ctx):
-    run(ctx, "pipx run pyupgrade --py36-plus $(git ls-files '*.py')", warn=True)
-
-
-def _fmt_black(ctx):
-    run(ctx, "pipx run black .", warn=True)
-
-
-def _fmt_isort(ctx):
-    run(
-        ctx,
-        "pipx run isort"
-        " --virtual-env venv --profile=black --lines-after-imports=2 --combine-as"
-        " .",
-        warn=True,
-    )
-
-
-def _fmt_djlint(ctx):
-    run(ctx, f"pipx run djlint --reformat --quiet {config.app}", warn=True)
-
-
-@task
-def fmt(ctx):
-    """Format the code"""
-    _fmt_pyupgrade(ctx)
-    _fmt_black(ctx)
-    _fmt_isort(ctx)
-    # _fmt_djlint(ctx)
-    _fmt_prettier(ctx)
-
-
 def _deploy_django(conn):
     run(conn, "git fetch origin")
     run(conn, f"git checkout {config.branch}")
@@ -806,7 +761,6 @@ GENERAL = {
     github,
     fetch,
     check,
-    fmt,
     deploy,
 }
 NINE = {

@@ -81,9 +81,7 @@ restarted after deployment. A custom ``deploy`` task follows:
    Instead of making existing tasks more flexible or configurable it's
    preferable to contribute better building blocks resp. to improve
    existing buildings blocks to make it easier to build customized tasks
-   inside projects. E.g. if you want to ``fmt`` additional paths it's
-   better to build your own ``fmt`` task and not add configuration
-   variables to the ``config`` dictionary.
+   inside projects.
 
 
 Multiple environments
@@ -138,7 +136,6 @@ Available tasks
 - ``deploy``: Deploy once 🔥
 - ``dev``: Run the development server for the frontend and backend
 - ``fetch``: Ensure a remote exists for the server and fetch
-- ``fmt``: Format the code
 - ``freeze``: Freeze the virtualenv's state
 - ``github``: Create a repository on GitHub and push the code
 - ``hook``: Install the pre-commit hook
@@ -193,17 +190,6 @@ Checks
   match configuration.
 - ``_check_no_uncommitted_changes(ctx)``: Terminates if there are
   uncommitted changes on the server.
-
-
-Formatters
-~~~~~~~~~~
-
-- ``_fmt_pyupgrade(ctx)``: Run ``pyupgrade``
-- ``_fmt_black(ctx)``: Run ``black``
-- ``_fmt_isort(ctx)``: Run ``isort``
-- ``_fmt_djlint(ctx)``: Run ``djLint``
-- ``_fmt_prettier(ctx)``: Run ``prettier``
-- ``_fmt_tox_style(ctx)``: Run ``tox -e style``
 
 
 Helpers
