@@ -13,6 +13,8 @@ Change log
   ``eslint --fix``.
 - Added a ``reset-sq`` task for resetting all PostgreSQL sequences in a
   database.
+- Added ``python3.10`` and removed ``python3.7`` and ``python3.6`` from the
+  list of Python 3 exexecutables used when initializing projects locally.
 
 
 `1.0.20220315`_
