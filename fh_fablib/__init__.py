@@ -358,6 +358,7 @@ def update(ctx):
         run(ctx, f"{_python3()} -m venv venv")
     _pip_up(ctx)
     run(ctx, "venv/bin/python -m pip install -r requirements.txt")
+    run(ctx, "git submodule update --init")
     run(ctx, 'find . -name "*.pyc" -delete')
     run(ctx, "yarn")
     run(ctx, "venv/bin/python manage.py migrate", warn=True)
