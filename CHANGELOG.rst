@@ -5,7 +5,13 @@ Change log
 `Next version`_
 ~~~~~~~~~~~~~~~
 
-.. _Next version: https://github.com/feinheit/fh-fablib/compare/1.0.20220315...main
+.. _Next version: https://github.com/feinheit/fh-fablib/compare/1.0.20220317...main
+
+
+`1.0.20220317`_
+~~~~~~~~~~~~~~~
+
+.. _1.0.20220317: https://github.com/feinheit/fh-fablib/compare/1.0.20220315...1.0.20220317
 
 - Added yet another missing babel plugin.
 - Reversed the default order of ESLint and prettier. ESLint doesn't complain
