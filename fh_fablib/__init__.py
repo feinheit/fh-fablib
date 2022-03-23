@@ -735,6 +735,7 @@ def _deploy_django(conn):
         terminate("Terminating because of uncommitted changes on server")
 
     run(conn, f"git reset --hard origin/{config.branch}")
+    run(conn, "git submodule update --init")
     run(conn, 'find . -name "*.pyc" -delete')
     _pip_up(conn)
     run(conn, "venv/bin/python -m pip install -r requirements.txt")
