@@ -5,7 +5,13 @@ Change log
 `Next version`_
 ~~~~~~~~~~~~~~~
 
-.. _Next version: https://github.com/feinheit/fh-fablib/compare/1.0.20220317...main
+.. _Next version: https://github.com/feinheit/fh-fablib/compare/1.0.20220324...main
+
+
+`1.0.20220324`_
+~~~~~~~~~~~~~~~
+
+.. _1.0.20220324: https://github.com/feinheit/fh-fablib/compare/1.0.20220317...1.0.20220324
 
 - Added updating of submodules to the deployment task.
 - Updated the pre-commit configuration.
