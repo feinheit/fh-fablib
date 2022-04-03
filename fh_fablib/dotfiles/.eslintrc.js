@@ -5,7 +5,7 @@ module.exports = {
       "error",
       {
         argsIgnorePattern: "^_",
-        varsIgnorePattern: "React|Fragment|h|^_",
+        varsIgnorePattern: "^_",
       },
     ],
   },

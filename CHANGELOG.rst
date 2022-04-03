@@ -7,6 +7,9 @@ Change log
 
 .. _Next version: https://github.com/feinheit/fh-fablib/compare/1.0.20220324...main
 
+- Updated the pre-commit configuration.
+- Updated the ESLint configuration to assume an automatic JSX runtime.
+
 
 `1.0.20220324`_
 ~~~~~~~~~~~~~~~
