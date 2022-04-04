@@ -48,7 +48,7 @@ module.exports = (PRODUCTION) => {
     return new HtmlWebpackPlugin({
       filename: `${debug}${chunk}.html`,
       templateContent: "<head></head>",
-      chunks: ["main"],
+      chunks: [chunk],
     })
   }
 
