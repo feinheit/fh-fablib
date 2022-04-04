@@ -1,7 +1,7 @@
 include LICENSE
 include MANIFEST.in
 include README.rst
-include fh_fablib/dotfiles/.*
+include fh_fablib/dotfiles/*
 recursive-include fh_fablib/static *
 recursive-include fh_fablib/locale *
 recursive-include fh_fablib/templates *
