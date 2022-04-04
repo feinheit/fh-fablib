@@ -37,6 +37,29 @@ const truthy = (...list) => list.filter((el) => !!el)
 module.exports = (PRODUCTION) => {
   const cwd = process.cwd()
 
+  function miniCssExtractPlugin() {
+    return new MiniCssExtractPlugin({
+      filename: PRODUCTION ? "[name].[contenthash].css" : "[name].css",
+    })
+  }
+
+  function htmlSingleChunkPlugin(chunk = "[name]") {
+    const debug = PRODUCTION ? "" : "debug."
+    return new HtmlWebpackPlugin({
+      filename: `${debug}${chunk}.html`,
+      templateContent: "<head></head>",
+      chunks: ["main"],
+    })
+  }
+
+  function htmlInlineScriptPlugin() {
+    return PRODUCTION
+      ? new HtmlInlineScriptPlugin({
+          scriptMatchPattern: [/runtime.*\.js$/],
+        })
+      : null
+  }
+
   return {
     truthy,
     base: {
@@ -51,18 +74,9 @@ module.exports = (PRODUCTION) => {
         filename: PRODUCTION ? "[name].[contenthash].js" : "[name].js",
       },
       plugins: truthy(
-        new MiniCssExtractPlugin({
-          filename: PRODUCTION ? "[name].[contenthash].css" : "[name].css",
-        }),
-        new HtmlWebpackPlugin({
-          filename: PRODUCTION ? "[name].html" : "debug.[name].html",
-          templateContent: "<head></head>",
-        }),
-        PRODUCTION
-          ? new HtmlInlineScriptPlugin({
-              scriptMatchPattern: [/runtime.*\.js$/],
-            })
-          : null
+        miniCssExtractPlugin(),
+        htmlSingleChunkPlugin(),
+        htmlInlineScriptPlugin()
       ),
       optimization: PRODUCTION
         ? {
@@ -175,5 +189,8 @@ module.exports = (PRODUCTION) => {
         },
       }
     },
+    miniCssExtractPlugin,
+    htmlSingleChunkPlugin,
+    htmlInlineScriptPlugin,
   }
 }
