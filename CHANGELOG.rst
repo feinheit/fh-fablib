@@ -9,6 +9,9 @@ Change log
 
 - Updated the pre-commit configuration.
 - Updated the ESLint configuration to assume an automatic JSX runtime.
+- Removed outdated configuration file examples.
+- Added a Webpack library to the files installed by ``fl hook``.
+- Started syncing the repository URL on servers when deploying.
 
 
 `1.0.20220324`_
