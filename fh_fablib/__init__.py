@@ -726,6 +726,11 @@ def check(ctx):
     run(ctx, "pre-commit run")
 
 
+def _deploy_sync_origin_url(ctx, conn):
+    url = run(ctx, "git remote get-url origin").stdout.strip()
+    run(conn, f"git remote set-url origin {url}")
+
+
 def _deploy_django(conn):
     run(conn, "git fetch origin")
     run(conn, f"git checkout {config.branch}")
@@ -768,6 +773,7 @@ def deploy(ctx, fast=False, force=False):
         run(ctx, "NODE_ENV=production yarn run webpack --mode production --bail")
 
     with Connection(config.host) as conn, conn.cd(config.domain):
+        _deploy_sync_origin_url(ctx, conn)
         _deploy_django(conn)
         if not fast:
             _rsync_static(ctx, delete=True)
