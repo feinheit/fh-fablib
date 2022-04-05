@@ -9,8 +9,6 @@ repos:
       - id: trailing-whitespace
       - id: file-contents-sorter
         files: requirements-to-freeze.txt
-      - id: file-contents-sorter
-        files: .gitignore
   - repo: local
     hooks:
       - id: django-check
