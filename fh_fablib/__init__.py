@@ -152,7 +152,9 @@ trap "kill 0" EXIT
 export PYTHONWARNINGS=always
 export PYTHONUNBUFFERED=yes
 
+set -ex
 {jobs}
+{{ set +x; }} 2>/dev/null
 
 for job in $(jobs -p); do wait $job; done
 """
@@ -180,14 +182,12 @@ def hook(ctx, force=False):
 def dev(ctx, host="127.0.0.1", port=8000):
     """Run the development server for the frontend and backend"""
     progress(f"Starting server at http://{host}:{port}/")
+    backend = random.randint(50000, 60000)
     _concurrently(
         ctx,
         [
-            f"venv/bin/python manage.py runserver 0.0.0.0:{port}",
-            (
-                f'HOST="{host}" yarn run webpack-dev-server'
-                " --host 0.0.0.0 --port 4000 --hot"
-            ),
+            f"venv/bin/python manage.py runserver {backend}",
+            f"yarn run webpack serve --hot --host {host} --port {port} --env backend={backend}",
         ],
     )
 

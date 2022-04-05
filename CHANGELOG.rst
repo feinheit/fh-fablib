@@ -7,11 +7,16 @@ Change log
 
 .. _Next version: https://github.com/feinheit/fh-fablib/compare/1.0.20220324...main
 
+- Made ``dev`` use the new method of using the Webpack dev server as a proxy
+  for the Django backend instead of having to listen on two ports and
+  comunicating IP addresses. The new method transparently works when connecting
+  to the development server from a different IP.
 - Updated the pre-commit configuration.
 - Updated the ESLint configuration to assume an automatic JSX runtime.
 - Removed outdated configuration file examples.
 - Added a Webpack library to the files installed by ``fl hook``.
 - Started syncing the repository URL on servers when deploying.
+- Removed the hook to sort ``.gitignore``, it made trouble with empty files.
 
 
 `1.0.20220324`_
