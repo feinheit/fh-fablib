@@ -25,7 +25,11 @@ A basic webpack file may looks as follows:
         },
       }
     }
+
+NOTE: PLEASE DO NOT EVER UPDATE THIS FILE WITHOUT CONTRIBUTING THE CHANGES BACK
+TO FH-FABLIB AT https://github.com/feinheit/fh-fablib
 */
+
 const path = require("path")
 const MiniCssExtractPlugin = require("mini-css-extract-plugin")
 const CssMinimizerPlugin = require("css-minimizer-webpack-plugin")
@@ -142,7 +146,14 @@ module.exports = (PRODUCTION) => {
               postcssOptions: { plugins: ["autoprefixer"] },
             },
           },
-          "sass-loader",
+          {
+            loader: "sass-loader",
+            options: {
+              sassOptions: {
+                includePaths: [path.resolve(path.join(cwd, "node_modules"))],
+              },
+            },
+          },
         ],
       }
     },
