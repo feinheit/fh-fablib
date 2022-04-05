@@ -5,7 +5,13 @@ Change log
 `Next version`_
 ~~~~~~~~~~~~~~~
 
-.. _Next version: https://github.com/feinheit/fh-fablib/compare/1.0.20220324...main
+.. _Next version: https://github.com/feinheit/fh-fablib/compare/1.0.20220405...main
+
+
+`1.0.20220405`_
+~~~~~~~~~~~~~~~
+
+.. _1.0.20220405: https://github.com/feinheit/fh-fablib/compare/1.0.20220324...1.0.20220405
 
 - Made ``dev`` use the new method of using the Webpack dev server as a proxy
   for the Django backend instead of having to listen on two ports and
