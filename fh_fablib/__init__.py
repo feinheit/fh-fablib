@@ -192,6 +192,16 @@ def dev(ctx, host="127.0.0.1", port=8000):
     )
 
 
+def _old_dev(ctx, host="127.0.0.1", port=8000):
+    _concurrently(
+        ctx,
+        [
+            f"venv/bin/python manage.py runserver 0.0.0.0:{port}",
+            f'HOST="{host}" yarn run webpack-dev-server --host 0.0.0.0 --port 4000 --hot',
+        ],
+    )
+
+
 @task
 def pull_db(ctx):
     """Pull a local copy of the remote DB and reset all passwords"""
