@@ -10,6 +10,9 @@ Change log
 - Added a ``babelRule`` utility to the Webpack library.
 - Added a ``_old_dev`` utility so that going back to the old way of running the
   webpack development server is easier.
+- Switched to a declarative setup.
+- Avoided installing fabric 2.7.0 since some combinations of fabric and
+  paramiko etc. seem to be buggy.
 
 
 `1.0.20220405`_
