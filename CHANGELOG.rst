@@ -7,6 +7,8 @@ Change log
 
 .. _Next version: https://github.com/feinheit/fh-fablib/compare/1.0.20220405...main
 
+- Added a ``babelRule`` utility to the Webpack library.
+
 
 `1.0.20220405`_
 ~~~~~~~~~~~~~~~

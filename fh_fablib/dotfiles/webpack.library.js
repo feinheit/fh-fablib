@@ -41,6 +41,33 @@ const truthy = (...list) => list.filter((el) => !!el)
 module.exports = (PRODUCTION) => {
   const cwd = process.cwd()
 
+  function babelRule({ presets, plugins } = {}) {
+    const options = {
+      cacheDirectory: true,
+      presets: [
+        [
+          "@babel/preset-env",
+          { useBuiltIns: "usage", corejs: "3.21", targets: "defaults" },
+        ],
+      ],
+      plugins: plugins || [],
+    }
+    if (presets) {
+      options.presets = [...options.presets, ...presets]
+    }
+    if (plugins) {
+      options.plugins = plugins
+    }
+    return {
+      test: /\.m?js$/,
+      exclude: /(node_modules)/,
+      use: {
+        loader: "babel-loader",
+        options,
+      },
+    }
+  }
+
   function miniCssExtractPlugin() {
     return new MiniCssExtractPlugin({
       filename: PRODUCTION ? "[name].[contenthash].css" : "[name].css",
@@ -163,48 +190,21 @@ module.exports = (PRODUCTION) => {
         ],
       }
     },
+    babelRule,
     babelWithPreactRule() {
-      return {
-        test: /\.m?js$/,
-        exclude: /(node_modules)/,
-        use: {
-          loader: "babel-loader",
-          options: {
-            cacheDirectory: true,
-            presets: [
-              [
-                "@babel/preset-env",
-                { useBuiltIns: "usage", corejs: "3.21", targets: "defaults" },
-              ],
-            ],
-            plugins: [
-              [
-                "@babel/plugin-transform-react-jsx",
-                { runtime: "automatic", importSource: "preact" },
-              ],
-            ],
-          },
-        },
-      }
+      return babelRule({
+        plugins: [
+          [
+            "@babel/plugin-transform-react-jsx",
+            { runtime: "automatic", importSource: "preact" },
+          ],
+        ],
+      })
     },
     babelWithReactRule() {
-      return {
-        test: /\.m?js$/,
-        exclude: /(node_modules)/,
-        use: {
-          loader: "babel-loader",
-          options: {
-            cacheDirectory: true,
-            presets: [
-              [
-                "@babel/preset-env",
-                { useBuiltIns: "usage", corejs: "3.21", targets: "defaults" },
-              ],
-              ["@babel/preset-react", { runtime: "automatic" }],
-            ],
-          },
-        },
-      }
+      return babelRule({
+        presets: [["@babel/preset-react", { runtime: "automatic" }]],
+      })
     },
     miniCssExtractPlugin,
     htmlSingleChunkPlugin,
