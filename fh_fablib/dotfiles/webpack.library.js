@@ -47,13 +47,19 @@ module.exports = (PRODUCTION) => {
     })
   }
 
-  function htmlSingleChunkPlugin(chunk = "[name]") {
+  function htmlSingleChunkPlugin(chunk = "") {
     const debug = PRODUCTION ? "" : "debug."
-    return new HtmlWebpackPlugin({
-      filename: `${debug}${chunk}.html`,
+    const config = {
+      filename: `${debug}${chunk || "main"}.html`,
       templateContent: "<head></head>",
-      chunks: [chunk],
-    })
+    }
+    if (chunk) {
+      config.filename = `${debug}${chunk}.html`
+      config.chunks = [chunk]
+    } else {
+      config.filename = `${debug}[name].html`
+    }
+    return new HtmlWebpackPlugin(config)
   }
 
   function htmlInlineScriptPlugin() {
@@ -70,7 +76,7 @@ module.exports = (PRODUCTION) => {
       mode: PRODUCTION ? "production" : "development",
       devtool: PRODUCTION ? "source-map" : "eval-source-map",
       context: path.join(cwd, "frontend"),
-      entry: "./main.js",
+      entry: { main: "./main.js" },
       output: {
         clean: { keep: /\.html$/ },
         path: path.join(cwd, "static"),
