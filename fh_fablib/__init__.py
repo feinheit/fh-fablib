@@ -15,7 +15,7 @@ from invoke import Collection  # noqa, re-export
 from fh_fablib.extract_js_gettext_strings import generate_strings
 
 
-__version__ = "1.0.20220405"
+__version__ = "1.0.20220411"
 
 
 # I don't care, in this context.

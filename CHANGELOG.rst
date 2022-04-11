@@ -5,7 +5,13 @@ Change log
 `Next version`_
 ~~~~~~~~~~~~~~~
 
-.. _Next version: https://github.com/feinheit/fh-fablib/compare/1.0.20220405...main
+.. _Next version: https://github.com/feinheit/fh-fablib/compare/1.0.20220411...main
+
+
+`1.0.20220411`_
+~~~~~~~~~~~~~~~
+
+.. _1.0.20220411: https://github.com/feinheit/fh-fablib/compare/1.0.20220405...1.0.20220411
 
 - Added a ``babelRule`` utility to the Webpack library.
 - Added a ``_old_dev`` utility so that going back to the old way of running the
