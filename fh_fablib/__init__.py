@@ -170,7 +170,7 @@ def hook(ctx, force=False):
     """
     source = Path(__file__).parent / "dotfiles"
     target = config.base
-    for s in source.glob("*"):
+    for s in sorted(source.glob("*")):
         t = target / s.name
         if force or not t.exists():
             shutil.copy(s, t)
