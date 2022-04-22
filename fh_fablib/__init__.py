@@ -651,11 +651,8 @@ def nine_reinit_from(ctx, environment):
                 f" OWNER {dbname} TEMPLATE template0 ENCODING 'UTF8'"
                 f'"',
             )
-            run(
-                conn,
-                f"source ~/.profile && pg_dump -Ox {source_dsn} | psql {target_dsn}",
-            )
 
+        run(conn, f"pg_dump -Ox {source_dsn} | psql {target_dsn}")
         run(
             conn,
             f"rsync -aH --stats {source['domain']}/media/ {config.domain}/media/",
