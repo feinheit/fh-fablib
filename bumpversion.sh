@@ -3,6 +3,8 @@
 set -e
 
 VERSION="1.0.$(date +%Y%m%d)"
+VERSION="${1:-$VERSION}"
+
 if ! grep --quiet "$VERSION" CHANGELOG.rst
 then
     echo "$VERSION not found in CHANGELOG.rst"
