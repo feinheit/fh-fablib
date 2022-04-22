@@ -11,6 +11,7 @@ from pathlib import Path
 import speckenv
 from fabric import Connection, task
 from invoke import Collection  # noqa, re-export
+from speckenv_django import django_database_url
 
 from fh_fablib.extract_js_gettext_strings import generate_strings
 
@@ -626,15 +627,35 @@ def nine_reinit_from(ctx, environment):
         target_dsn = target_e("DATABASE_URL")
 
         dbname = _dbname_from_dsn(target_dsn)
+
         run(conn, f"pg_dump -Ox {target_dsn} > {config.domain}/tmp/{dbname}.sql")
-        run(conn, f'source ~/.profile && psql -c "DROP DATABASE IF EXISTS {dbname}"')
-        run(
-            conn,
-            f'source ~/.profile && psql -c "CREATE DATABASE {dbname} WITH'
-            f" OWNER {dbname} TEMPLATE template0 ENCODING 'UTF8'"
-            f'"',
-        )
-        run(conn, f"source ~/.profile && pg_dump -Ox {source_dsn} | psql {target_dsn}")
+
+        if _nine_has_manage_databases(conn):
+            password = django_database_url(target_dsn)["PASSWORD"]
+            run(
+                conn,
+                f"sudo nine-manage-databases database drop -t postgresql {dbname} --force",
+            )
+            run(
+                conn,
+                f'sudo nine-manage-databases database create -t postgresql --user={dbname} --password="{password}" {dbname}',
+            )
+
+        else:
+            run(
+                conn, f'source ~/.profile && psql -c "DROP DATABASE IF EXISTS {dbname}"'
+            )
+            run(
+                conn,
+                f'source ~/.profile && psql -c "CREATE DATABASE {dbname} WITH'
+                f" OWNER {dbname} TEMPLATE template0 ENCODING 'UTF8'"
+                f'"',
+            )
+            run(
+                conn,
+                f"source ~/.profile && pg_dump -Ox {source_dsn} | psql {target_dsn}",
+            )
+
         run(
             conn,
             f"rsync -aH --stats {source['domain']}/media/ {config.domain}/media/",
