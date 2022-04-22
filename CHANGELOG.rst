@@ -5,7 +5,13 @@ Change log
 `Next version`_
 ~~~~~~~~~~~~~~~
 
-.. _Next version: https://github.com/feinheit/fh-fablib/compare/1.0.20220411...main
+.. _Next version: https://github.com/feinheit/fh-fablib/compare/1.0.20220422...main
+
+
+`1.0.20220422`_
+~~~~~~~~~~~~~~~
+
+.. _1.0.20220422: https://github.com/feinheit/fh-fablib/compare/1.0.20220411...1.0.20220422
 
 - Augmented ``fl nine-reinit-from`` to also support hosts with ``nine-manage-databases``.
 
