@@ -7,6 +7,8 @@ Change log
 
 .. _Next version: https://github.com/feinheit/fh-fablib/compare/1.0.20220422.1...main
 
+- Started enforcing absolute imports in Python files.
+
 
 `1.0.20220422.1`_
 ~~~~~~~~~~~~~~~
