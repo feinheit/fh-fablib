@@ -7,7 +7,9 @@ Change log
 
 .. _Next version: https://github.com/feinheit/fh-fablib/compare/1.0.20220422.1...main
 
-- Started enforcing absolute imports in Python files.
+- Tweaked the ``bumpversion.sh`` script to allow overriding the version from the commandline.
+- Updated the pre-commit hooks installed by ``fl hook`` to enforce absolute
+  imports and target a minimum of Django 4.0.
 
 
 `1.0.20220422.1`_
