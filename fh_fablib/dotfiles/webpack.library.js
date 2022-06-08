@@ -133,8 +133,8 @@ module.exports = (PRODUCTION) => {
         hot: true,
         port: 8000,
         allowedHosts: "all",
-        headers: { "Access-Control-Allow-Origin": "*" },
         devMiddleware: {
+          headers: { "Access-Control-Allow-Origin": "*" },
           index: true,
           writeToDisk: (path) => /\.html$/.test(path),
         },
