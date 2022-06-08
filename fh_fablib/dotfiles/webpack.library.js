@@ -74,19 +74,18 @@ module.exports = (PRODUCTION) => {
     })
   }
 
-  function htmlSingleChunkPlugin(chunk = "") {
+  function htmlPlugin(name = "", config = {}) {
     const debug = PRODUCTION ? "" : "debug."
-    const config = {
-      filename: `${debug}${chunk || "main"}.html`,
+    config = {
+      filename: name ? `${debug}${name}.html` : `${debug}[name].html`,
       templateContent: "<head></head>",
-    }
-    if (chunk) {
-      config.filename = `${debug}${chunk}.html`
-      config.chunks = [chunk]
-    } else {
-      config.filename = `${debug}[name].html`
+      ...config,
     }
     return new HtmlWebpackPlugin(config)
+  }
+
+  function htmlSingleChunkPlugin(chunk = "") {
+    return htmlPlugin(chunk, chunk ? { chunks: [chunk] } : {})
   }
 
   function htmlInlineScriptPlugin() {
@@ -101,6 +100,7 @@ module.exports = (PRODUCTION) => {
     truthy,
     base: {
       mode: PRODUCTION ? "production" : "development",
+      bail: PRODUCTION,
       devtool: PRODUCTION ? "source-map" : "eval-source-map",
       context: path.join(cwd, "frontend"),
       entry: { main: "./main.js" },
@@ -123,21 +123,26 @@ module.exports = (PRODUCTION) => {
               chunks: "all",
             },
           }
-        : {},
+        : {
+            runtimeChunk: "single",
+          },
     },
-    devServer({ backendPort }) {
+    devServer(proxySettings) {
       return {
         host: "0.0.0.0",
+        hot: true,
         port: 8000,
         allowedHosts: "all",
         devMiddleware: {
           index: true,
           writeToDisk: (path) => /\.html$/.test(path),
         },
-        proxy: {
-          context: () => true,
-          target: `http://127.0.0.1:${backendPort}`,
-        },
+        proxy: proxySettings
+          ? {
+              context: () => true,
+              target: `http://127.0.0.1:${proxySettings.backendPort}`,
+            }
+          : {},
       }
     },
     assetRule() {
@@ -207,6 +212,7 @@ module.exports = (PRODUCTION) => {
       })
     },
     miniCssExtractPlugin,
+    htmlPlugin,
     htmlSingleChunkPlugin,
     htmlInlineScriptPlugin,
   }

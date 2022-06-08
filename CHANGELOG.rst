@@ -7,9 +7,14 @@ Change log
 
 .. _Next version: https://github.com/feinheit/fh-fablib/compare/1.0.20220422.1...main
 
-- Tweaked the ``bumpversion.sh`` script to allow overriding the version from the commandline.
+- Tweaked the ``bumpversion.sh`` script to allow overriding the version from
+  the commandline.
 - Updated the pre-commit hooks installed by ``fl hook`` to enforce absolute
   imports and target a minimum of Django 4.0.
+- Added a ``htmlPlugin`` utility to the Webpack library for scenarios where
+  more control is required over the html-webpack-plugin configuration.
+- Made the forwarding proxy optional in the ``devServer`` Webpack library
+  utility.
 
 
 `1.0.20220422.1`_
