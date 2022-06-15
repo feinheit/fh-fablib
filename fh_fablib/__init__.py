@@ -271,7 +271,7 @@ ORDER BY S.relname;
     with tempfile.NamedTemporaryFile("w") as f:
         f.write(SQL)
         f.seek(0)
-        ctx.run(f"psql -Atq -f {f.name} {dsn} | psql -a {dsn}")
+        run(ctx, f"psql -Atq -f {f.name} {dsn} | psql -a {dsn}")
 
 
 def _local_env(path=".env"):
