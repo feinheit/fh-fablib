@@ -96,6 +96,21 @@ module.exports = (PRODUCTION) => {
       : null
   }
 
+  function postcssLoaders(plugins) {
+    return [
+      MiniCssExtractPlugin.loader,
+      {
+        loader: "css-loader",
+      },
+      {
+        loader: "postcss-loader",
+        options: {
+          postcssOptions: { plugins },
+        },
+      },
+    ]
+  }
+
   return {
     truthy,
     base: {
@@ -154,37 +169,18 @@ module.exports = (PRODUCTION) => {
       }
     },
     postcssRule({ plugins }) {
-      plugins = plugins || ["autoprefixer"]
       return {
         test: /\.css$/i,
-        use: [
-          MiniCssExtractPlugin.loader,
-          {
-            loader: "css-loader",
-          },
-          {
-            loader: "postcss-loader",
-            options: {
-              postcssOptions: { plugins },
-            },
-          },
-        ],
+        use: postcssLoaders(plugins),
       }
     },
-    sassRule() {
+    sassRule(options = {}) {
+      let { cssLoaders } = options
+      if (!cssLoaders) cssLoaders = postcssLoaders(["autoprefixer"])
       return {
         test: /\.scss$/i,
         use: [
-          MiniCssExtractPlugin.loader,
-          {
-            loader: "css-loader",
-          },
-          {
-            loader: "postcss-loader",
-            options: {
-              postcssOptions: { plugins: ["autoprefixer"] },
-            },
-          },
+          ...cssLoaders,
           {
             loader: "sass-loader",
             options: {
@@ -216,5 +212,6 @@ module.exports = (PRODUCTION) => {
     htmlPlugin,
     htmlSingleChunkPlugin,
     htmlInlineScriptPlugin,
+    postcssLoaders,
   }
 }
