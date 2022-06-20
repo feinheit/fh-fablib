@@ -161,6 +161,19 @@ module.exports = (PRODUCTION) => {
           : {},
       }
     },
+    nodeModulesAssetRule() {
+      // If you import files from node_modules and use the [path] component in
+      // assetModuleFilename you have to add this additional rule before
+      // assetRule, otherwise files from node_modules will not be available
+      // after building.
+      return {
+        test: /node_modules.*\.(png|woff2?|svg|eot|ttf|otf|gif|jpe?g)$/,
+        type: "asset/resource",
+        generator: {
+          filename: "_/[name].[hash][ext][query]",
+        },
+      }
+    },
     assetRule() {
       return {
         test: /\.(png|woff2?|svg|eot|ttf|otf|gif|jpe?g)$/,
