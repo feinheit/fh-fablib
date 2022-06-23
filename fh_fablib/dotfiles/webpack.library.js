@@ -124,6 +124,8 @@ module.exports = (PRODUCTION) => {
         path: path.join(cwd, "static"),
         publicPath: "/static/",
         filename: PRODUCTION ? "[name].[contenthash].js" : "[name].js",
+        // Same as the default but prefixed with "_/[name]."
+        assetModuleFilename: "_/[name].[hash][ext][query]",
       },
       plugins: truthy(
         miniCssExtractPlugin(),
@@ -159,19 +161,6 @@ module.exports = (PRODUCTION) => {
               target: `http://127.0.0.1:${proxySettings.backendPort}`,
             }
           : {},
-      }
-    },
-    nodeModulesAssetRule() {
-      // If you import files from node_modules and use the [path] component in
-      // assetModuleFilename you have to add this additional rule before
-      // assetRule, otherwise files from node_modules will not be available
-      // after building.
-      return {
-        test: /node_modules.*\.(png|woff2?|svg|eot|ttf|otf|gif|jpe?g)$/,
-        type: "asset/resource",
-        generator: {
-          filename: "_/[name].[hash][ext][query]",
-        },
       }
     },
     assetRule() {
