@@ -234,7 +234,7 @@ def pull_media(ctx, folder="media"):
 def reset_pw(ctx):
     """Set all user passwords to "password" """
     # 'password' encoded with a constant salt. Does not force a login after pull_db
-    pw = r"pbkdf2_sha256\$216000\$salt\$xuFh/Jmp9ZyNeO4k67igyjH9t5hHZ84M69rSfrV2W/g="
+    pw = r"pbkdf2_sha256\$320000\$2Hz1pcncCTWtqEnr3uoBdD\$nVc9Fka1oYQHFgGRGLUC4Nw3w6+ZmdO0IDdZOow+kJ0="
     run(
         ctx,
         f"venv/bin/python manage.py shell -c \"pw='{pw}';"
