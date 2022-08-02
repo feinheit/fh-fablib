@@ -9,7 +9,7 @@ repos:
       - id: file-contents-sorter
         files: requirements-to-freeze.txt
   - repo: https://github.com/asottile/pyupgrade
-    rev: v2.34.0
+    rev: v2.37.3
     hooks:
       - id: pyupgrade
         args: [--py38-plus]
@@ -27,7 +27,7 @@ repos:
     hooks:
       - id: black
   - repo: https://github.com/pycqa/flake8
-    rev: 4.0.1
+    rev: 5.0.3
     hooks:
       - id: flake8
         args: ["--ignore=E203,E501,W503"]
