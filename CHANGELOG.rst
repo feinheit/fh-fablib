@@ -7,6 +7,8 @@ Change log
 
 .. _Next version: https://github.com/feinheit/fh-fablib/compare/1.0.20220615...main
 
+- Added `flake8-bugbear <https://pypi.org/project/flake8-bugbear/>`__.
+
 
 `1.0.20220615`_
 ~~~~~~~~~~~~~~~
