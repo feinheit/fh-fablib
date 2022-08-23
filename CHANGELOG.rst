@@ -5,9 +5,21 @@ Change log
 `Next version`_
 ~~~~~~~~~~~~~~~
 
-.. _Next version: https://github.com/feinheit/fh-fablib/compare/1.0.20220615...main
+.. _Next version: https://github.com/feinheit/fh-fablib/compare/1.0.20220823...main
+
+
+`1.0.20220823`_
+~~~~~~~~~~~~~~~
+
+.. _1.0.20220823: https://github.com/feinheit/fh-fablib/compare/1.0.20220615...1.0.20220823
 
 - Added `flake8-bugbear <https://pypi.org/project/flake8-bugbear/>`__.
+- Changed the ``output.assetModuleFilename`` configuration to do the right
+  thing when encountering files outside Django's staticfiles.
+- Updated the pre-commit hooks.
+- Updated the password set by ``fl reset-pw`` with more iterations so that
+  repeated ``fl pull-db`` invocations do not cause sign-outs when using Django
+  4.0.
 
 
 `1.0.20220615`_
