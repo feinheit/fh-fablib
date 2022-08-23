@@ -5,7 +5,16 @@ Change log
 `Next version`_
 ~~~~~~~~~~~~~~~
 
-.. _Next version: https://github.com/feinheit/fh-fablib/compare/1.0.20220823...main
+.. _Next version: https://github.com/feinheit/fh-fablib/compare/1.0.20220824...main
+
+
+`1.0.20220824`_
+~~~~~~~~~~~~~~~
+
+.. _1.0.20220824: https://github.com/feinheit/fh-fablib/compare/1.0.20220823...1.0.20220824
+
+- Added extra arguments to ``fl pull-db`` which are passed to the remote
+  ``pg_dump`` command.
 
 
 `1.0.20220823`_

@@ -16,7 +16,7 @@ from speckenv_django import django_database_url
 from fh_fablib.extract_js_gettext_strings import generate_strings
 
 
-__version__ = "1.0.20220823"
+__version__ = "1.0.20220824"
 
 
 # I don't care, in this context.
@@ -203,8 +203,8 @@ def _old_dev(ctx, host="127.0.0.1", port=8000):
     )
 
 
-@task
-def pull_db(ctx):
+@task(auto_shortflags=False)
+def pull_db(ctx, extra_dump_args=""):
     """Pull a local copy of the remote DB and reset all passwords"""
     _local_dotenv_if_not_exists()
 
@@ -217,7 +217,10 @@ def pull_db(ctx):
 
     run(ctx, f"dropdb --if-exists {dbname}", warn=True)
     run(ctx, f"createdb {dbname}")
-    run(ctx, f"ssh {config.host} -C 'pg_dump -Ox {srv_dsn}' | psql {local_dsn}")
+    run(
+        ctx,
+        f"ssh {config.host} -C 'pg_dump -Ox {srv_dsn} {extra_dump_args}' | psql {local_dsn}",
+    )
 
     reset_pw(ctx)
 
