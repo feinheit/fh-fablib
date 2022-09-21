@@ -47,7 +47,7 @@ module.exports = (PRODUCTION) => {
       presets: [
         [
           "@babel/preset-env",
-          { useBuiltIns: "usage", corejs: "3.22", targets: "defaults" },
+          { useBuiltIns: "usage", corejs: "3.25", targets: "defaults" },
         ],
       ],
       plugins: plugins || [],
