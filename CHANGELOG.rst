@@ -7,6 +7,9 @@ Change log
 
 .. _Next version: https://github.com/feinheit/fh-fablib/compare/1.0.20220824...main
 
+- Started using the ``style-loader`` again in development since it properly
+  supports source maps.
+
 
 `1.0.20220824`_
 ~~~~~~~~~~~~~~~

@@ -98,16 +98,9 @@ module.exports = (PRODUCTION) => {
 
   function postcssLoaders(plugins) {
     return [
-      MiniCssExtractPlugin.loader,
-      {
-        loader: "css-loader",
-      },
-      {
-        loader: "postcss-loader",
-        options: {
-          postcssOptions: { plugins },
-        },
-      },
+      PRODUCTION ? MiniCssExtractPlugin.loader : { loader: "style-loader" },
+      { loader: "css-loader" },
+      { loader: "postcss-loader", options: { postcssOptions: { plugins } } },
     ]
   }
 
