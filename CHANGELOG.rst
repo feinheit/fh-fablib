@@ -9,6 +9,8 @@ Change log
 
 - Started using the ``style-loader`` again in development since it properly
   supports source maps.
+- Changed the asset rule to also handle MP3 and WAV files; made the regex case
+  insensitive.
 
 
 `1.0.20220824`_

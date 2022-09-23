@@ -59,7 +59,7 @@ module.exports = (PRODUCTION) => {
       options.plugins = plugins
     }
     return {
-      test: /\.m?js$/,
+      test: /\.m?js$/i,
       exclude: /(node_modules)/,
       use: {
         loader: "babel-loader",
@@ -158,7 +158,7 @@ module.exports = (PRODUCTION) => {
     },
     assetRule() {
       return {
-        test: /\.(png|woff2?|svg|eot|ttf|otf|gif|jpe?g)$/,
+        test: /\.(png|woff2?|svg|eot|ttf|otf|gif|jpe?g|mp3|wav)$/i,
         type: "asset",
         parser: { dataUrlCondition: { maxSize: 512 /* bytes */ } },
       }
