@@ -480,20 +480,30 @@ def _nine_has_manage_databases(conn):
     return bool(run(conn, "which nine-manage-databases", warn=True).stdout.strip())
 
 
-@task
-def nine_db_dotenv(ctx):
+@task(
+    auto_shortflags=False,
+    help={"recreate": "Only recreate the database"},
+)
+def nine_db_dotenv(ctx, recreate=False):
     """Create a database and initialize the .env"""
     with Connection(config.host) as conn:
-        try:
-            conn.get(f"{config.domain}/.env", io.BytesIO())
-        except FileNotFoundError:
-            pass
-        else:
-            terminate(f"'{config.domain}/.env' already exists on the server")
+        if recreate:
+            e = _srv_env(conn, f"{config.domain}/.env")
+            db = django_database_url(e("DATABASE_URL", required=True))
 
-        password = _random_string(20, chars="abcdefghijklmnopqrstuvwxyz0123456789")
-        secret_key = _random_string(70)
-        dbname = _dbname_from_domain(config.domain)
+            password = db["PASSWORD"]
+            dbname = db["NAME"]
+        else:
+            try:
+                conn.get(f"{config.domain}/.env", io.BytesIO())
+            except FileNotFoundError:
+                pass
+            else:
+                terminate(f"'{config.domain}/.env' already exists on the server")
+
+            password = _random_string(20, chars="abcdefghijklmnopqrstuvwxyz0123456789")
+            secret_key = _random_string(70)
+            dbname = _dbname_from_domain(config.domain)
 
         if _nine_has_manage_databases(conn):
             dbname = f"nmd_{dbname}"
@@ -521,9 +531,10 @@ def nine_db_dotenv(ctx):
                 f'"',
             )
 
-        conn.put(
-            io.StringIO(
-                f"""\
+        if not recreate:
+            conn.put(
+                io.StringIO(
+                    f"""\
 DEBUG=False
 DATABASE_URL=postgres://{dbname}:{password}@localhost:5432/{dbname}
 CACHE_URL=hiredis://localhost:6379/1/?key_prefix={dbname}
@@ -540,9 +551,9 @@ SENTRY_ENVIRONMENT=
 # SECURE_SSL_HOST={config.domain}
 # SECURE_SSL_REDIRECT=True
 """
-            ),
-            f"{config.domain}/.env",
-        )
+                ),
+                f"{config.domain}/.env",
+            )
 
 
 @task

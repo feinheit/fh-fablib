@@ -11,6 +11,7 @@ Change log
   supports source maps.
 - Changed the asset rule to also handle MP3 and WAV files; made the regex case
   insensitive.
+- Added a ``--recreate`` option to the ``fl nine-db-dotenv`` task.
 
 
 `1.0.20220824`_
