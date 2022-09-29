@@ -18,7 +18,7 @@ repos:
         language: system
         always_run: true
   - repo: https://github.com/asottile/pyupgrade
-    rev: v2.38.0
+    rev: v2.38.2
     hooks:
       - id: pyupgrade
         args: [--py39-plus]
@@ -48,14 +48,14 @@ repos:
         additional_dependencies:
           - flake8-bugbear
   - repo: https://github.com/pre-commit/mirrors-eslint
-    rev: v8.23.1
+    rev: v8.24.0
     hooks:
       - id: eslint
         args: [--fix]
         types_or: [css, scss, javascript]
         verbose: true
         additional_dependencies:
-          - eslint@^8.23.1
+          - eslint@^8.24.0
           - eslint-config-prettier
           - eslint-config-preact
           - eslint-plugin-compat
