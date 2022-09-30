@@ -12,6 +12,9 @@ Change log
 - Changed the asset rule to also handle MP3 and WAV files; made the regex case
   insensitive.
 - Added a ``--recreate`` option to the ``fl nine-db-dotenv`` task.
+- Added a ``noSplitting`` export to the Webpack library to easily disable the
+  chunk splitting optimization. It may not be an optimization for projects
+  using very little JavaScript.
 
 
 `1.0.20220824`_

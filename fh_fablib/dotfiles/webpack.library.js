@@ -137,6 +137,11 @@ module.exports = (PRODUCTION) => {
             runtimeChunk: "single",
           },
     },
+    noSplitting: {
+      optimization: PRODUCTION
+        ? { minimizer: ["...", new CssMinimizerPlugin()] }
+        : {},
+    },
     devServer(proxySettings) {
       return {
         host: "0.0.0.0",
