@@ -15,6 +15,8 @@ Change log
 - Added a ``noSplitting`` export to the Webpack library to easily disable the
   chunk splitting optimization. It may not be an optimization for projects
   using very little JavaScript.
+- Stopped using pyinvoke's ``echo`` setting and opted to echo commands
+  ourselves instead.
 
 
 `1.0.20220824`_

@@ -71,9 +71,10 @@ def require(version):
 
 def run(c, *a, **kw):
     """A Context.run or Connection.run with better defaults"""
-    kw.setdefault("echo", True)
     kw.setdefault("pty", True)
     kw.setdefault("replace_env", False)
+    if not kw.get("hide"):
+        progress(" ".join(str(part) for part in a))
     return c.run(*a, **kw)
 
 
