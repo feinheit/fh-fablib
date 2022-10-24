@@ -5,7 +5,13 @@ Change log
 `Next version`_
 ~~~~~~~~~~~~~~~
 
-.. _Next version: https://github.com/feinheit/fh-fablib/compare/1.0.20220824...main
+.. _Next version: https://github.com/feinheit/fh-fablib/compare/1.0.20221024...main
+
+
+`1.0.20221024`_
+~~~~~~~~~~~~~~~
+
+.. _1.0.20221024: https://github.com/feinheit/fh-fablib/compare/1.0.20220824...1.0.20221024
 
 - Started using the ``style-loader`` again in development since it properly
   supports source maps.
