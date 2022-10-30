@@ -131,7 +131,6 @@ Available tasks
 ``fh_fablib.GENERAL``
 ~~~~~~~~~~~~~~~~~~~~~
 
-- ``bitbucket``: Create a repository on Bitbucket and push the code
 - ``check``: Check the coding style
 - ``cm``: Compile the translation catalogs
 - ``deploy``: Deploy once 🔥

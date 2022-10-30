@@ -699,38 +699,6 @@ def nine(ctx):
     nine_db_dotenv(ctx)
     nine_vhost(ctx)
     nine_unit(ctx)
-    # nine_ssl(ctx)      Does not apply
-    # nine_disable(ctx)  Does obviously not apply 😅
-
-
-@task
-def bitbucket(ctx):
-    """Create a repository on Bitbucket and push the code"""
-    e = _local_env(Path.home() / ".box.env")
-    username = e("BITBUCKET_USERNAME")
-    password = e("BITBUCKET_PASSWORD")
-    organization = e("BITBUCKET_ORGANIZATION")
-    repository = config.domain
-
-    print(f"Username [{username}]: ", end="")
-    username = input() or username
-    print(f"Password [{password}]: ", end="")
-    password = input() or password
-    print(f"Organization [{organization}]: ", end="")
-    organization = input() or organization
-    print(f"Repository [{repository}]: ", end="")
-    repository = input() or repository
-
-    run(
-        ctx,
-        f"""\
-curl -X POST -v -u {username}:"{password}" -H "content-type: application/json"\
- https://api.bitbucket.org/2.0/repositories/{organization}/{repository}\
- -d '{{"scm": "git", "is_private": true, "forking_policy": "no_public_forks"}}'\
-""",
-    )
-    run(ctx, f"git remote add origin git@bitbucket.org:{organization}/{repository}.git")
-    run(ctx, f"git push -u origin {config.branch}")
 
 
 @task
@@ -855,7 +823,6 @@ GENERAL = {
     reset_pw,
     reset_sq,
     local,
-    bitbucket,
     github,
     fetch,
     check,

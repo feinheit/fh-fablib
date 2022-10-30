@@ -10,6 +10,7 @@ Change log
 - Changed the code to automatically determine the base.
 - Changed ``fl.require`` to not only update its own version but also all dotfiles.
 - Added Python 3.11 to the list of known interpreters.
+- Removed the ``fl bitbucket`` task.
 
 
 `1.0.20221024`_
