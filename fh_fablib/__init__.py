@@ -1,3 +1,4 @@
+import inspect
 import io
 import os
 import random
@@ -46,6 +47,19 @@ def terminate(msg):
     sys.exit(1)
 
 
+def _find_base():
+    frame = inspect.currentframe().f_back.f_back
+    try:
+        while frame:
+            if (name := frame.f_locals.get("__file__")) and name.endswith(
+                "/fabfile.py"
+            ):
+                return Path(name).parent
+            frame = frame.f_back
+    finally:
+        del frame
+
+
 def require(version):
     if __version__ < version:
         terminate(f"fh_fablib version {version} required (you have {__version__})")
@@ -60,10 +74,8 @@ def require(version):
             )
             if new != old:
                 path.write_text(new)
-                info(
-                    "The fabfile has been updated automatically with your"
-                    " local fh_fablib version."
-                )
+                _update_dotfiles(force=True)
+                info("The fabfile and dotfiles have been updated automatically.")
                 return
 
         info(f"fh_fablib version is {__version__}, project requires only {version}.")
@@ -80,6 +92,7 @@ def run(c, *a, **kw):
 
 class Config:
     app = "app"
+    base = _find_base()
     environment = "default"
     environments = {}
     force = False
@@ -87,8 +100,6 @@ class Config:
     def update(self, **kwargs):
         for key, value in kwargs.items():
             setattr(self, key, value)
-
-        os.chdir(self.base)
 
     def __getattr__(self, key):
         environments = getattr(self, "environments", None)
@@ -103,6 +114,7 @@ class Config:
 
 #: Defaults
 config = Config()
+os.chdir(config.base)
 
 
 def environment(name, cfg, **kwargs):
@@ -165,18 +177,21 @@ for job in $(jobs -p); do wait $job; done
         run(ctx, f"bash {f.name}", replace_env=False)
 
 
-@task(auto_shortflags=False, help={"force": "Overwrite existing pre-commit files"})
-def hook(ctx, force=False):
-    """
-    Add default pre-commit configuration and install hook running coding style checks
-    """
+def _update_dotfiles(*, force):
     source = Path(__file__).parent / "dotfiles"
     target = config.base
     for s in sorted(source.glob("*")):
         t = target / s.name
         if force or not t.exists():
             shutil.copy(s, t)
-            info(f"Copying {s.name} into project...")
+
+
+@task(auto_shortflags=False, help={"force": "Overwrite existing pre-commit files"})
+def hook(ctx, force=False):
+    """
+    Add default pre-commit configuration and install hook running coding style checks
+    """
+    _update_dotfiles(force=force)
     run(ctx, "pre-commit install -f")
 
 

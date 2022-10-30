@@ -7,6 +7,9 @@ Change log
 
 .. _Next version: https://github.com/feinheit/fh-fablib/compare/1.0.20221024...main
 
+- Changed the code to automatically determine the base.
+- Changed ``fl.require`` to not only update its own version but also all dotfiles.
+
 
 `1.0.20221024`_
 ~~~~~~~~~~~~~~~
