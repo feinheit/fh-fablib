@@ -717,7 +717,10 @@ def github(ctx):
     print(f"Repository [{repository}]: ", end="")
     repository = input() or repository
 
-    run(ctx, f"gh repo create {organization}/{repository} --private")
+    run(
+        ctx,
+        f"gh repo create {organization}/{repository} --private --source=. --remote=origin",
+    )
     run(ctx, f"git push -u origin {config.branch}")
 
 

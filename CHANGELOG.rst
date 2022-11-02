@@ -7,6 +7,8 @@ Change log
 
 .. _Next version: https://github.com/feinheit/fh-fablib/compare/1.0.20221102...main
 
+- Fixed ``fl github`` to actually set ``origin`` (again).
+
 
 `1.0.20221102`_
 ~~~~~~~~~~~~~~~
