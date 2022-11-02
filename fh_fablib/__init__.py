@@ -719,7 +719,7 @@ def github(ctx):
 
     run(
         ctx,
-        f"gh repo create {organization}/{repository} --private --source=. --remote=origin",
+        f"gh repo create {organization}/{repository} --private --source=. --remote=origin --push",
     )
     run(ctx, f"git push -u origin {config.branch}")
 
