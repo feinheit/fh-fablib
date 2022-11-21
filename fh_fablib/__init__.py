@@ -357,11 +357,18 @@ def _pip_up(c):
     run(c, "venv/bin/python -m pip install -U pip wheel setuptools")
 
 
-@task(auto_shortflags=False, help={"stable": "Avoid pre-release versions of packages"})
-def upgrade(ctx, stable=False):
+@task(
+    auto_shortflags=False,
+    help={
+        "keep": "Keep the existing virtualenv",
+        "stable": "Avoid pre-release versions of packages",
+    },
+)
+def upgrade(ctx, keep=False, stable=False):
     """Re-create the virtualenv with newest versions of all libraries"""
-    run(ctx, "rm -rf venv")
-    run(ctx, f"{_python3()} -m venv venv")
+    venv = config.base / "venv"
+    if not venv.exists() or not keep:
+        run(ctx, f"rm -rf venv && {_python3()} -m venv venv")
     _pip_up(ctx)
     extra = "" if stable else "--pre"
     run(ctx, f"venv/bin/python -m pip install -U -r requirements-to-freeze.txt {extra}")
