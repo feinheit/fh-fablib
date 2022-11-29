@@ -501,6 +501,7 @@ Description=gunicorn for {config.domain}
 [Service]
 Environment=LANG=en_US.UTF-8 LC_ALL=en_US.UTF-8 LC_CTYPE=en_US.UTF-8
 ExecStart=/home/www-data/{config.domain}/venv/bin/gunicorn wsgi:application -b unix:///home/www-data/{config.domain}/tmp/gunicorn.sock --max-requests 1000 --max-requests-jitter 100 {args}
+SyslogIdentifier=gunicorn:{config.domain}
 WorkingDirectory=/home/www-data/{config.domain}/
 Restart=always
 
