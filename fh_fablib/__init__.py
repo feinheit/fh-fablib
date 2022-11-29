@@ -492,11 +492,32 @@ def nine_alias_remove(ctx, alias, include_www=False):
             )
 
 
+def _unit(config, *, args=""):
+    # args = " -w 2 --preload"
+    return f"""\
+[Unit]
+Description=gunicorn for {config.domain}
+
+[Service]
+Environment=LANG=en_US.UTF-8 LC_ALL=en_US.UTF-8 LC_CTYPE=en_US.UTF-8
+ExecStart=/home/www-data/{config.domain}/venv/bin/gunicorn wsgi:application -b unix:///home/www-data/{config.domain}/tmp/gunicorn.sock --max-requests 1000 --max-requests-jitter 100 {args}
+WorkingDirectory=/home/www-data/{config.domain}/
+Restart=always
+
+[Install]
+WantedBy=default.target
+"""
+
+
 @task
 def nine_unit(ctx):
-    """Start and enable a gunicorn@ unit"""
+    """Start and enable a gunicorn unit"""
     with Connection(config.host) as conn:
-        run(conn, f"systemctl --user enable --now gunicorn@{config.domain}.service")
+        conn.put(
+            io.StringIO(_unit(config)), f".config/systemd/user/{config.domain}.service"
+        )
+        run(conn, "systemctl --user daemon-reload")
+        run(conn, f"systemctl --user enable --now {config.domain}.service")
 
 
 def _nine_has_manage_databases(conn):
@@ -596,7 +617,7 @@ def nine_ssl(ctx):
 
 
 def _nine_restart(conn):
-    run(conn, f"systemctl --user restart gunicorn@{config.domain}.service")
+    run(conn, f"systemctl --user restart {config.domain}.service")
 
 
 @task
@@ -609,10 +630,13 @@ def nine_restart(ctx):
 
 @task
 def nine_disable(ctx):
-    """Disable a virtual host, dump and remove the DB and stop the gunicorn@ unit"""
+    """Disable a virtual host, dump and remove the DB and stop the gunicorn unit"""
     with Connection(config.host) as conn:
         run(conn, f"sudo nine-manage-vhosts virtual-host remove {config.domain}")
-        run(conn, f"systemctl --user disable --now gunicorn@{config.domain}.service")
+
+        run(conn, f"systemctl --user disable --now {config.domain}.service")
+        run(conn, f"rm -f .config/systemd/user/{config.domain}.service")
+        run(conn, "systemctl --user daemon-reload")
 
         e = _srv_env(conn, f"{config.domain}/.env")
         srv_dsn = e("DATABASE_URL")
