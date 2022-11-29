@@ -5,11 +5,19 @@ Change log
 `Next version`_
 ~~~~~~~~~~~~~~~
 
-.. _Next version: https://github.com/feinheit/fh-fablib/compare/1.0.20221102...main
+.. _Next version: https://github.com/feinheit/fh-fablib/compare/1.0.20221129...main
+
+
+`1.0.20221129`_
+~~~~~~~~~~~~~~~
+
+.. _1.0.20221129: https://github.com/feinheit/fh-fablib/compare/1.0.20221102...1.0.20221129
 
 - Fixed ``fl github`` to actually set ``origin`` (again).
 - Added a ``--keep`` flag to ``fl upgrade`` if the virtualenv shouldn't be
   recreated unconditionally.
+- Changed the Nine systemd user service to not use a template anymore. This
+  allows customizing the service per vhost.
 
 
 `1.0.20221102`_
