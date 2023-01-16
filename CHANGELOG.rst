@@ -5,9 +5,17 @@ Change log
 `Next version`_
 ~~~~~~~~~~~~~~~
 
-.. _Next version: https://github.com/feinheit/fh-fablib/compare/1.0.20221129...main
+.. _Next version: https://github.com/feinheit/fh-fablib/compare/1.0.20230116...main
+
+`1.0.20230116`_
+~~~~~~~~~~~~~~~
+
+.. _1.0.20230116: https://github.com/feinheit/fh-fablib/compare/1.0.20221129...1.0.20230116
 
 - Guarded against including the environment name in the aliases list.
+- Customized the syslog identifier when adding systemd services.
+- Pinned fabric to <2.7 for now.
+- Stopped recommending ``importFrom`` when using ``postcss-custom-media``.
 
 
 `1.0.20221129`_
