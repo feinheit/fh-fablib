@@ -7,6 +7,8 @@ Change log
 
 .. _Next version: https://github.com/feinheit/fh-fablib/compare/1.0.20221129...main
 
+- Guarded against including the environment name in the aliases list.
+
 
 `1.0.20221129`_
 ~~~~~~~~~~~~~~~

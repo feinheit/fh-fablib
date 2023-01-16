@@ -120,6 +120,9 @@ os.chdir(config.base)
 def environment(name, cfg, **kwargs):
     config.environments[name] = cfg
 
+    if name in kwargs.get("aliases", ()):
+        terminate(f"Remove {name} from the aliases list of the {name} environment.")
+
     @task(name=name, **kwargs)
     def fn(ctx):
         cfg["environment"] = name
