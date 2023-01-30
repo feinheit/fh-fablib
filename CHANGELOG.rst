@@ -5,10 +5,17 @@ Change log
 `Next version`_
 ~~~~~~~~~~~~~~~
 
-.. _Next version: https://github.com/feinheit/fh-fablib/compare/1.0.20230116...main
+.. _Next version: https://github.com/feinheit/fh-fablib/compare/1.0.20230130...main
+
+
+`1.0.20230130`_
+~~~~~~~~~~~~~~~
+
+.. _1.0.20230130: https://github.com/feinheit/fh-fablib/compare/1.0.20230116...1.0.20230130
 
 - Replaced the ``include_www=False`` default argument to ``nine-alias-add`` and
   ``nine-alias-remove`` with a mandatory boolean argument.
+- Added messages about updating the hostings overview.
 
 
 `1.0.20230116`_
