@@ -47,6 +47,18 @@ def terminate(msg):
     sys.exit(1)
 
 
+def _bool(s):
+    true = {"yes", "true"}
+    false = {"no", "false"}
+    if s in true:
+        return True
+    elif s in false:
+        return False
+    terminate(
+        f"Boolean argument value {s!r} not recognized. Use yes, true, no or false."
+    )
+
+
 def _find_base():
     frame = inspect.currentframe().f_back.f_back
     try:
@@ -460,8 +472,9 @@ def nine_vhost(ctx):
 
 
 @task(auto_shortflags=False, help={"include-www": "Include the www. subdomain"})
-def nine_alias_add(ctx, alias, include_www=False):
+def nine_alias_add(ctx, alias, include_www):
     """Add aliasses to a nine-manage-vhost virtual host"""
+    include_www = _bool(include_www)
     with Connection(config.host) as conn:
         run(
             conn,
@@ -478,8 +491,9 @@ def nine_alias_add(ctx, alias, include_www=False):
 
 
 @task(auto_shortflags=False, help={"include-www": "Include the www. subdomain"})
-def nine_alias_remove(ctx, alias, include_www=False):
+def nine_alias_remove(ctx, alias, include_www):
     """Remove aliasses from a nine-manage-vhost virtual host"""
+    include_www = _bool(include_www)
     with Connection(config.host) as conn:
         run(
             conn,

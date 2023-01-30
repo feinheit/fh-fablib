@@ -7,6 +7,10 @@ Change log
 
 .. _Next version: https://github.com/feinheit/fh-fablib/compare/1.0.20230116...main
 
+- Replaced the ``include_www=False`` default argument to ``nine-alias-add`` and
+  ``nine-alias-remove`` with a mandatory boolean argument.
+
+
 `1.0.20230116`_
 ~~~~~~~~~~~~~~~
 
