@@ -537,6 +537,10 @@ def nine_unit(ctx):
         run(conn, "systemctl --user daemon-reload")
         run(conn, f"systemctl --user enable --now {config.domain}.service")
 
+    info(
+        "Successfully created the virtual host.\n\nPlease update the hostings overview as well!"
+    )
+
 
 def _nine_has_manage_databases(conn):
     return bool(run(conn, "which nine-manage-databases", warn=True).stdout.strip())
@@ -667,6 +671,10 @@ def nine_disable(ctx):
         else:
             run(conn, f"source ~/.profile && dropdb {srv_dbname}")
             run(conn, f"source ~/.profile && dropuser {srv_dbname}")
+
+    info(
+        "Successfully removed the virtual host.\n\nPlease update the hostings overview as well!"
+    )
 
 
 @task
