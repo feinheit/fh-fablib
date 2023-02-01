@@ -31,7 +31,8 @@ def ansi(code):
 # underline = ansi("4")
 red = ansi("31")
 green = ansi("32")
-purple = ansi("35")
+yellow = ansi("33")
+magenta = ansi("35")
 
 
 def progress(msg):
@@ -39,7 +40,11 @@ def progress(msg):
 
 
 def info(msg):
-    print(purple(msg))
+    print(magenta(msg))
+
+
+def warning(msg):
+    print(yellow(msg))
 
 
 def terminate(msg):
@@ -87,10 +92,9 @@ def require(version):
             if new != old:
                 path.write_text(new)
                 _update_dotfiles(force=True)
-                info("The fabfile and dotfiles have been updated automatically.")
-                return
-
-        info(f"fh_fablib version is {__version__}, project requires only {version}.")
+                warning(
+                    "The fabfile and dotfiles have been updated automatically.\n\nPlease check the result twice before committing!"
+                )
 
 
 def run(c, *a, **kw):
@@ -537,9 +541,8 @@ def nine_unit(ctx):
         run(conn, "systemctl --user daemon-reload")
         run(conn, f"systemctl --user enable --now {config.domain}.service")
 
-    info(
-        "Successfully created the virtual host.\n\nPlease update the hostings overview as well!"
-    )
+    info("Successfully created the virtual host.\n")
+    warning("Please update the hostings overview as well!")
 
 
 def _nine_has_manage_databases(conn):
@@ -672,9 +675,8 @@ def nine_disable(ctx):
             run(conn, f"source ~/.profile && dropdb {srv_dbname}")
             run(conn, f"source ~/.profile && dropuser {srv_dbname}")
 
-    info(
-        "Successfully removed the virtual host.\n\nPlease update the hostings overview as well!"
-    )
+    info("Successfully removed the virtual host.\n")
+    warning("Please update the hostings overview as well!")
 
 
 @task
