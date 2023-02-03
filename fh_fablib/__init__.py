@@ -413,10 +413,15 @@ def update(ctx):
     if not venv.exists():
         run(ctx, f"{_python3()} -m venv venv")
     _pip_up(ctx)
-    run(ctx, "venv/bin/python -m pip install -r requirements.txt")
-    run(ctx, "git submodule update --init")
-    run(ctx, 'find . -name "*.pyc" -delete')
-    run(ctx, "yarn")
+    _concurrently(
+        ctx,
+        [
+            "venv/bin/python -m pip install -r requirements.txt",
+            "git submodule update --init",
+            'find . -name "*.pyc" -delete',
+            "yarn",
+        ],
+    )
     run(ctx, "venv/bin/python manage.py migrate", warn=True)
     hook(ctx)
 
