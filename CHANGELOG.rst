@@ -7,6 +7,9 @@ Change log
 
 .. _Next version: https://github.com/feinheit/fh-fablib/compare/1.0.20230130...main
 
+- Updated the pre-commit hooks.
+- Quieted deprecation warnings in SASS dependencies by default. We know that
+  divison will be going away in Dart Sass 2.0.
 
 `1.0.20230130`_
 ~~~~~~~~~~~~~~~
