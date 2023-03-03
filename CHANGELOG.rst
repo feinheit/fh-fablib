@@ -5,11 +5,19 @@ Change log
 `Next version`_
 ~~~~~~~~~~~~~~~
 
-.. _Next version: https://github.com/feinheit/fh-fablib/compare/1.0.20230130...main
+.. _Next version: https://github.com/feinheit/fh-fablib/compare/1.0.20230303...main
+
+
+`1.0.20230303`_
+~~~~~~~~~~~~~~~
+
+.. _1.0.20230303: https://github.com/feinheit/fh-fablib/compare/1.0.20230130...1.0.20230303
 
 - Updated the pre-commit hooks.
 - Quieted deprecation warnings in SASS dependencies by default. We know that
   divison will be going away in Dart Sass 2.0.
+- Converted the ``update`` task to run things concurrently.
+
 
 `1.0.20230130`_
 ~~~~~~~~~~~~~~~
