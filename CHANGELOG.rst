@@ -7,6 +7,9 @@ Change log
 
 .. _Next version: https://github.com/feinheit/fh-fablib/compare/1.0.20230303...main
 
+- Switched the default tooling from flake8, isort etc. to ruff. Added a
+  standard ``pyproject.toml`` file.
+
 
 `1.0.20230303`_
 ~~~~~~~~~~~~~~~
