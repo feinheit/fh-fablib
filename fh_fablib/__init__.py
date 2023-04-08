@@ -294,7 +294,7 @@ def reset_pw(ctx):
 def reset_sq(ctx):
     """Reset all PostgreSQL sequences"""
 
-    SQL = """
+    sql = """
 SELECT 'SELECT SETVAL(' ||
        quote_literal(quote_ident(PGT.schemaname) || '.' || quote_ident(S.relname)) ||
        ', COALESCE(MAX(' ||quote_ident(C.attname)|| '), 1) ) FROM ' ||
@@ -316,7 +316,7 @@ ORDER BY S.relname;
     dsn = _local_env()("DATABASE_URL")
 
     with tempfile.NamedTemporaryFile("w") as f:
-        f.write(SQL)
+        f.write(sql)
         f.seek(0)
         run_local(ctx, f"psql -Atq -f {f.name} {dsn} | psql -a {dsn}")
 
