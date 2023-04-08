@@ -9,6 +9,8 @@ Change log
 
 - Switched the default tooling from flake8, isort etc. to ruff. Added a
   standard ``pyproject.toml`` file.
+- Fixed the differentiation between local and remote command execution with or
+  without a replaced environment and with or without a PTY.
 
 
 `1.0.20230303`_
