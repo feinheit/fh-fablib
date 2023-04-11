@@ -17,7 +17,7 @@ from speckenv_django import django_database_url
 from fh_fablib.extract_js_gettext_strings import generate_strings
 
 
-__version__ = "1.0.20230303"
+__version__ = "1.0.20230411"
 
 
 # I don't care, in this context.
