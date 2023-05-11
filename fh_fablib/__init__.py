@@ -758,9 +758,11 @@ def nine_reinit_from(ctx, environment):
             )
 
         run(conn, f"pg_dump -Ox {source_dsn} | psql {target_dsn}")
+        media_source = f"{source['domain']}/media/"
+        media_target = f"{config.domain}/media/"
         run(
             conn,
-            f"rsync -aH --stats {source['domain']}/media/ {config.domain}/media/",
+            f"rsync -aH --stats --link-dest=`pwd`/{media_source} {media_source} {media_target}",
         )
     progress(f"Success! (A database backup is at {config.domain}/tmp/)")
     progress("You may have to run nine-restart or even deploy once.")
