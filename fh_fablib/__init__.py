@@ -17,7 +17,7 @@ from speckenv_django import django_database_url
 from fh_fablib.extract_js_gettext_strings import generate_strings
 
 
-__version__ = "1.0.20230411"
+__version__ = "1.0.20230531"
 
 
 # I don't care, in this context.
@@ -347,7 +347,7 @@ def mm(ctx, language=None):
 
     with open("conf/strings.js", "w", encoding="utf-8") as f:
         f.write("/* eslint-disable */\n")
-        f.write("".join(f"{str}\n" for str in generate_strings()))
+        f.write("".join(f"{string}\n" for string in generate_strings()))
 
     language = f"-l {language}" if language else "-a"
     run_local(
