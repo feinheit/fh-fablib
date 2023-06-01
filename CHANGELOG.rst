@@ -5,6 +5,10 @@ Change log
 Next version
 ~~~~~~~~~~~~
 
+- Changed the JavaScript string extractor to strip trailing commas from
+  argument lists.
+
+
 1.0.20230531
 ~~~~~~~~~~~~
 

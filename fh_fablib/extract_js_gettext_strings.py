@@ -63,6 +63,8 @@ def gettext_calls(source):
     ["gettext(':-)')"]
     >>> list(gettext_calls("abc gettext('xyz' def pgettext('ctx', 'str') xzz"))
     ["pgettext('ctx', 'str')"]
+    >>> list(gettext_calls("gettext( 'Blub', )"))
+    ["gettext('Blub')"]
     """
 
     parts = deque(part.strip() for part in re.split(r"\b(\w*gettext)\b", source))
@@ -73,7 +75,7 @@ def gettext_calls(source):
             continue
 
         if parts and (args := extract_args(parts.popleft())):
-            yield f"{top}({args.strip()})"
+            yield f"{top}({args.strip().rstrip(',')})"
 
 
 def generate_strings():
