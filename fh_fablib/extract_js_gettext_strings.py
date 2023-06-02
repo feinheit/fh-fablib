@@ -33,7 +33,7 @@ def extract_args(part):
             quote = ""
         elif quote:
             pass
-        elif c in {"'", '"'}:
+        elif c in {"'", '"', "`"}:
             quote = c
         elif c == "(":
             parens += 1
@@ -65,6 +65,8 @@ def gettext_calls(source):
     ["pgettext('ctx', 'str')"]
     >>> list(gettext_calls("gettext( 'Blub', )"))
     ["gettext('Blub')"]
+    >>> list(gettext_calls("gettext(`Blub'`)"))
+    ["gettext(`Blub'`)"]
     """
 
     parts = deque(part.strip() for part in re.split(r"\b(\w*gettext)\b", source))
