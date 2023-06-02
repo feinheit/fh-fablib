@@ -61,7 +61,7 @@ def gettext_calls(source):
     ["gettext(':-/')"]
     >>> list(gettext_calls("gettext(':-)')"))
     ["gettext(':-)')"]
-    >>> list(gettext_calls("abc gettext('xyz' def pgettext('ctx', 'str') xzz"))
+    >>> list(gettext_calls("abc gettext('xyz' def pgettext('ctx', 'str', ) xzz"))
     ["pgettext('ctx', 'str')"]
     >>> list(gettext_calls("gettext( 'Blub', )"))
     ["gettext('Blub')"]
