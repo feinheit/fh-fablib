@@ -59,6 +59,10 @@ max-complexity = 15
   # Ignore the fact that migration files are invalid module names
   "N999",
 ]
+"fabfile.py" = [
+  # No boolean trap in function definitions in the fabfile
+  "FBT002",
+]
 
 [tool.coverage.run]
 branch = true
