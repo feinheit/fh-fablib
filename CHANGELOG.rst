@@ -7,6 +7,8 @@ Next version
 
 - Changed the JavaScript string extractor to strip trailing commas from
   argument lists.
+- Switched to not deleting everything under ``static/`` when deploying, only
+  delete old files.
 
 
 1.0.20230531

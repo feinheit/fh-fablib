@@ -886,7 +886,8 @@ def deploy(ctx, fast=False, force=False):
         _deploy_sync_origin_url(ctx, conn)
         _deploy_django(conn)
         if not fast:
-            _rsync_static(ctx, delete=True)
+            run(conn, "find static/ -mtime +60 -delete")
+            _rsync_static(ctx, delete=False)
         _deploy_staticfiles(conn)
         _nine_restart(conn)
 
