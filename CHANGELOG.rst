@@ -5,6 +5,9 @@ Change log
 Next version
 ~~~~~~~~~~~~
 
+1.0.20230622
+~~~~~~~~~~~~
+
 - Changed the JavaScript string extractor to strip trailing commas from
   argument lists.
 - Switched to not deleting everything under ``static/`` when deploying, only
