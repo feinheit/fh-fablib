@@ -5,6 +5,13 @@ Change log
 Next version
 ~~~~~~~~~~~~
 
+1.0.20230630
+~~~~~~~~~~~~
+
+- Fixed the ``find`` command which deletes old ``static`` files.
+- Updated the example Webpack configuration to work with the newest version of
+  ``postcss-custom-media``.
+
 1.0.20230622
 ~~~~~~~~~~~~
 
