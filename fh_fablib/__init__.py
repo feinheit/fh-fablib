@@ -116,7 +116,6 @@ def run_local(c, *a, **kw):
 
 
 class Config:
-    app = "app"
     base = _find_base()
     environment = "default"
     environments = {}

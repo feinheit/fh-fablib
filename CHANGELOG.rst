@@ -5,6 +5,8 @@ Change log
 Next version
 ~~~~~~~~~~~~
 
+- Removed the unused ``config.app``.
+
 1.0.20230630
 ~~~~~~~~~~~~
 
