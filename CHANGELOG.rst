@@ -5,7 +5,12 @@ Change log
 Next version
 ~~~~~~~~~~~~
 
+1.0.20230705
+~~~~~~~~~~~~
+
 - Removed the unused ``config.app``.
+- Exposed all configuration values as ``FL_*`` environment values, for example
+  ``FL_DOMAIN``.
 
 1.0.20230630
 ~~~~~~~~~~~~

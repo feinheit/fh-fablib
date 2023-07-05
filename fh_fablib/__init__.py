@@ -116,14 +116,10 @@ def run_local(c, *a, **kw):
 
 
 class Config:
-    base = _find_base()
-    environment = "default"
-    environments = {}
-    force = False
-
     def update(self, **kwargs):
         for key, value in kwargs.items():
             setattr(self, key, value)
+            os.environ[f"FL_{key.upper()}"] = str(value)
 
     def __getattr__(self, key):
         environments = getattr(self, "environments", None)
@@ -138,6 +134,12 @@ class Config:
 
 #: Defaults
 config = Config()
+config.update(
+    base=_find_base(),
+    environment="default",
+    environments={},
+    force=False,
+)
 os.chdir(config.base)
 
 
