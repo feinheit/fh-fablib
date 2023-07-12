@@ -5,6 +5,12 @@ Change log
 Next version
 ~~~~~~~~~~~~
 
+1.0.20230712
+~~~~~~~~~~~~
+
+- Updated the bundled pre-commit hooks, removed flake8-logging-format from the
+  default configuration.
+
 1.0.20230705
 ~~~~~~~~~~~~
 
