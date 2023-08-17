@@ -11,7 +11,7 @@ from pathlib import Path
 
 import speckenv
 from fabric import Connection, task
-from invoke import Collection  # noqa, re-export
+from invoke import Collection  # noqa: F401
 from speckenv_django import django_database_url
 
 from fh_fablib.extract_js_gettext_strings import generate_strings
