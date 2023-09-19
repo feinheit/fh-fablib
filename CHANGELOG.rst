@@ -5,7 +5,12 @@ Change log
 Next version
 ~~~~~~~~~~~~
 
+1.0.20230919
+~~~~~~~~~~~~
+
 - Removed the Pylint refactoring warnings from the default ruff ruleset.
+- Activated more ruff rules, removed the PyLint refactoring warnings, updated
+  pre-commit hooks.
 
 1.0.20230712
 ~~~~~~~~~~~~
