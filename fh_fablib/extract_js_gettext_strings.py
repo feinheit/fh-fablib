@@ -21,6 +21,7 @@ def js_files():
         ["git", "ls-files", "*.js", "*.mjs", "*.jsx"],
         capture_output=True,
         encoding="utf-8",
+        check=True,
     )
     return res.stdout.splitlines()
 
