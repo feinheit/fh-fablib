@@ -5,6 +5,8 @@ Change log
 Next version
 ~~~~~~~~~~~~
 
+- Improved the error message when unable to fetch a remote ``.env`` file.
+
 1.0.20230919
 ~~~~~~~~~~~~
 

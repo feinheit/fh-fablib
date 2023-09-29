@@ -333,7 +333,11 @@ def _srv_env(conn, path):
     mapping = {}
 
     with tempfile.NamedTemporaryFile() as f:
-        conn.get(path, f.name)
+        try:
+            conn.get(path, f.name)
+        except OSError as exc:
+            terminate(f"Unable to read {conn.host}:{path}: {exc}")
+
         speckenv.read_speckenv(f.name, mapping=mapping)
 
     return lambda *a, **kw: speckenv.env(*a, **kw, mapping=mapping)
