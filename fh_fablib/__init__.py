@@ -225,14 +225,20 @@ def hook(ctx, force=False):
 
 
 @task(auto_shortflags=False)
-def dev(ctx, host="127.0.0.1", port=8000):
+def dev(ctx, host="127.0.0.1", port=8000, debugpy=False, debugpy_port=5678):
     """Run the development server for the frontend and backend"""
     progress(f"Starting server at http://{host}:{port}/")
     backend = random.randint(50000, 60000)
+    if debugpy:
+        runserver_command = f"venv/bin/python -m debugpy --listen {debugpy_port} --wait-for-client manage.py runserver {backend}"
+        progress(f"Exposing debugpy interface on {host}:{debugpy_port}")
+    else:
+        runserver_command = f"venv/bin/python manage.py runserver {backend}"
+
     _concurrently(
         ctx,
         [
-            f"venv/bin/python manage.py runserver {backend}",
+            runserver_command,
             f"yarn run webpack serve --hot --host {host} --port {port} --env backend={backend}",
         ],
     )
