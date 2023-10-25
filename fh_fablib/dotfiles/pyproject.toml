@@ -34,6 +34,8 @@ extend-select = [
   "SLOT",
   # flake8-simplify
   "SIM",
+  # flake8-tidy-imports
+  "TID",
   # flake8-gettext
   "INT",
   # flake8-use-pathlib
@@ -83,6 +85,10 @@ max-complexity = 15
 ]
 "conf/*" = [
   # Allow Python files in conf/ without __init__
+  "INP",
+]
+"scripts/*" = [
+  # Allow Python files in scripts/ without __init__
   "INP",
 ]
 

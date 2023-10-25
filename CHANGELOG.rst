@@ -7,6 +7,7 @@ Next version
 
 - Improved the error message when unable to fetch a remote ``.env`` file.
 - Added a ``resolvePreactAsReact`` utility to the Webpack library.
+- Replaced black with ruff format.
 
 
 1.0.20230919
