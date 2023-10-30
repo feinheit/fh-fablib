@@ -5,9 +5,13 @@ Change log
 Next version
 ~~~~~~~~~~~~
 
+1.0.20231030
+~~~~~~~~~~~~
+
 - Improved the error message when unable to fetch a remote ``.env`` file.
 - Added a ``resolvePreactAsReact`` utility to the Webpack library.
 - Replaced black with ruff format.
+- Changed the ``requirements-to-freeze.txt`` sorting to be case insensitive.
 
 
 1.0.20230919
