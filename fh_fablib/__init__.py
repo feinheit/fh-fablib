@@ -382,7 +382,7 @@ def cm(ctx):
 
 
 def _python3():
-    interpreters = ("python3.11", "python3.10", "python3.9", "python3.8")
+    interpreters = ("python3.12", "python3.11", "python3.10", "python3.9")
     return next(filter(None, (shutil.which(v) for v in interpreters)))
 
 

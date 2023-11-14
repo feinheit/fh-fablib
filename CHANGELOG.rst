@@ -5,6 +5,9 @@ Change log
 Next version
 ~~~~~~~~~~~~
 
+- Added Python 3.12 detection when rebuilding the local virtualenv.
+
+
 1.0.20231030
 ~~~~~~~~~~~~
 
