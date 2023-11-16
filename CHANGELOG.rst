@@ -7,7 +7,8 @@ Next version
 
 - Added Python 3.12 detection when rebuilding the local virtualenv.
 - Changed the webpack dev server configuration to disable the compilation
-  warnings overlay by default.
+  warnings overlay by default. Re-enabled SASS warnings from dependencies now
+  that warnings are less annoying.
 
 
 1.0.20231030
