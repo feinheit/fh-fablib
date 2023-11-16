@@ -6,6 +6,8 @@ Next version
 ~~~~~~~~~~~~
 
 - Added Python 3.12 detection when rebuilding the local virtualenv.
+- Changed the webpack dev server configuration to disable the compilation
+  warnings overlay by default.
 
 
 1.0.20231030
