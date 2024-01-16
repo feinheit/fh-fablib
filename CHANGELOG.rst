@@ -9,6 +9,9 @@ Next version
 - Changed the webpack dev server configuration to disable the compilation
   warnings overlay by default. Re-enabled SASS warnings from dependencies now
   that warnings are less annoying.
+- Moved ``pull-db``, ``pull-media``, ``fetch`` and ``deploy`` into the ``NINE``
+  group because they are really dependent upon our common setup there and do
+  not work with cloud native apps.
 
 
 1.0.20231030

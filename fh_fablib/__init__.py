@@ -913,15 +913,11 @@ GENERAL = {
     upgrade,
     freeze,
     update,
-    pull_db,
-    pull_media,
     reset_pw,
     reset_sq,
     local,
     github,
-    fetch,
     check,
-    deploy,
 }
 NINE = {
     nine_vhost,
@@ -936,4 +932,8 @@ NINE = {
     nine_venv,
     nine_reinit_from,
     nine,
+    pull_db,
+    pull_media,
+    fetch,
+    deploy,
 }
