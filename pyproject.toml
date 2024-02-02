@@ -17,7 +17,7 @@ classifiers = [
 ]
 dependencies = [
     "fabric>=3",
-    "speckenv>=3.3",
+    "speckenv>=6.2",
 ]
 
 [project.scripts]
