@@ -5,6 +5,10 @@ Change log
 Next version
 ~~~~~~~~~~~~
 
+- Prepared the webpack library for configuration schema changes in
+  webpack-dev-server 5.
+
+
 1.0.20240116
 ~~~~~~~~~~~~
 
