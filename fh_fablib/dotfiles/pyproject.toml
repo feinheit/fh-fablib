@@ -1,4 +1,10 @@
 [tool.ruff]
+fix = true
+show-fixes = true
+target-version = "py310"
+preview = true
+
+[tool.ruff.lint]
 extend-select = [
   # pyflakes, pycodestyle
   "F", "E", "W",
@@ -38,20 +44,14 @@ extend-select = [
   "TID",
   # flake8-gettext
   "INT",
-  # flake8-use-pathlib
-  "PTH",
   # pygrep-hooks
   "PGH",
   # pylint
   "PLC", "PLE", "PLW",
-  # tryceratops
-  "TRY",
-  # refurb
-  "FURB",
   # flake8-logging
   "LOG",
   # ruff
-  "RUF005", "RUF006", "RUF007", "RUF008", "RUF009", "RUF010", "RUF011",
+  "RUF005", "RUF006", "RUF007", "RUF008", "RUF009", "RUF010",
   "RUF015", "RUF016", "RUF017", "RUF100", "RUF200",
 ]
 extend-ignore = [
@@ -60,19 +60,15 @@ extend-ignore = [
   # No line length errors
   "E501",
 ]
-fix = true
-show-fixes = true
-target-version = "py310"
-preview = true
 
-[tool.ruff.isort]
+[tool.ruff.lint.isort]
 combine-as-imports = true
 lines-after-imports = 2
 
-[tool.ruff.mccabe]
+[tool.ruff.lint.mccabe]
 max-complexity = 15
 
-[tool.ruff.per-file-ignores]
+[tool.ruff.lint.per-file-ignores]
 "*/migrat*/*" = [
   # Allow using PascalCase model names in migrations
   "N806",
