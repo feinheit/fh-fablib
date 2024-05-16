@@ -5,6 +5,11 @@ Change log
 Next version
 ~~~~~~~~~~~~
 
+1.0.20240516.1
+~~~~~~~~~~~~~~
+
+- Added the missing biome configuration.
+
 1.0.20240516
 ~~~~~~~~~~~~
 
