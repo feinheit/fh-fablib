@@ -7,6 +7,7 @@ Next version
 
 - Prepared the webpack library for configuration schema changes in
   webpack-dev-server 5.
+- Avoid the very annoying creation of dotfiles over and over.
 
 
 1.0.20240116

@@ -91,7 +91,7 @@ def require(version):
             )
             if new != old:
                 path.write_text(new)
-                _update_dotfiles(force=True)
+                _update_dotfiles()
                 warning(
                     "The fabfile and dotfiles have been updated automatically.\n\nPlease check the result twice before committing!"
                 )
@@ -206,13 +206,12 @@ for job in $(jobs -p); do wait $job; done
         run_local(ctx, f"bash {f.name}", replace_env=False)
 
 
-def _update_dotfiles(*, force):
+def _update_dotfiles():
     source = Path(__file__).parent / "dotfiles"
     target = config.base
     for s in sorted(source.glob("*")):
         t = target / s.name
-        if force or not t.exists():
-            shutil.copy(s, t)
+        shutil.copy(s, t)
 
 
 @task(auto_shortflags=False, help={"force": "Overwrite existing pre-commit files"})
@@ -220,7 +219,7 @@ def hook(ctx, force=False):
     """
     Add default pre-commit configuration and install hook running coding style checks
     """
-    _update_dotfiles(force=force)
+    _update_dotfiles()
     run_local(ctx, "pre-commit install -f")
 
 
@@ -408,7 +407,7 @@ def upgrade(ctx, keep=False, stable=False):
         ctx, f"venv/bin/python -m pip install -U -r requirements-to-freeze.txt {extra}"
     )
     freeze(ctx)
-    hook(ctx)
+    run_local(ctx, "pre-commit install -f")
 
 
 @task
@@ -441,7 +440,7 @@ def update(ctx):
         ],
     )
     run_local(ctx, "venv/bin/python manage.py migrate", warn=True)
-    hook(ctx)
+    run_local(ctx, "pre-commit install -f")
 
 
 def _local_dotenv_if_not_exists():
