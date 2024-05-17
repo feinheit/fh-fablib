@@ -858,7 +858,7 @@ def _deploy_django(conn):
         f"-path {path} -prune -o "
         for path in ["./venv", "./static", "./media", "./.git", "./node_modules"]
     )
-    run(conn, f'find . {skip} -name "*.pyc" -print | xargs rm')
+    run(conn, f'find . {skip} -name "*.pyc" -print | xargs rm -f')
     _pip_up(conn)
     run(conn, "venv/bin/python -m pip install -r requirements.txt")
     run(conn, "venv/bin/python manage.py migrate")
