@@ -18,7 +18,7 @@ Usage
 
        import fh_fablib as fl
 
-       fl.require("1.0.20240516.1")
+       fl.require("1.0.20240517")
        fl.config.update(host="www-data@feinheit06.nine.ch")
 
        environments = [
@@ -94,7 +94,7 @@ If you need multiple environments, add environment tasks as follows:
 
     import fh_fablib as fl
 
-    fl.require("1.0.20240516.1")
+    fl.require("1.0.20240517")
     fl.config.update(host="www-data@feinheit06.nine.ch")
 
     environments = [
