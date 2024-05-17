@@ -6,8 +6,8 @@ Next version
 ~~~~~~~~~~~~
 
 
-1.0.20240517
-~~~~~~~~~~~~
+1.0.20240517.1
+~~~~~~~~~~~~~~
 
 - Improved the ``*.pyc`` deletion stage by skipping potentially big folders
   which should never contain those files.
