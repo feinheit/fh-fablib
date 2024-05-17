@@ -855,7 +855,10 @@ def _deploy_django(conn):
 
     run(conn, f"git reset --hard origin/{config.branch}")
     run(conn, "git submodule update --init")
-    run(conn, 'find . -name "*.pyc" -delete')
+    run(
+        conn,
+        'find . -not -path "./venv/*" -not -path "./static/*" -not -path "./media/*" -not -path "./.git/*" -name "*.pyc" -delete',
+    )
     _pip_up(conn)
     run(conn, "venv/bin/python -m pip install -r requirements.txt")
     run(conn, "venv/bin/python manage.py migrate")
