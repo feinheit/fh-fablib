@@ -93,7 +93,10 @@ def require(version):
                 path.write_text(new)
                 _update_dotfiles()
                 warning(
-                    "The fabfile and dotfiles have been updated automatically.\n\nPlease check the result twice before committing!"
+                    "The fabfile and dotfiles have been updated automatically.\n\n"
+                    "*******************************************\n"
+                    "PLEASE CHECK THE RESULTS BEFORE COMMITTING!\n"
+                    "*******************************************\n"
                 )
 
 
