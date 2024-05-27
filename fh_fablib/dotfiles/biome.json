@@ -6,8 +6,7 @@
   "formatter": {
     "enabled": true,
     "indentStyle": "space",
-    "indentWidth": 2,
-    "ignore": ["*/map/styles_*.json"]
+    "indentWidth": 2
   },
   "javascript": {
     "formatter": {
