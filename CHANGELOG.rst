@@ -5,6 +5,9 @@ Change log
 Next version
 ~~~~~~~~~~~~
 
+- Switched to ``uv``. Install it using ``pipx install uv`` if you haven't done
+  so already.
+
 
 1.0.20240517.1
 ~~~~~~~~~~~~~~

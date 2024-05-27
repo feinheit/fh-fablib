@@ -6,13 +6,14 @@ Usage
 =====
 
 1. Install `pipx <https://pipxproject.github.io/pipx/>`__
-2. Install fh-fablib
+2. Install uv using ``pipx install uv``
+3. Install fh-fablib
 
    a. ``pipx install fh_fablib`` if you're happy with the packaged version
    b. ``pipx install ~/Projects/fh-fablib`` if you have a local git checkout
       you want to install from
 
-3. Add a ``fabfile.py`` to your project. A minimal example follows:
+4. Add a ``fabfile.py`` to your project. A minimal example follows:
 
    .. code-block:: python
 
@@ -35,11 +36,11 @@ Usage
 
        ns = fl.Collection(*fl.GENERAL, *fl.NINE, *environments)
 
-4. Run ``fl hook`` to provide a default `pre-commit
+5. Run ``fl hook`` to provide a default `pre-commit
    <https://pre-commit.com/>`__ configuration (or ``fl hook --force`` to
    override the dotfiles).
 
-5. Run ``fl --list`` to get a list of commands.
+6. Run ``fl --list`` to get a list of commands.
 
 
 Configuration values
