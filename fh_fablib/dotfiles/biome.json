@@ -10,14 +10,7 @@
   },
   "linter": {
     "enabled": true,
-    "rules": {
-      "complexity": {
-        "noForEach": "off"
-      },
-      "suspicious": {
-        "noArrayIndexKey": "off"
-      }
-    }
+    "rules": {}
   },
   "javascript": {
     "formatter": {
