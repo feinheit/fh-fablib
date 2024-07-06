@@ -5,8 +5,12 @@ Change log
 Next version
 ~~~~~~~~~~~~
 
+1.0.20240706
+~~~~~~~~~~~~
+
 - Added support for pointing users to the Traduire instance when running the
   ``mm`` task.
+- Updated hooks.
 
 
 1.0.20240527
