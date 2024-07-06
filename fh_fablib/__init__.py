@@ -142,6 +142,7 @@ config.update(
     environment="default",
     environments={},
     force=False,
+    traduire="",
 )
 os.chdir(config.base)
 
@@ -370,6 +371,9 @@ def mm(ctx, language=None):
         " -d djangojs",
         replace_env=False,
     )
+
+    if config.traduire:
+        warning(f"Attention, this project uses {config.traduire}.")
 
 
 @task

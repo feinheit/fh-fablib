@@ -5,6 +5,9 @@ Change log
 Next version
 ~~~~~~~~~~~~
 
+- Added support for pointing users to the Traduire instance when running the
+  ``mm`` task.
+
 
 1.0.20240527
 ~~~~~~~~~~~~
