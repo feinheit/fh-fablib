@@ -1,4 +1,4 @@
-exclude: ".yarn/|yarn.lock|package.json"
+exclude: ".yarn/|yarn.lock|package.json|conf/strings.js"
 repos:
   - repo: https://github.com/pre-commit/pre-commit-hooks
     rev: v4.6.0

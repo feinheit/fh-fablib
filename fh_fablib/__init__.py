@@ -354,7 +354,6 @@ def mm(ctx, language=None):
     """Update the translation catalogs"""
 
     with open("conf/strings.js", "w", encoding="utf-8") as f:
-        f.write("/* eslint-disable */\n")
         f.write("".join(f"{string}\n" for string in generate_strings()))
 
     language = f"-l {language}" if language else "-a"
