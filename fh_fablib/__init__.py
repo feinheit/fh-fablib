@@ -232,13 +232,17 @@ def dev(ctx, host="127.0.0.1", port=8000):
     """Run the development server for the frontend and backend"""
     progress(f"Starting server at http://{host}:{port}/")
     backend = random.randint(50000, 60000)
-    _concurrently(
-        ctx,
-        [
-            f".venv/bin/python manage.py runserver {backend}",
+    jobs = [f".venv/bin/python manage.py runserver {backend}"]
+
+    if (config.base / "webpack.config.js").exists():
+        jobs.append(
             f"yarn run webpack serve --hot --host {host} --port {port} --env backend={backend}",
-        ],
-    )
+        )
+    elif (config.base / "rspack.config.js").exists():
+        jobs.append(
+            f"HOST={host} PORT={port} yarn run rspack serve --mode=development --env backend={backend}"
+        )
+    _concurrently(ctx, jobs)
 
 
 def _old_dev(ctx, host="127.0.0.1", port=8000):
@@ -886,8 +890,10 @@ def deploy(ctx, fast=False, force=False):
     check(ctx)
     force = "--force-with-lease " if (force or config.force) else ""
     run_local(ctx, f"git push origin {force}{config.branch}")
-    if not fast:
+    if not fast and (config.base / "webpack.config.js").exists():
         run_local(ctx, "NODE_ENV=production yarn run webpack --mode production --bail")
+    if not fast and (config.base / "rspack.config.js").exists():
+        run_local(ctx, "NODE_ENV=production yarn rspack build --mode production")
 
     with Connection(config.host) as conn, conn.cd(config.domain):
         _deploy_sync_origin_url(ctx, conn)
