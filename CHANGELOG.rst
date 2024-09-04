@@ -5,6 +5,9 @@ Change log
 Next version
 ~~~~~~~~~~~~
 
+1.0.20240904
+~~~~~~~~~~~~
+
 - Added support for ``rspack.config.js`` out of the box.
 - Added ``rspack.library.js`` to the list of automatically installed files when
   running the ``hook`` task.
