@@ -105,10 +105,11 @@ module.exports = (PRODUCTION) => {
   }
 
   function htmlPlugin(name = "", config = {}) {
-    const debug = PRODUCTION ? "" : "debug."
     return new HtmlWebpackPlugin({
-      filename: name ? `${debug}${name}.html` : `${debug}[name].html`,
-      templateContent: "<head></head>",
+      filename: name ? `${name}.html` : "[name].html",
+      inject: false,
+      templateContent: ({ htmlWebpackPlugin }) =>
+        `${htmlWebpackPlugin.tags.headTags}`,
       ...config,
     })
   }
@@ -131,8 +132,8 @@ module.exports = (PRODUCTION) => {
       context: path.join(cwd, "frontend"),
       entry: { main: "./main.js" },
       output: {
-        clean: true,
-        path: path.join(cwd, "static"),
+        clean: PRODUCTION,
+        path: path.join(cwd, PRODUCTION ? "static" : "tmp"),
         publicPath: "/static/",
         filename: PRODUCTION ? "[name].[contenthash].js" : "[name].js",
         // Same as the default but prefixed with "_/[name]."
