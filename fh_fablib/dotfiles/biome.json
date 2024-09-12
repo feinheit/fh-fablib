@@ -22,10 +22,15 @@
         "useArrayLiterals": "error",
         "useHookAtTopLevel": "error"
       },
+      "security": {
+        "noDangerouslySetInnerHtml": "warn"
+      },
       "style": {
-        "noParameterAssign": "off"
+        "noParameterAssign": "off",
+        "useForOf": "warn"
       },
       "suspicious": {
+        "noArrayIndexKey": "warn",
         "noAssignInExpressions": "off"
       }
     }
