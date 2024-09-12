@@ -11,6 +11,20 @@
   "linter": {
     "enabled": true,
     "rules": {
+      "recommended": true,
+      "a11y": {
+        "noSvgWithoutTitle": "off"
+      },
+      "correctness": {
+        "noUndeclaredVariables": "error",
+        "noUnusedImports": "error",
+        "noUnusedVariables": "error",
+        "useArrayLiterals": "error",
+        "useHookAtTopLevel": "error"
+      },
+      "style": {
+        "noParameterAssign": "off"
+      },
       "suspicious": {
         "noAssignInExpressions": "off"
       }
@@ -27,6 +41,11 @@
     },
     "linter": {
       "enabled": true
+    }
+  },
+  "json": {
+    "formatter": {
+      "enabled": false
     }
   }
 }
