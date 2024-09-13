@@ -103,3 +103,7 @@ omit = [
 [tool.coverage.report]
 skip_covered = true
 show_missing = true
+
+[tool.pyright]
+venvPath = ".venv"
+venv = "."
