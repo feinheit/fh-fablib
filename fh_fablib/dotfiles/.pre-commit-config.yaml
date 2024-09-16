@@ -53,7 +53,7 @@ repos:
     rev: "v0.4.0"
     hooks:
       - id: biome-check
-        additional_dependencies: ["@biomejs/biome@1.9.0"]
+        additional_dependencies: ["@biomejs/biome@1.9.1"]
         args: [--unsafe]
         types_or: [javascript, json]
   - repo: https://github.com/boidolr/pre-commit-images
