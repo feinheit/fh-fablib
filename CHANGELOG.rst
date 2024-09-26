@@ -5,6 +5,8 @@ Change log
 Next version
 ~~~~~~~~~~~~
 
+- Updated hooks. Added the djade Django template formatter.
+
 1.0.20240904
 ~~~~~~~~~~~~
 
