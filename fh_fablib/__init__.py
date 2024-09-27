@@ -16,7 +16,6 @@ from speckenv_django import django_database_url
 
 from fh_fablib.extract_js_gettext_strings import generate_strings
 
-
 __version__ = "1.0.20240904"
 
 
@@ -84,9 +83,11 @@ def require(version):
         path = Path.cwd() / "fabfile.py"
         if path.is_file() and (old := path.read_text()):
             new = "".join(
-                f'fl.require("{__version__}")\n'
-                if line.startswith("fl.require")
-                else line
+                (
+                    f'fl.require("{__version__}")\n'
+                    if line.startswith("fl.require")
+                    else line
+                )
                 for line in old.splitlines(keepends=True)
             )
             if new != old:
@@ -228,11 +229,19 @@ def hook(ctx, force=False):
 
 
 @task(auto_shortflags=False)
-def dev(ctx, host="127.0.0.1", port=8000):
+def debug(ctx, host="127.0.0.1", port=8000, debug_port=5678, wait_for_client=False):
+    """Run the development server with local debugpy interface"""
+    run_with = f"-m debugpy --listen {debug_port}{' --wait-for-client' if wait_for_client else ''}"
+    progress(f"Exposing debugpy interface at port {debug_port}")
+    dev(ctx, host=host, port=port, run_with=run_with)
+
+
+@task(auto_shortflags=False)
+def dev(ctx, host="127.0.0.1", port=8000, run_with=None):
     """Run the development server for the frontend and backend"""
     progress(f"Starting server at http://{host}:{port}/")
     backend = random.randint(50000, 60000)
-    jobs = [f".venv/bin/python manage.py runserver {backend}"]
+    jobs = [f".venv/bin/python {run_with} manage.py runserver {backend}"]
 
     if (config.base / "webpack.config.js").exists():
         jobs.append(
@@ -924,6 +933,7 @@ GENERAL = {
     local,
     github,
     check,
+    debug,
 }
 NINE = {
     nine_vhost,
