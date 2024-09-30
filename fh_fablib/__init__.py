@@ -241,7 +241,7 @@ def dev(ctx, host="127.0.0.1", port=8000, run_with=None):
     """Run the development server for the frontend and backend"""
     progress(f"Starting server at http://{host}:{port}/")
     backend = random.randint(50000, 60000)
-    jobs = [f".venv/bin/python {run_with} manage.py runserver {backend}"]
+    jobs = [f".venv/bin/python {run_with if run_with else ""} manage.py runserver {backend}"]
 
     if (config.base / "webpack.config.js").exists():
         jobs.append(
