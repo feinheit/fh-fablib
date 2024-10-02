@@ -229,9 +229,9 @@ def hook(ctx, force=False):
 
 
 @task(auto_shortflags=False)
-def debug(ctx, host="127.0.0.1", port=8000, debug_port=5678, wait_for_client=False):
+def debug(ctx, host="127.0.0.1", port=8000, debug_port=5678):
     """Run the development server with local debugpy interface"""
-    run_with = f"-m debugpy --listen {debug_port}{' --wait-for-client' if wait_for_client else ''}"
+    run_with = f"-m debugpy --listen {debug_port} --wait-for-client"
     progress(f"Exposing debugpy interface at port {debug_port}")
     dev(ctx, host=host, port=port, run_with=run_with)
 
