@@ -5,7 +5,11 @@ Change log
 Next version
 ~~~~~~~~~~~~
 
+1.0.20241002
+~~~~~~~~~~~~
+
 - Updated hooks. Added the djade Django template formatter.
+- Run development server and debugpy interface with the ``debug`` task.
 
 1.0.20240904
 ~~~~~~~~~~~~
