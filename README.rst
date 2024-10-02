@@ -134,6 +134,7 @@ Available tasks
 
 - ``check``: Check the coding style
 - ``cm``: Compile the translation catalogs
+- ``debug``: Run development server with debugpy enabled
 - ``deploy``: Deploy once 🔥
 - ``dev``: Run the development server for the frontend and backend
 - ``fetch``: Ensure a remote exists for the server and fetch
