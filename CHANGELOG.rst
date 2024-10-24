@@ -5,6 +5,8 @@ Change log
 Next version
 ~~~~~~~~~~~~
 
+- Switched to using biome for CSS.
+
 1.0.20241002
 ~~~~~~~~~~~~
 
