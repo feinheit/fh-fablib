@@ -6,6 +6,7 @@ Next version
 ~~~~~~~~~~~~
 
 - Switched to using biome for CSS.
+- Added Python 3.13 to the list of Python interpreters, removed 3.9.
 
 1.0.20241002
 ~~~~~~~~~~~~

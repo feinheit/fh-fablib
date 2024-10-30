@@ -16,6 +16,7 @@ from speckenv_django import django_database_url
 
 from fh_fablib.extract_js_gettext_strings import generate_strings
 
+
 __version__ = "1.0.20241002"
 
 
@@ -241,7 +242,9 @@ def dev(ctx, host="127.0.0.1", port=8000, run_with=None):
     """Run the development server for the frontend and backend"""
     progress(f"Starting server at http://{host}:{port}/")
     backend = random.randint(50000, 60000)
-    jobs = [f".venv/bin/python {run_with if run_with else ""} manage.py runserver {backend}"]
+    jobs = [
+        f".venv/bin/python {run_with if run_with else ""} manage.py runserver {backend}"
+    ]
 
     if (config.base / "webpack.config.js").exists():
         jobs.append(
@@ -400,7 +403,7 @@ def cm(ctx):
 
 
 def _python3():
-    interpreters = ("python3.12", "python3.11", "python3.10", "python3.9")
+    interpreters = ("python3.13", "python3.12", "python3.11", "python3.10")
     return next(filter(None, (shutil.which(v) for v in interpreters)))
 
 
