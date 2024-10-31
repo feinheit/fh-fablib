@@ -7,12 +7,16 @@ Next version
 
 - Switched to using biome for CSS.
 - Added Python 3.13 to the list of Python interpreters, removed 3.9.
+- Added ``EMAIL_URL`` to all ``.env`` files created by the fablib.
+- Updated the bundled hooks.
+
 
 1.0.20241002
 ~~~~~~~~~~~~
 
 - Updated hooks. Added the djade Django template formatter.
 - Run development server and debugpy interface with the ``debug`` task.
+
 
 1.0.20240904
 ~~~~~~~~~~~~
