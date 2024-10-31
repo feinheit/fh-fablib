@@ -470,6 +470,7 @@ def _local_dotenv_if_not_exists():
 DEBUG=True
 DATABASE_URL=postgres://localhost:5432/{dbname}
 CACHE_URL=hiredis://localhost:6379/1/?key_prefix={dbname}
+EMAIL_URL=console://
 SECRET_KEY={secret_key}
 ALLOWED_HOSTS=["*", ".localhost"]
 
@@ -642,6 +643,7 @@ def nine_db_dotenv(ctx, recreate=False):
 DEBUG=False
 DATABASE_URL=postgres://{dbname}:{password}@localhost:5432/{dbname}
 CACHE_URL=hiredis://localhost:6379/1/?key_prefix={dbname}
+EMAIL_URL=smtp://
 SECRET_KEY={secret_key}
 ALLOWED_HOSTS=[".{config.domain}", ".{conn.host}", ".feinheit.dev"]
 
