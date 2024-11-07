@@ -145,6 +145,7 @@ config.update(
     environments={},
     force=False,
     traduire="",
+    python="3.12",
 )
 os.chdir(config.base)
 
@@ -402,11 +403,6 @@ def cm(ctx):
     )
 
 
-def _python3():
-    interpreters = ("python3.13", "python3.12", "python3.11", "python3.10")
-    return next(filter(None, (shutil.which(v) for v in interpreters)))
-
-
 @task(
     auto_shortflags=False,
     help={
@@ -418,7 +414,7 @@ def upgrade(ctx, keep=False, stable=False):
     """Re-create the virtualenv with newest versions of all libraries"""
     venv = config.base / ".venv"
     if not venv.exists() or not keep:
-        run_local(ctx, f"rm -rf .venv && uv venv --python {_python3()}")
+        run_local(ctx, f"rm -rf .venv && uv venv --python {config.python}")
     extra = "" if stable else "--pre"
     run_local(ctx, f"uv pip install -U -r requirements-to-freeze.txt {extra}")
     freeze(ctx)
@@ -442,7 +438,7 @@ def update(ctx):
     """Update virtualenv and node_modules to match the lockfiles"""
     venv = config.base / ".venv"
     if not venv.exists():
-        run_local(ctx, f"uv venv --python {_python3()}")
+        run_local(ctx, f"uv venv --python {config.python}")
     _concurrently(
         ctx,
         [

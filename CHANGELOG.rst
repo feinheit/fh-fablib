@@ -6,9 +6,11 @@ Next version
 ~~~~~~~~~~~~
 
 - Switched to using biome for CSS.
-- Added Python 3.13 to the list of Python interpreters, removed 3.9.
 - Added ``EMAIL_URL`` to all ``.env`` files created by the fablib.
 - Updated the bundled hooks.
+- Stopped autodetecting the newest available Python interpreter and instead
+  take advantage of the fact that ``uv`` will download missing interpreters for
+  us.
 
 
 1.0.20241002
