@@ -1,5 +1,5 @@
 /*
-Somewhat reusable rspack configuration chunks
+Somewhat reusable webpack configuration chunks
 
 A basic rspack file may looks as follows:
 
@@ -43,7 +43,7 @@ TO FH-FABLIB AT https://github.com/feinheit/fh-fablib
 */
 
 const path = require("node:path")
-const rspack = require("@rspack/core")
+const HtmlWebpackPlugin = require("html-webpack-plugin")
 
 const truthy = (...list) => list.filter((el) => !!el)
 
@@ -99,11 +99,11 @@ module.exports = (PRODUCTION) => {
   }
 
   function htmlPlugin(name = "", config = {}) {
-    return new rspack.HtmlRspackPlugin({
+    return new HtmlWebpackPlugin({
       filename: name ? `${name}.html` : "[name].html",
       inject: false,
-      templateContent: ({ htmlRspackPlugin }) =>
-        `${htmlRspackPlugin.tags.headTags}`,
+      templateContent: ({ htmlWebpackPlugin }) =>
+        `${htmlWebpackPlugin.tags.headTags}`,
       ...config,
     })
   }

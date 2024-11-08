@@ -11,8 +11,6 @@ Next version
 - Stopped autodetecting the newest available Python interpreter and instead
   take advantage of the fact that ``uv`` will download missing interpreters for
   us.
-- Switched from ``HtmlWebpackPlugin`` to ``rspack.HtmlRspackPlugin`` in the
-  rspack library.
 
 
 1.0.20241002
