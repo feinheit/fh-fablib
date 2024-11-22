@@ -5,8 +5,8 @@ Change log
 Next version
 ~~~~~~~~~~~~
 
-1.0.20241122
-~~~~~~~~~~~~
+1.0.20241122.1
+~~~~~~~~~~~~~~
 
 - Switched to using biome for CSS.
 - Added ``EMAIL_URL`` to all ``.env`` files created by the fablib.
