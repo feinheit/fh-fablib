@@ -121,6 +121,13 @@ module.exports = (PRODUCTION) => {
     ]
   }
 
+  function cssExtractPlugin() {
+    return new rspack.CssExtractRspackPlugin({
+      filename: PRODUCTION ? "[name].[contenthash].css" : "[name].css",
+      chunkFilename: PRODUCTION ? "[name].[contenthash].css" : "[name].css",
+    })
+  }
+
   return {
     truthy,
     base: {
@@ -136,10 +143,7 @@ module.exports = (PRODUCTION) => {
         // Same as the default but prefixed with "_/[name]."
         assetModuleFilename: "_/[name].[hash][ext][query][fragment]",
       },
-      plugins: truthy(
-        new rspack.CssExtractRspackPlugin({}),
-        htmlSingleChunkPlugin(),
-      ),
+      plugins: truthy(cssExtractPlugin(), htmlSingleChunkPlugin()),
       target: "browserslist:defaults",
     },
     devServer(proxySettings) {
@@ -220,5 +224,6 @@ module.exports = (PRODUCTION) => {
     htmlPlugin,
     htmlSingleChunkPlugin,
     postcssLoaders,
+    cssExtractPlugin,
   }
 }
