@@ -204,7 +204,7 @@ module.exports = (PRODUCTION) => {
             },
           },
         ],
-        type: "css",
+        type: "javascript/auto",
       }
     },
     swcWithPreactRule,
