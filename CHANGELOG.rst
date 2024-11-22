@@ -5,12 +5,16 @@ Change log
 Next version
 ~~~~~~~~~~~~
 
+1.0.20241122
+~~~~~~~~~~~~
+
 - Switched to using biome for CSS.
 - Added ``EMAIL_URL`` to all ``.env`` files created by the fablib.
 - Updated the bundled hooks.
 - Stopped autodetecting the newest available Python interpreter and instead
   take advantage of the fact that ``uv`` will download missing interpreters for
   us.
+- Disabled ``experiments.css``, it's broken: https://github.com/web-infra-dev/rspack/issues/8027
 
 
 1.0.20241002
