@@ -123,8 +123,8 @@ module.exports = (PRODUCTION) => {
 
   function cssExtractPlugin() {
     return new rspack.CssExtractRspackPlugin({
-      filename: PRODUCTION ? "[name].[contenthash].css" : "[name].css",
-      chunkFilename: PRODUCTION ? "[name].[contenthash].css" : "[name].css",
+      filename: PRODUCTION ? "[name].[contenthash:20].css" : "[name].css",
+      chunkFilename: PRODUCTION ? "[name].[contenthash:20].css" : "[name].css",
     })
   }
 
