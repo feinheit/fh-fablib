@@ -5,15 +5,14 @@ fh-fablib
 Usage
 =====
 
-1. Install `pipx <https://pipxproject.github.io/pipx/>`__
-2. Install uv using ``pipx install uv``
-3. Install fh-fablib
+1. Install `uv <https://docs.astral.sh/uv/>`__
+2. Install fh-fablib
 
-   a. ``pipx install fh_fablib`` if you're happy with the packaged version
-   b. ``pipx install ~/Projects/fh-fablib`` if you have a local git checkout
-      you want to install from
+   a. Recommended: ``uv tool install -e ~/projects/fh-fablib`` if you have a
+      local git checkout you want to install from
+   a. ``uv tool install fh-fablib`` if you're happy with the packaged version
 
-4. Add a ``fabfile.py`` to your project. A minimal example follows:
+3. Add a ``fabfile.py`` to your project. A minimal example follows:
 
    .. code-block:: python
 
@@ -36,11 +35,11 @@ Usage
 
        ns = fl.Collection(*fl.GENERAL, *fl.NINE, *environments)
 
-5. Run ``fl hook`` to provide a default `pre-commit
+4. Run ``fl hook`` to provide a default `pre-commit
    <https://pre-commit.com/>`__ configuration (or ``fl hook --force`` to
    override the dotfiles).
 
-6. Run ``fl --list`` to get a list of commands.
+5. Run ``fl --list`` to get a list of commands.
 
 
 Configuration values
