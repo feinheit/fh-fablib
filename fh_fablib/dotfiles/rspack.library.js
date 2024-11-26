@@ -45,6 +45,10 @@ TO FH-FABLIB AT https://github.com/feinheit/fh-fablib
 const path = require("node:path")
 const HtmlWebpackPlugin = require("html-webpack-plugin")
 const rspack = require("@rspack/core")
+const assert = require("node:assert/strict")
+const semver = require("semver")
+
+assert.ok(semver.satisfies(rspack.rspackVersion, ">=1.1.3"), "rspack outdated")
 
 const truthy = (...list) => list.filter((el) => !!el)
 
@@ -123,8 +127,8 @@ module.exports = (PRODUCTION) => {
 
   function cssExtractPlugin() {
     return new rspack.CssExtractRspackPlugin({
-      filename: PRODUCTION ? "[name].[contenthash:20].css" : "[name].css",
-      chunkFilename: PRODUCTION ? "[name].[contenthash:20].css" : "[name].css",
+      filename: PRODUCTION ? "[name].[contenthash].css" : "[name].css",
+      chunkFilename: PRODUCTION ? "[name].[contenthash].css" : "[name].css",
     })
   }
 
