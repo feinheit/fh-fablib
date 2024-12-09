@@ -483,7 +483,7 @@ def _local_dbname():
 
 @task(
     auto_shortflags=False,
-    help={"clobber": "Clobber pre-existing node_modules and venv folders"},
+    help={"clobber": "Clobber pre-existing node_modules and .venv folders"},
 )
 def local(ctx, clobber=False):
     """Local environment setup"""
@@ -728,9 +728,11 @@ def nine_venv(ctx, python3="python3"):
     """Create a venv and install packages from requirements.txt"""
     with Connection(config.host) as conn, conn.cd(config.domain):
         run(conn, "rm -rf venv")
-        run(conn, f"PATH=~/.pyenv/shims:$PATH {python3} -m venv venv")
-        run(conn, "venv/bin/python -m pip install -U pip")
-        run(conn, "venv/bin/python -m pip install -r requirements.txt")
+        run(conn, f"PATH=~/.local/bin:$PATH uv venv venv --python {python3}")
+        run(
+            conn,
+            "PATH=~/.local/bin:$PATH uv pip install -r requirements.txt --prefix venv",
+        )
 
 
 @task
@@ -871,8 +873,9 @@ def _deploy_django(conn):
         for path in ["./venv", "./static", "./media", "./.git", "./node_modules"]
     )
     run(conn, f'find . {skip} -name "*.pyc" -print | xargs rm -f')
-    run(conn, "venv/bin/python -m pip install -U pip")
-    run(conn, "venv/bin/python -m pip install -r requirements.txt")
+    run(
+        conn, "PATH=~/.local/bin:$PATH uv pip install -r requirements.txt --prefix venv"
+    )
     run(conn, "venv/bin/python manage.py migrate")
     run(conn, "venv/bin/python manage.py check --deploy", warn=True)
 
