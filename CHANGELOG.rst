@@ -5,6 +5,11 @@ Change log
 Next version
 ~~~~~~~~~~~~
 
+- Always set the upstream when pushing git branches.
+- Started recommending uv instead of pipx.
+- Started requiring a minimum rspack version.
+
+
 1.0.20241122.2
 ~~~~~~~~~~~~~~
 
