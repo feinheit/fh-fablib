@@ -833,7 +833,7 @@ def fetch(ctx):
 
 
 def _check_branch(ctx):
-    branch = run_local(ctx, "git rev-parse --abbrev-ref HEAD", hide=True).stdout.strip()
+    branch = run_local(ctx, "git symbolic-ref --short HEAD", hide=True).stdout.strip()
     if branch != config.branch:
         terminate(f"Current branch is '{branch}', should be '{config.branch}'")
 
