@@ -41,7 +41,7 @@ repos:
       -   id: djade
           args: [--target-version, "5.1"]
   - repo: https://github.com/astral-sh/ruff-pre-commit
-    rev: "v0.9.5"
+    rev: "v0.9.7"
     hooks:
       - id: ruff
         args: [--unsafe-fixes]
@@ -55,10 +55,9 @@ repos:
     hooks:
       - id: validate-pyproject
   - repo: https://github.com/biomejs/pre-commit
-    rev: "v0.6.1"
+    rev: "v1.9.4"
     hooks:
       - id: biome-check
-        additional_dependencies: ["@biomejs/biome@1.9.4"]
         args: [--unsafe]
         types_or: [css, javascript, json]
         verbose: true
