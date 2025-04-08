@@ -6,11 +6,8 @@ Usage
 =====
 
 1. Install `uv <https://docs.astral.sh/uv/>`__
-2. Install fh-fablib
 
-   a. Recommended: ``uv tool install -e ~/projects/fh-fablib`` if you have a
-      local git checkout you want to install from
-   a. ``uv tool install fh-fablib`` if you're happy with the packaged version
+2. Install fh-fablib. The recommended way is to use ``uv tool install -e ~/projects/fh-fablib`` if you have a local git checkout you want to install from. Otherwise you can use ``uv tool install fh-fablib`` to install the packaged version.
 
 3. Add a ``fabfile.py`` to your project. A minimal example follows:
 
@@ -18,7 +15,7 @@ Usage
 
        import fh_fablib as fl
 
-       fl.require("1.0.20250407")
+       fl.require("1.0.20250408")
        fl.config.update(host="www-data@feinheit06.nine.ch")
 
        environments = [
@@ -94,7 +91,7 @@ If you need multiple environments, add environment tasks as follows:
 
     import fh_fablib as fl
 
-    fl.require("1.0.20250407")
+    fl.require("1.0.20250408")
     fl.config.update(host="www-data@feinheit06.nine.ch")
 
     environments = [
@@ -178,7 +175,7 @@ The following functions may be used to build your own tasks. They cannot
 be executed directly from the command line.
 
 Running commands
-~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~
 
 - ``run(c, ...)``: Wrapper around ``Context.run`` or ``Connection.run``
   which always sets a few useful arguments (``echo=True``, ``pty= True``
