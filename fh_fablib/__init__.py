@@ -98,6 +98,7 @@ def require(version):
                     "The fabfile and dotfiles have been updated automatically.\n\n"
                     "*******************************************\n"
                     "PLEASE CHECK THE RESULTS BEFORE COMMITTING!\n"
+                    "Especially, remove the webpack or rspack library if you don't need it!\n"
                     "*******************************************\n"
                 )
 
