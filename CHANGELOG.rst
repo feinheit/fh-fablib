@@ -5,6 +5,10 @@ Change log
 Next version
 ~~~~~~~~~~~~
 
+- Added a ``env/`` prefix to environment remotes to avoid ambiguous arguments
+  to git when checking out etc..
+
+
 1.0.20250408
 ~~~~~~~~~~~~
 

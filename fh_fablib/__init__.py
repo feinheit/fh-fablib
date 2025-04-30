@@ -826,11 +826,11 @@ def fetch(ctx):
     """Ensure a remote exists for the server and fetch"""
     run_local(
         ctx,
-        f"git remote add {config.remote} {config.host}:{config.domain}",
+        f"git remote add env/{config.remote} {config.host}:{config.domain}",
         warn=True,
         hide=True,
     )
-    run_local(ctx, f"git fetch {config.remote}")
+    run_local(ctx, f"git fetch env/{config.remote}")
 
 
 def _check_branch(ctx):
