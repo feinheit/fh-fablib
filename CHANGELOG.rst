@@ -5,6 +5,13 @@ Change log
 Next version
 ~~~~~~~~~~~~
 
+1.0.20250610
+~~~~~~~~~~~~
+
+- Updated pre-commit hooks.
+- Allowed using ``pull-db`` and friends with ``DATABASE_URL`` configuration
+  values containing things not understood by the PostgreSQL commandline tools.
+
 1.0.20250430
 ~~~~~~~~~~~~
 
