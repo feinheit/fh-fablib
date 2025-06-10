@@ -191,6 +191,10 @@ def _dbname_from_domain(domain):
     return re.sub(r"[^a-z0-9]+", "_", domain)
 
 
+def _dsn_from_database_url(url):
+    return url.split("?")[0]
+
+
 def _concurrently(ctx, jobs):
     with tempfile.NamedTemporaryFile("w+", prefix="fl.", suffix=".sh") as f:
         jobs = "\n".join(f"{job} &" for job in jobs)
@@ -277,8 +281,8 @@ def pull_db(ctx, extra_dump_args=""):
     with Connection(config.host) as conn:
         e = _srv_env(conn, f"{config.domain}/.env")
 
-    srv_dsn = e("DATABASE_URL")
-    local_dsn = _local_env()("DATABASE_URL")
+    srv_dsn = _dsn_from_database_url(e("DATABASE_URL"))
+    local_dsn = _dsn_from_database_url(_local_env()("DATABASE_URL"))
     dbname = _dbname_from_dsn(local_dsn)
 
     run_local(ctx, f"dropdb --if-exists {dbname}", warn=True)
@@ -335,7 +339,7 @@ WHERE S.relkind = 'S'
 ORDER BY S.relname;
     """
 
-    dsn = _local_env()("DATABASE_URL")
+    dsn = _dsn_from_database_url(_local_env()("DATABASE_URL"))
 
     with tempfile.NamedTemporaryFile("w") as f:
         f.write(sql)
@@ -479,7 +483,7 @@ SENTRY_ENVIRONMENT=
 
 def _local_dbname():
     _local_dotenv_if_not_exists()
-    return _dbname_from_dsn(_local_env()("DATABASE_URL"))
+    return _dbname_from_dsn(_dsn_from_database_url(_local_env()("DATABASE_URL")))
 
 
 @task(
@@ -698,8 +702,8 @@ def nine_disable(ctx):
         run(conn, "systemctl --user daemon-reload")
 
         e = _srv_env(conn, f"{config.domain}/.env")
-        srv_dsn = e("DATABASE_URL")
-        srv_dbname = _dbname_from_dsn(e("DATABASE_URL"))
+        srv_dsn = _dsn_from_database_url(e("DATABASE_URL"))
+        srv_dbname = _dbname_from_dsn(_dsn_from_database_url(e("DATABASE_URL")))
 
         run(conn, f"pg_dump -Ox {srv_dsn} > {config.domain}/{srv_dbname}.sql")
 
@@ -746,8 +750,8 @@ def nine_reinit_from(ctx, environment):
         source_e = _srv_env(conn, f"{config.environments[environment]['domain']}/.env")
         target_e = _srv_env(conn, f"{config.domain}/.env")
 
-        source_dsn = source_e("DATABASE_URL")
-        target_dsn = target_e("DATABASE_URL")
+        source_dsn = _dsn_from_database_url(source_e("DATABASE_URL"))
+        target_dsn = _dsn_from_database_url(target_e("DATABASE_URL"))
 
         dbname = _dbname_from_dsn(target_dsn)
 
