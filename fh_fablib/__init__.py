@@ -201,7 +201,7 @@ def _concurrently(ctx, jobs):
         # See https://stackoverflow.com/a/53982330
         f.write(
             f"""\
-trap 'pkill -P $$' SIGINT SIGTERM
+trap 'pkill -9 -P $$' SIGINT SIGTERM
 
 export PYTHONWARNINGS=always
 export PYTHONUNBUFFERED=yes
