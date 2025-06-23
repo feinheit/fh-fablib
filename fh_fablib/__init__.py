@@ -198,11 +198,10 @@ def _dsn_from_database_url(url):
 def _concurrently(ctx, jobs):
     with tempfile.NamedTemporaryFile("w+", prefix="fl.", suffix=".sh") as f:
         jobs = "\n".join(f"{job} &" for job in jobs)
-        # https://gist.github.com/jiaaro/b2e1b7c705022c2cf56888152a999f65
+        # See https://stackoverflow.com/a/53982330
         f.write(
             f"""\
-trap "exit" INT TERM
-trap "kill 0" EXIT
+trap 'pkill -P $$' SIGINT SIGTERM
 
 export PYTHONWARNINGS=always
 export PYTHONUNBUFFERED=yes
