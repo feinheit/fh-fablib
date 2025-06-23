@@ -5,6 +5,16 @@ Change log
 Next version
 ~~~~~~~~~~~~
 
+
+1.0.20250623
+~~~~~~~~~~~~
+
+- Updated pre-commit hooks.
+- Dropped the rspack version requirement, it didn't like beta versions.
+- Autodetermined the core-js version.
+- Fixed the ``_concurrently`` utility.
+
+
 1.0.20250610
 ~~~~~~~~~~~~
 
