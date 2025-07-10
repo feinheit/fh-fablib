@@ -5,8 +5,12 @@ Change log
 Next version
 ~~~~~~~~~~~~
 
+1.0.20250710
+~~~~~~~~~~~~
+
 - Changed ``_concurrently`` to use systemd and cgroups so that no processes
   escape the reaping (if systemd's available).
+- Updated pre-commit hooks.
 
 
 1.0.20250623
