@@ -5,6 +5,9 @@ Change log
 Next version
 ~~~~~~~~~~~~
 
+- Changed ``_concurrently`` to use systemd and cgroups so that no processes
+  escape the reaping (if systemd's available).
+
 
 1.0.20250623
 ~~~~~~~~~~~~

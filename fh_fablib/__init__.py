@@ -6,6 +6,7 @@ import re
 import shutil
 import sys
 import tempfile
+import uuid
 import warnings
 from pathlib import Path
 
@@ -196,6 +197,46 @@ def _dsn_from_database_url(url):
 
 
 def _concurrently(ctx, jobs):
+    # Check if systemd is available
+    try:
+        run_local(ctx, "systemctl --user --version", hide=True)
+    except Exception:
+        # Fall back to bash implementation if systemd is not available
+        _concurrently_bash(ctx, jobs)
+        return
+
+    scope_name = f"fl-concurrent-{uuid.uuid4().hex[:8]}"
+    slice_name = "fl-concurrent"
+
+    with tempfile.NamedTemporaryFile("w+", prefix="fl.", suffix=".sh") as f:
+        jobs_script = "\n".join(f"    {job} &" for job in jobs)
+
+        script_content = f"""\
+#!/bin/bash
+
+cleanup() {{
+    systemctl --user kill "{scope_name}.scope" 2>/dev/null || true
+    systemctl --user stop "{scope_name}.scope" 2>/dev/null || true
+}}
+
+trap cleanup EXIT INT TERM
+
+# Create a scope and run the work in it
+systemd-run --user --scope --unit="{scope_name}" --slice="{slice_name}" bash -c '
+export PYTHONWARNINGS=always
+export PYTHONUNBUFFERED=yes
+{jobs_script}
+wait
+'
+"""
+        f.write(script_content)
+        f.flush()
+
+        run_local(ctx, f"bash {f.name}", replace_env=False)
+
+
+def _concurrently_bash(ctx, jobs):
+    """Fallback bash implementation for systems without systemd"""
     with tempfile.NamedTemporaryFile("w+", prefix="fl.", suffix=".sh") as f:
         jobs = "\n".join(f"{job} &" for job in jobs)
         # See https://stackoverflow.com/a/53982330
