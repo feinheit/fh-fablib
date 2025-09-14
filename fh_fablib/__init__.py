@@ -266,13 +266,13 @@ def _update_dotfiles():
         shutil.copy(s, t)
 
 
-@task(auto_shortflags=False, help={"force": "Overwrite existing pre-commit files"})
+@task(auto_shortflags=False, help={"force": "Overwrite existing prek files"})
 def hook(ctx, force=False):
     """
-    Add default pre-commit configuration and install hook running coding style checks
+    Add default prek configuration and install hook running coding style checks
     """
     _update_dotfiles()
-    run_local(ctx, "pre-commit install -f")
+    run_local(ctx, "prek install -f")
 
 
 @task(auto_shortflags=False)
@@ -463,7 +463,7 @@ def upgrade(ctx, keep=False, stable=False):
     extra = "" if stable else "--pre"
     run_local(ctx, f"uv pip install -U -r requirements-to-freeze.txt {extra}")
     freeze(ctx)
-    run_local(ctx, "pre-commit install -f")
+    run_local(ctx, "prek install -f")
 
 
 @task
@@ -494,7 +494,7 @@ def update(ctx):
         ],
     )
     run_local(ctx, ".venv/bin/python manage.py migrate", warn=True)
-    run_local(ctx, "pre-commit install -f")
+    run_local(ctx, "prek install -f")
 
 
 def _local_dotenv_if_not_exists():
@@ -893,7 +893,7 @@ def _check_no_uncommitted_changes(ctx):
 @task
 def check(ctx):
     """Check the coding style of staged files"""
-    run_local(ctx, "pre-commit run")
+    run_local(ctx, "prek run")
 
 
 def _deploy_sync_origin_url(ctx, conn):

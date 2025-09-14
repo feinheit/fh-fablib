@@ -32,8 +32,8 @@ Usage
 
        ns = fl.Collection(*fl.GENERAL, *fl.NINE, *environments)
 
-4. Run ``fl hook`` to provide a default `pre-commit
-   <https://pre-commit.com/>`__ configuration (or ``fl hook --force`` to
+4. Run ``fl hook`` to provide a default `prek
+   <https://pypi.org/project/prek/>`__ configuration (or ``fl hook --force`` to
    override the dotfiles).
 
 5. Run ``fl --list`` to get a list of commands.
@@ -136,7 +136,7 @@ Available tasks
 - ``fetch``: Ensure a remote exists for the server and fetch
 - ``freeze``: Freeze the virtualenv's state
 - ``github``: Create a repository on GitHub and push the code
-- ``hook``: Install the pre-commit hook
+- ``hook``: Install the prek hook
 - ``local``: Local environment setup
 - ``mm``: Update the translation catalogs
 - ``pull-db``: Pull a local copy of the remote DB and reset all passwords

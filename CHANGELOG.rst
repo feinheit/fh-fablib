@@ -5,6 +5,8 @@ Change log
 Next version
 ~~~~~~~~~~~~
 
+- Switched from pre-commit to `prek <https://prek.j178.dev/>`__.
+
 1.0.20250710
 ~~~~~~~~~~~~
 
