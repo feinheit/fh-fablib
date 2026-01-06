@@ -487,7 +487,7 @@ def update(ctx):
     _concurrently(
         ctx,
         [
-            "uv pip install -r requirements.txt",
+            "uv sync" if (config.base / "uv.lock").exists() else "uv pip install -r requirements.txt",
             "git submodule update --init",
             'find . -name "*.pyc" -delete',
             "yarn",
