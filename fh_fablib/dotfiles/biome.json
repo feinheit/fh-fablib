@@ -69,7 +69,7 @@
     "formatter": {
       "semicolons": "asNeeded"
     },
-    "globals": []
+    "globals": ["gettext", "ngettext", "interpolate"]
   },
   "json": {
     "formatter": {
