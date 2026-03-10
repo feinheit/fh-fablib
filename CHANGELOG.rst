@@ -5,6 +5,9 @@ Change log
 Next version
 ~~~~~~~~~~~~
 
+1.0.20260310
+~~~~~~~~~~~~
+
 - Switched from pre-commit to `prek <https://prek.j178.dev/>`__.
 - Added a uv version check on startup.
 
