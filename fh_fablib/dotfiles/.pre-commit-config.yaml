@@ -31,38 +31,38 @@ repos:
         types_or: [scss]
         require_serial: true
   - repo: https://github.com/adamchainz/django-upgrade
-    rev: 1.28.0
+    rev: 1.30.0
     hooks:
       - id: django-upgrade
-        args: [--target-version, "5.1"]
+        args: [--target-version, "5.2"]
   -   repo: https://github.com/adamchainz/djade-pre-commit
-      rev: "1.6.0"
+      rev: 1.9.0
       hooks:
       -   id: djade
-          args: [--target-version, "5.1"]
+          args: [--target-version, "5.2"]
   - repo: https://github.com/astral-sh/ruff-pre-commit
-    rev: "v0.13.0"
+    rev: v0.15.5
     hooks:
       - id: ruff
         args: [--unsafe-fixes]
       - id: ruff-format
   - repo: https://github.com/tox-dev/pyproject-fmt
-    rev: v2.6.0
+    rev: v2.16.2
     hooks:
       - id: pyproject-fmt
   - repo: https://github.com/abravalheri/validate-pyproject
-    rev: v0.24.1
+    rev: v0.25
     hooks:
       - id: validate-pyproject
   - repo: https://github.com/biomejs/pre-commit
-    rev: "v2.2.4"
+    rev: v2.4.6
     hooks:
       - id: biome-check
         args: [--unsafe]
         types_or: [css, javascript, json]
         verbose: true
   - repo: https://github.com/boidolr/pre-commit-images
-    rev: v1.9.0
+    rev: v1.11.1
     hooks:
       - id: optimize-avif
       - id: optimize-jpg
