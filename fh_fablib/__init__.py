@@ -110,6 +110,12 @@ def run(c, *a, **kw):
     """A Context.run or Connection.run with better defaults"""
     kw.setdefault("pty", False)
     kw.setdefault("replace_env", True)
+    kw.setdefault(
+        "env",
+        {
+            "PATH": "/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin:~/.local/bin",
+        },
+    )
     if not kw.get("hide"):
         progress(" ".join(str(part) for part in a))
     return c.run(*a, **kw)
@@ -755,7 +761,7 @@ def nine_restart(ctx):
     """Restart the application server"""
     with Connection(config.host) as conn, conn.cd(config.domain):
         if config._uv_project:
-            run(conn, "PATH=~/.local/bin:$PATH uv run manage.py check --deploy")
+            run(conn, "uv run manage.py check --deploy")
         else:
             run(conn, "venv/bin/python manage.py check --deploy")
         _nine_restart(conn)
@@ -804,7 +810,7 @@ def nine_venv(ctx, python3="python3"):
     with Connection(config.host) as conn, conn.cd(config.domain):
         if config._uv_project:
             run(conn, "rm -rf venv .venv")
-            run(conn, "PATH=~/.local/bin:$PATH uv sync --no-dev")
+            run(conn, "uv sync --no-dev")
         else:
             run(conn, "rm -rf venv")
             run(conn, f"PATH=~/.pyenv/shims:$PATH {python3} -m venv venv")
@@ -951,9 +957,9 @@ def _deploy_django(conn):
     )
     run(conn, f'find . {skip} -name "*.pyc" -print | xargs rm -f')
     if config._uv_project:
-        run(conn, "PATH=~/.local/bin:$PATH uv sync --no-dev")
-        run(conn, "PATH=~/.local/bin:$PATH uv run manage.py migrate")
-        run(conn, "PATH=~/.local/bin:$PATH uv run manage.py check --deploy", warn=True)
+        run(conn, "uv sync --no-dev")
+        run(conn, "uv run manage.py migrate")
+        run(conn, "uv run manage.py check --deploy", warn=True)
     else:
         run(conn, "venv/bin/python -m pip install -U pip")
         run(conn, "venv/bin/python -m pip install -r requirements.txt")
@@ -963,7 +969,7 @@ def _deploy_django(conn):
 
 def _deploy_staticfiles(conn):
     if config._uv_project:
-        run(conn, "PATH=~/.local/bin:$PATH uv run manage.py collectstatic --noinput")
+        run(conn, "uv run manage.py collectstatic --noinput")
     else:
         run(conn, "venv/bin/python manage.py collectstatic --noinput")
 
