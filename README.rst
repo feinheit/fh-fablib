@@ -53,6 +53,8 @@ Configuration values
 - ``host``: SSH connection string (``username@server``)
 - ``remote``: git remote name for the server. Only used for the
   ``fetch`` task.
+- ``_uv_project``: Whether to use uv for project management. Defaults to
+  ``True`` if ``uv.lock`` exists.
 
 
 Adding or overriding bundled tasks
