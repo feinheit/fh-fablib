@@ -6,6 +6,8 @@ Next version
 ~~~~~~~~~~~~
 
 - Switched from pre-commit to `prek <https://prek.j178.dev/>`__.
+- Added a uv version check on startup.
+
 
 1.0.20250710
 ~~~~~~~~~~~~

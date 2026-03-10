@@ -4,6 +4,7 @@ import os
 import random
 import re
 import shutil
+import subprocess
 import sys
 import tempfile
 import uuid
@@ -79,6 +80,7 @@ def _find_base():
 
 
 def require(version):
+    _check_uv_version()
     if __version__ < version:
         terminate(f"fh_fablib version {version} required (you have {__version__})")
     if __version__ > version:
@@ -111,6 +113,19 @@ def run(c, *a, **kw):
     if not kw.get("hide"):
         progress(" ".join(str(part) for part in a))
     return c.run(*a, **kw)
+
+
+def _check_uv_version():
+    try:
+        result = subprocess.run(["uv", "version"], capture_output=True, text=True)
+        if m := re.search(r"(\d+)\.(\d+)(?:\.\d+)?", result.stdout):
+            if (int(m.group(1)), int(m.group(2))) < (0, 10):
+                terminate(
+                    f"uv>=0.10 required (you have {m.group()})."
+                    " Upgrade with: uv self update"
+                )
+    except FileNotFoundError:
+        pass  # let the actual uv command fail naturally
 
 
 def run_local(c, *a, **kw):
