@@ -19,7 +19,7 @@ from speckenv_django import django_database_url
 from fh_fablib.extract_js_gettext_strings import generate_strings
 
 
-__version__ = "1.0.20260310"
+__version__ = "1.0.20260310.1"
 
 
 # I don't care, in this context.
@@ -118,9 +118,9 @@ def run(c, *a, **kw):
 def _check_uv_version():
     try:
         result = subprocess.run(
-            ["uv", "version"], capture_output=True, text=True, check=False
+            ["uv", "-V"], capture_output=True, text=True, check=False
         )
-        if (m := re.search(r"(\d+)\.(\d+)(?:\.\d+)?", result.stdout)) and (
+        if (m := re.search(r"\b(\d+)\.(\d+).*\b", result.stdout)) and (
             int(m.group(1)),
             int(m.group(2)),
         ) < (0, 10):
