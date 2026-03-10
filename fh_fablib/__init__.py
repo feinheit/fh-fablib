@@ -163,6 +163,10 @@ class Config:
             f"{environments}"
         )
 
+    def _manage(self):
+        """Run manage.py locally"""
+        return "uv run manage.py" if self._uv_project else ".venv/bin/python manage.py"
+
 
 #: Defaults
 config = Config()
@@ -334,7 +338,7 @@ def _old_dev(ctx, host="127.0.0.1", port=8000):
     _concurrently(
         ctx,
         [
-            f".venv/bin/python manage.py runserver 0.0.0.0:{port}",
+            f"{config._manage()} runserver 0.0.0.0:{port}",
             f'HOST="{host}" yarn run webpack-dev-server --host 0.0.0.0 --port 4000 --hot',
         ],
     )
@@ -377,7 +381,7 @@ def reset_pw(ctx):
     pw = r"pbkdf2_sha256\$320000\$2Hz1pcncCTWtqEnr3uoBdD\$nVc9Fka1oYQHFgGRGLUC4Nw3w6+ZmdO0IDdZOow+kJ0="
     run_local(
         ctx,
-        f".venv/bin/python manage.py shell -c \"pw='{pw}';"
+        f"{config._manage()} shell -c \"pw='{pw}';"
         f"from django.contrib.auth import get_user_model as g;"
         f'g()._base_manager.update(password=pw)"',
     )
@@ -448,13 +452,13 @@ def mm(ctx, language=None):
     language = f"-l {language}" if language else "-a"
     run_local(
         ctx,
-        f".venv/bin/python manage.py makemessages {language} --add-location file"
+        f"{config._manage()} makemessages {language} --add-location file"
         " -i .venv -i htmlcov -i node_modules -i lib -i build -i dist --no-wrap",
         replace_env=False,
     )
     run_local(
         ctx,
-        f".venv/bin/python manage.py makemessages {language} --add-location file"
+        f"{config._manage()} makemessages {language} --add-location file"
         " -i .venv -i htmlcov -i node_modules -i lib -i build -i dist --no-wrap"
         " -d djangojs",
         replace_env=False,
@@ -469,7 +473,7 @@ def cm(ctx):
     """Compile the translation catalogs"""
     run_local(
         ctx,
-        ".venv/bin/python manage.py compilemessages"
+        f"{config._manage()} compilemessages"
         " -i .venv -i htmlcov -i node_modules -i lib -i build -i dist",
         replace_env=False,
     )
