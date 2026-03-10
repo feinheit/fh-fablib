@@ -5,6 +5,8 @@ Change log
 Next version
 ~~~~~~~~~~~~
 
+- Extended uv support to server deployments.
+
 1.0.20260310.1
 ~~~~~~~~~~~~~~
 
