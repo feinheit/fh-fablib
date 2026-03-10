@@ -117,13 +117,17 @@ def run(c, *a, **kw):
 
 def _check_uv_version():
     try:
-        result = subprocess.run(["uv", "version"], capture_output=True, text=True)
-        if m := re.search(r"(\d+)\.(\d+)(?:\.\d+)?", result.stdout):
-            if (int(m.group(1)), int(m.group(2))) < (0, 10):
-                terminate(
-                    f"uv>=0.10 required (you have {m.group()})."
-                    " Upgrade with: uv self update"
-                )
+        result = subprocess.run(
+            ["uv", "version"], capture_output=True, text=True, check=False
+        )
+        if (m := re.search(r"(\d+)\.(\d+)(?:\.\d+)?", result.stdout)) and (
+            int(m.group(1)),
+            int(m.group(2)),
+        ) < (0, 10):
+            terminate(
+                f"uv>=0.10 required (you have {m.group()})."
+                " Upgrade with: uv self update"
+            )
     except FileNotFoundError:
         pass  # let the actual uv command fail naturally
 
@@ -502,7 +506,9 @@ def update(ctx):
     _concurrently(
         ctx,
         [
-            "uv sync" if (config.base / "uv.lock").exists() else "uv pip install -r requirements.txt",
+            "uv sync"
+            if (config.base / "uv.lock").exists()
+            else "uv pip install -r requirements.txt",
             "git submodule update --init",
             'find . -name "*.pyc" -delete',
             "yarn",
