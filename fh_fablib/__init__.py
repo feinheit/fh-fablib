@@ -310,7 +310,7 @@ def dev(ctx, host="127.0.0.1", port=8000, run_with=None):
     progress(f"Starting server at http://{host}:{port}/")
     backend = random.randint(50000, 60000)
     jobs = [
-        f".venv/bin/python {run_with if run_with else ''} manage.py runserver {backend}"
+        f"{'uv run' if config._uv_project else '.venv/bin/python'} {run_with if run_with else ''} manage.py runserver {backend}"
     ]
 
     if (config.base / "webpack.config.js").exists():
@@ -625,7 +625,7 @@ Description=gunicorn for {config.domain}
 
 [Service]
 Environment=LANG=en_US.UTF-8 LC_ALL=en_US.UTF-8 LC_CTYPE=en_US.UTF-8
-ExecStart=/home/www-data/{config.domain}/venv/bin/gunicorn wsgi:application -b unix:///home/www-data/{config.domain}/tmp/gunicorn.sock --max-requests 1000 --max-requests-jitter 100 {args}
+ExecStart=/home/www-data/{config.domain}/{".venv/bin/gunicorn" if config._uv_project else "venv/bin/gunicorn"} wsgi:application -b unix:///home/www-data/{config.domain}/tmp/gunicorn.sock --max-requests 1000 --max-requests-jitter 100 {args}
 SyslogIdentifier=gunicorn:{config.domain}
 WorkingDirectory=/home/www-data/{config.domain}/
 Restart=always
@@ -754,7 +754,10 @@ def _nine_restart(conn):
 def nine_restart(ctx):
     """Restart the application server"""
     with Connection(config.host) as conn, conn.cd(config.domain):
-        run(conn, "venv/bin/python manage.py check --deploy")
+        if config._uv_project:
+            run(conn, "PATH=~/.local/bin:$PATH uv run manage.py check --deploy")
+        else:
+            run(conn, "venv/bin/python manage.py check --deploy")
         _nine_restart(conn)
 
 
@@ -948,16 +951,21 @@ def _deploy_django(conn):
     )
     run(conn, f'find . {skip} -name "*.pyc" -print | xargs rm -f')
     if config._uv_project:
-        run(conn, "uv sync --no-dev")
+        run(conn, "PATH=~/.local/bin:$PATH uv sync --no-dev")
+        run(conn, "PATH=~/.local/bin:$PATH uv run manage.py migrate")
+        run(conn, "PATH=~/.local/bin:$PATH uv run manage.py check --deploy", warn=True)
     else:
         run(conn, "venv/bin/python -m pip install -U pip")
         run(conn, "venv/bin/python -m pip install -r requirements.txt")
-    run(conn, "venv/bin/python manage.py migrate")
-    run(conn, "venv/bin/python manage.py check --deploy", warn=True)
+        run(conn, "venv/bin/python manage.py migrate")
+        run(conn, "venv/bin/python manage.py check --deploy", warn=True)
 
 
 def _deploy_staticfiles(conn):
-    run(conn, "venv/bin/python manage.py collectstatic --noinput")
+    if config._uv_project:
+        run(conn, "PATH=~/.local/bin:$PATH uv run manage.py collectstatic --noinput")
+    else:
+        run(conn, "venv/bin/python manage.py collectstatic --noinput")
 
 
 def _rsync_static(ctx, *, delete=False):
