@@ -480,8 +480,11 @@ def upgrade(ctx, keep=False, stable=False):
     if not venv.exists() or not keep:
         run_local(ctx, f"rm -rf .venv && uv venv --python {config.python}")
     extra = "" if stable else "--pre"
-    run_local(ctx, f"uv pip install -U -r requirements-to-freeze.txt {extra}")
-    freeze(ctx)
+    if (config.base / "uv.lock").exists():
+        run_local(ctx, "uv sync --upgrade")
+    else:
+        run_local(ctx, f"uv pip install -U -r requirements-to-freeze.txt {extra}")
+        freeze(ctx)
     run_local(ctx, "prek install -f")
 
 
