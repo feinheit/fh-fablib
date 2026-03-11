@@ -534,7 +534,7 @@ def update(ctx):
             "yarn",
         ],
     )
-    run_local(ctx, "uv run manage.py migrate", warn=True)
+    run_local(ctx, f"{config._manage()} migrate", warn=True)
     run_local(ctx, "prek install -f")
 
 
