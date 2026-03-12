@@ -69,6 +69,8 @@ lint.extend-ignore = [
   "E501",
   # Percent-formatting is fine
   "UP031",
+  # Allow mutable defaults for classes
+  "RUF012",
 ]
 lint.per-file-ignores."*/migrat*/*" = [
   # Allow using PascalCase model names in migrations
