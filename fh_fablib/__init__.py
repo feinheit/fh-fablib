@@ -167,6 +167,9 @@ class Config:
         """Run manage.py locally"""
         return "uv run manage.py" if self._uv_project else ".venv/bin/python manage.py"
 
+    def _tool(self, name):
+        return f"mise x -- {name}" if self._mise else name
+
 
 #: Defaults
 config = Config()
@@ -179,6 +182,7 @@ config.update(
     traduire="",
     python="3.12",
     _uv_project=(_base / "uv.lock").exists(),
+    _mise=(_base / "mise.toml").exists(),
 )
 os.chdir(config.base)
 
@@ -329,11 +333,11 @@ def dev(ctx, host="127.0.0.1", port=8000, run_with=None):
 
     if (config.base / "webpack.config.js").exists():
         jobs.append(
-            f"yarn run webpack serve --hot --host {host} --port {port} --env backend={backend}",
+            f"{config._tool('yarn')} run webpack serve --hot --host {host} --port {port} --env backend={backend}",
         )
     elif (config.base / "rspack.config.js").exists():
         jobs.append(
-            f"HOST={host} PORT={port} yarn run rspack serve --mode=development --env backend={backend}"
+            f"HOST={host} PORT={port} {config._tool('yarn')} run rspack serve --mode=development --env backend={backend}"
         )
     _concurrently(ctx, jobs)
 
@@ -343,7 +347,7 @@ def _old_dev(ctx, host="127.0.0.1", port=8000):
         ctx,
         [
             f"{config._manage()} runserver 0.0.0.0:{port}",
-            f'HOST="{host}" yarn run webpack-dev-server --host 0.0.0.0 --port 4000 --hot',
+            f'HOST="{host}" {config._tool("yarn")} run webpack-dev-server --host 0.0.0.0 --port 4000 --hot',
         ],
     )
 
@@ -531,7 +535,7 @@ def update(ctx):
             "uv sync" if config._uv_project else "uv pip install -r requirements.txt",
             "git submodule update --init",
             'find . -name "*.pyc" -delete',
-            "yarn",
+            config._tool("yarn"),
         ],
     )
     run_local(ctx, f"{config._manage()} migrate", warn=True)
@@ -1002,9 +1006,15 @@ def deploy(ctx, fast=False, force=False):
     force = "--force-with-lease " if (force or config.force) else ""
     run_local(ctx, f"git push -u origin {force}{config.branch}")
     if not fast and (config.base / "webpack.config.js").exists():
-        run_local(ctx, "NODE_ENV=production yarn run webpack --mode production --bail")
+        run_local(
+            ctx,
+            f"NODE_ENV=production {config._tool('yarn')} run webpack --mode production --bail",
+        )
     if not fast and (config.base / "rspack.config.js").exists():
-        run_local(ctx, "NODE_ENV=production yarn rspack build --mode production")
+        run_local(
+            ctx,
+            f"NODE_ENV=production {config._tool('yarn')} rspack build --mode production",
+        )
 
     with Connection(config.host) as conn, conn.cd(config.domain):
         _deploy_sync_origin_url(ctx, conn)
