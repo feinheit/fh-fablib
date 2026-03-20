@@ -168,7 +168,7 @@ class Config:
         return "uv run manage.py" if self._uv_project else ".venv/bin/python manage.py"
 
     def _tool(self, name):
-        return f"mise x -- {name}" if self._mise else name
+        return f"{self._mise} x -- {name}" if self._mise else name
 
 
 #: Defaults
@@ -182,7 +182,7 @@ config.update(
     traduire="",
     python="3.12",
     _uv_project=(_base / "uv.lock").exists(),
-    _mise=(_base / "mise.toml").exists(),
+    _mise=shutil.which("mise"),
 )
 os.chdir(config.base)
 
