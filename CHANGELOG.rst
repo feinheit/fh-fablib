@@ -5,6 +5,13 @@ Change log
 Next version
 ~~~~~~~~~~~~
 
+1.0.20260320
+~~~~~~~~~~~~
+
+- Started running ``yarn`` through `mise <https://mise.jdx.dev/>`__ if it is
+  available.
+
+
 1.0.20260311
 ~~~~~~~~~~~~
 

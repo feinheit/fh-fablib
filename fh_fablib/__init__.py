@@ -19,7 +19,7 @@ from speckenv_django import django_database_url
 from fh_fablib.extract_js_gettext_strings import generate_strings
 
 
-__version__ = "1.0.20260311"
+__version__ = "1.0.20260320"
 
 
 # I don't care, in this context.
@@ -167,7 +167,7 @@ class Config:
         """Run manage.py locally"""
         return "uv run manage.py" if self._uv_project else ".venv/bin/python manage.py"
 
-    def _tool(self, name):
+    def run_mise(self, name):
         return f"{self._mise} x -- {name}" if self._mise else name
 
 
@@ -333,11 +333,11 @@ def dev(ctx, host="127.0.0.1", port=8000, run_with=None):
 
     if (config.base / "webpack.config.js").exists():
         jobs.append(
-            f"{config._tool('yarn')} run webpack serve --hot --host {host} --port {port} --env backend={backend}",
+            f"{config.run_mise('yarn')} run webpack serve --hot --host {host} --port {port} --env backend={backend}",
         )
     elif (config.base / "rspack.config.js").exists():
         jobs.append(
-            f"HOST={host} PORT={port} {config._tool('yarn')} run rspack serve --mode=development --env backend={backend}"
+            f"HOST={host} PORT={port} {config.run_mise('yarn')} run rspack serve --mode=development --env backend={backend}"
         )
     _concurrently(ctx, jobs)
 
@@ -347,7 +347,7 @@ def _old_dev(ctx, host="127.0.0.1", port=8000):
         ctx,
         [
             f"{config._manage()} runserver 0.0.0.0:{port}",
-            f'HOST="{host}" {config._tool("yarn")} run webpack-dev-server --host 0.0.0.0 --port 4000 --hot',
+            f'HOST="{host}" {config.run_mise("yarn")} run webpack-dev-server --host 0.0.0.0 --port 4000 --hot',
         ],
     )
 
@@ -535,7 +535,7 @@ def update(ctx):
             "uv sync" if config._uv_project else "uv pip install -r requirements.txt",
             "git submodule update --init",
             'find . -name "*.pyc" -delete',
-            config._tool("yarn"),
+            config.run_mise("yarn"),
         ],
     )
     run_local(ctx, f"{config._manage()} migrate", warn=True)
@@ -1008,12 +1008,12 @@ def deploy(ctx, fast=False, force=False):
     if not fast and (config.base / "webpack.config.js").exists():
         run_local(
             ctx,
-            f"NODE_ENV=production {config._tool('yarn')} run webpack --mode production --bail",
+            f"NODE_ENV=production {config.run_mise('yarn')} run webpack --mode production --bail",
         )
     if not fast and (config.base / "rspack.config.js").exists():
         run_local(
             ctx,
-            f"NODE_ENV=production {config._tool('yarn')} rspack build --mode production",
+            f"NODE_ENV=production {config.run_mise('yarn')} rspack build --mode production",
         )
 
     with Connection(config.host) as conn, conn.cd(config.domain):
