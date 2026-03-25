@@ -182,7 +182,7 @@ config.update(
     traduire="",
     python="3.12",
     _uv_project=(_base / "uv.lock").exists(),
-    _mise=shutil.which("mise") and (_base / "mise.toml").exists(),
+    _mise=shutil.which("mise"),
 )
 os.chdir(config.base)
 
