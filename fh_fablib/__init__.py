@@ -1032,6 +1032,30 @@ def deploy(ctx, fast=False, force=False):
     progress(f"Successfully deployed the {config.environment} environment.")
 
 
+@task
+def audit(ctx):
+    """Run various package auditing tools"""
+    if config._uv_project:
+        progress("Auditing backend lockfile")
+        run_local(ctx, "uv audit", warn=True)
+    else:
+        progress("Auditing installed backend packages")
+        run_local(ctx, "uvx pip-audit", warn=True)
+
+    yarn_lock = config.base / "yarn.lock"
+    if yarn_lock.exists():
+        if "yarn lockfile v1" in yarn_lock.read_text():
+            progress("Auditing yarn 1 lockfile")
+            # Yarn 1
+            run_local(ctx, config.run_mise("yarn audit"), warn=True)
+        else:
+            progress("Auditing yarn>1 lockfile")
+            # Newer yarn
+            run_local(ctx, config.run_mise("yarn npm audit"), warn=True)
+    else:
+        progress(f"yarn lockfile {yarn_lock} doesn't exist")
+
+
 GENERAL = {
     hook,
     cm,
@@ -1046,6 +1070,7 @@ GENERAL = {
     github,
     check,
     debug,
+    audit,
 }
 NINE = {
     nine_vhost,

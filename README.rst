@@ -147,6 +147,7 @@ Available tasks
 - ``reset-sq``: Reset all PostgreSQL sequences
 - ``update``: Update virtualenv and node_modules to match the lockfiles
 - ``upgrade``: Re-create the virtualenv with newest versions of all libraries
+- ``audit``: Run Python and npm/yarn audits
 
 
 ``fh_fablib.NINE``
