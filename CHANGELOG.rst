@@ -5,6 +5,19 @@ Change log
 Next version
 ~~~~~~~~~~~~
 
+1.0.20260423
+~~~~~~~~~~~~
+
+- Added ``fl audit`` for auditing frontend and backend dependencies.
+- Removed most files from the folder of automatically updated/installed
+  project-specific dotfiles. We're not using Webpack, overwriting
+  ``pyproject.toml`` in projects using uv projects is a bad idea, and
+  pre-commit (prek) configuration is good enough in most current projects
+  anyway.
+- Dropped the uv version check, all uv versions in use support proper version
+  requirements.
+
+
 1.0.20260320
 ~~~~~~~~~~~~
 
