@@ -987,11 +987,13 @@ def deploy(ctx, fast=False, force=False):
     force = "--force-with-lease " if (force or config.force) else ""
     run_local(ctx, f"git push -u origin {force}{config.branch}")
     if not fast and (config.base / "webpack.config.js").exists():
+        run_local(ctx, config.run_mise("yarn"))
         run_local(
             ctx,
             f"NODE_ENV=production {config.run_mise('yarn')} run webpack --mode production --bail",
         )
     if not fast and (config.base / "rspack.config.js").exists():
+        run_local(ctx, config.run_mise("yarn"))
         run_local(
             ctx,
             f"NODE_ENV=production {config.run_mise('yarn')} rspack build --mode production",
