@@ -5,6 +5,12 @@ import random
 import re
 import shutil
 import sys
+
+# https://github.com/BradleyKirton/invoke/commit/dedac9a9807b973e4fa615c413f8bb59a869ebdf
+# bytes_to_read() uses struct format "h" (2 bytes) but FIONREAD can return 4-byte
+# values on some platforms; gate on the presence of "h" in bytecode constants so
+# the patch silently becomes a no-op once upstream ships the fix.
+import sys as _sys
 import tempfile
 import uuid
 import warnings
@@ -14,6 +20,45 @@ import speckenv
 from fabric import Connection, task
 from invoke import Collection  # noqa: F401
 from speckenv_django import django_database_url
+
+
+if _sys.platform != "win32":
+    import fcntl as _fcntl
+    import struct as _struct
+    import termios as _termios
+
+    import invoke.terminals as _invoke_terminals
+
+    if "h" in _invoke_terminals.bytes_to_read.__code__.co_consts:
+        from invoke.util import has_fileno as _has_fileno, isatty as _isatty
+
+        _fionread_buf = b" " * _struct.calcsize("i")
+
+        def _bytes_to_read_fixed(input_):
+            if (
+                not _invoke_terminals.WINDOWS
+                and _isatty(input_)
+                and _has_fileno(input_)
+            ):
+                return int(
+                    _struct.unpack(
+                        "i",
+                        _fcntl.ioctl(input_, _termios.FIONREAD, _fionread_buf),
+                    )[0]
+                )
+            return 1
+
+        _invoke_terminals.bytes_to_read = _bytes_to_read_fixed
+
+        import invoke.runners as _invoke_runners
+
+        _invoke_runners.bytes_to_read = _bytes_to_read_fixed
+    else:
+        warnings.warn(
+            "invoke.terminals.bytes_to_read monkey patch in fh_fablib is no longer"
+            " needed — please remove it.",
+            stacklevel=2,
+        )
 
 from fh_fablib.extract_js_gettext_strings import generate_strings
 
