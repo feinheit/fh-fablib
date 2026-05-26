@@ -1,64 +1,21 @@
+import importlib.util
 import inspect
 import io
 import os
 import random
 import re
 import shutil
+import subprocess
 import sys
-
-# https://github.com/BradleyKirton/invoke/commit/dedac9a9807b973e4fa615c413f8bb59a869ebdf
-# bytes_to_read() uses struct format "h" (2 bytes) but FIONREAD can return 4-byte
-# values on some platforms; gate on the presence of "h" in bytecode constants so
-# the patch silently becomes a no-op once upstream ships the fix.
-import sys as _sys
 import tempfile
 import uuid
 import warnings
 from pathlib import Path
 
 import speckenv
-from fabric import Connection, task
-from invoke import Collection  # noqa: F401
+import typer
+from fabric import Connection as _FabricConnection
 from speckenv_django import django_database_url
-
-
-if _sys.platform != "win32":
-    import fcntl as _fcntl
-    import struct as _struct
-    import termios as _termios
-
-    import invoke.terminals as _invoke_terminals
-
-    if "h" in _invoke_terminals.bytes_to_read.__code__.co_consts:
-        from invoke.util import has_fileno as _has_fileno, isatty as _isatty
-
-        _fionread_buf = b" " * _struct.calcsize("i")
-
-        def _bytes_to_read_fixed(input_):
-            if (
-                not _invoke_terminals.WINDOWS
-                and _isatty(input_)
-                and _has_fileno(input_)
-            ):
-                return int(
-                    _struct.unpack(
-                        "i",
-                        _fcntl.ioctl(input_, _termios.FIONREAD, _fionread_buf),
-                    )[0]
-                )
-            return 1
-
-        _invoke_terminals.bytes_to_read = _bytes_to_read_fixed
-
-        import invoke.runners as _invoke_runners
-
-        _invoke_runners.bytes_to_read = _bytes_to_read_fixed
-    else:
-        warnings.warn(
-            "invoke.terminals.bytes_to_read monkey patch in fh_fablib is no longer"
-            " needed — please remove it.",
-            stacklevel=2,
-        )
 
 from fh_fablib.extract_js_gettext_strings import generate_strings
 
@@ -96,6 +53,20 @@ def warning(msg):
 def terminate(msg):
     print(red(msg), file=sys.stderr)
     sys.exit(1)
+
+
+def task(fn=None, **kwargs):
+    if fn is not None:
+        return fn
+    return lambda fn: fn
+
+
+class _Result:
+    def __init__(self, returncode: int, stdout: str = "", stderr: str = ""):
+        self.returncode = returncode
+        self.exited = returncode
+        self.stdout = stdout
+        self.stderr = stderr
 
 
 def _bool(s):
@@ -149,8 +120,39 @@ def require(version):
                 )
 
 
+def run_local(
+    cmd,
+    *args,
+    hide: bool = False,
+    warn: bool = False,
+    replace_env: bool = False,
+    env: dict | None = None,
+    **kw,
+):
+    """Run a local command"""
+    if not hide:
+        progress(cmd if isinstance(cmd, str) else " ".join(str(s) for s in cmd))
+    if replace_env:
+        run_env = env or {}
+    elif env:
+        run_env = os.environ | env
+    else:
+        run_env = None
+    if hide:
+        proc = subprocess.run(
+            cmd, shell=isinstance(cmd, str), capture_output=True, text=True, env=run_env
+        )
+        result = _Result(proc.returncode, proc.stdout, proc.stderr)
+    else:
+        proc = subprocess.run(cmd, shell=isinstance(cmd, str), env=run_env)
+        result = _Result(proc.returncode)
+    if proc.returncode and not warn:
+        sys.exit(proc.returncode)
+    return result
+
+
 def run(c, *a, **kw):
-    """A Context.run or Connection.run with better defaults"""
+    """A Connection.run with better defaults (SSH tasks only)"""
     kw.setdefault("pty", False)
     kw.setdefault("replace_env", True)
     kw.setdefault(
@@ -159,15 +161,6 @@ def run(c, *a, **kw):
             "PATH": "/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin:~/.local/bin",
         },
     )
-    if not kw.get("hide"):
-        progress(" ".join(str(part) for part in a))
-    return c.run(*a, **kw)
-
-
-def run_local(c, *a, **kw):
-    """A Context.run for local execution with better defaults"""
-    kw.setdefault("pty", True)
-    kw.setdefault("replace_env", False)
     if not kw.get("hide"):
         progress(" ".join(str(part) for part in a))
     return c.run(*a, **kw)
@@ -207,33 +200,103 @@ config.update(
     force=False,
     traduire="",
     python="3.12",
-    _uv_project=(_base / "uv.lock").exists(),
+    _uv_project=(_base / "uv.lock").exists() if _base else False,
     _mise=shutil.which("mise"),
 )
-os.chdir(config.base)
+if _base:
+    os.chdir(config.base)
 
 
-def environment(name, cfg, **kwargs):
-    config.environments[name] = cfg
-
-    if name in kwargs.get("aliases", ()):
-        terminate(f"Remove {name} from the aliases list of the {name} environment.")
-
-    @task(name=name, **kwargs)
-    def fn(ctx):
-        cfg["environment"] = name
-        config.update(**cfg)
-
-    fn.__doc__ = f'Set the environment to "{name}"'
-    return fn
-
-
-class Connection(Connection):
+class Connection(_FabricConnection):
     """Connection subclass which always forwards the agent by default"""
 
     def __init__(self, *args, **kwargs):
         kwargs.setdefault("forward_agent", True)
         super().__init__(*args, **kwargs)
+
+
+def environment(name: str, cfg: dict, **kwargs) -> typer.Typer:
+    config.environments[name] = cfg
+    if name in kwargs.get("aliases", ()):
+        terminate(f"Remove {name} from the aliases list of the {name} environment.")
+    env_app = typer.Typer(name=name, help=f'Set the environment to "{name}"')
+
+    @env_app.callback(invoke_without_command=True)
+    def _setup(ctx: typer.Context):
+        cfg["environment"] = name
+        config.update(**cfg)
+        if ctx.invoked_subcommand is None:
+            print(ctx.get_help())
+
+    return env_app
+
+
+class Collection(typer.Typer):
+    def __init__(self, *items, **kwargs):
+        if items and isinstance(items[0], str):
+            name, items = items[0], items[1:]
+        else:
+            name = None
+        kwargs.setdefault("add_completion", False)
+        super().__init__(name=name, **kwargs)
+        self._fl_tasks: list = []
+        self._fl_envs: list = []
+        self._fl_default: str | None = None
+        for item in items:
+            if isinstance(item, typer.Typer):
+                self._fl_envs.append(item)
+            else:
+                self._fl_tasks.append(item)
+                self.command()(item)
+        for env_app in self._fl_envs:
+            for t in self._fl_tasks:
+                env_app.command()(t)
+            self.add_typer(env_app)
+
+    @property
+    def default(self):
+        return self._fl_default
+
+    @default.setter
+    def default(self, value: str):
+        self._fl_default = value
+        fn = next((t for t in self._fl_tasks if t.__name__ == value), None)
+        if fn is None:
+            return
+
+        @self.callback(invoke_without_command=True)
+        def _default_callback(ctx: typer.Context):
+            if ctx.invoked_subcommand is None:
+                ctx.invoke(fn)
+
+    def add_collection(self, sub: "Collection", *, name: str | None = None):
+        # Pass the sub-app's own name explicitly so Typer doesn't warn about
+        # callbacks on nameless sub-apps.
+        self.add_typer(sub, name=name or sub.info.name)
+
+
+def main():
+    for directory in [Path.cwd(), *Path.cwd().parents]:
+        fabfile = directory / "fabfile.py"
+        if fabfile.exists():
+            break
+    else:
+        print(red("No fabfile.py found"), file=sys.stderr)
+        sys.exit(1)
+
+    os.chdir(fabfile.parent)
+    sys.path.insert(0, str(fabfile.parent))
+    spec = importlib.util.spec_from_file_location("fabfile", fabfile)
+    mod = importlib.util.module_from_spec(spec)
+    sys.modules["fabfile"] = mod
+    spec.loader.exec_module(mod)
+
+    ns = getattr(mod, "ns", None)
+    if ns is None:
+        print(red("fabfile.py must define 'ns'"), file=sys.stderr)
+        sys.exit(1)
+
+    ns()
 
 
 def _random_string(length, *, chars=None):
@@ -257,13 +320,13 @@ def _dsn_from_database_url(url):
     return url.split("?")[0]
 
 
-def _concurrently(ctx, jobs):
+def _concurrently(jobs):
     # Check if systemd is available
     try:
-        run_local(ctx, "systemctl --user --version", hide=True)
+        run_local("systemctl --user --version", hide=True)
     except Exception:
         # Fall back to bash implementation if systemd is not available
-        _concurrently_bash(ctx, jobs)
+        _concurrently_bash(jobs)
         return
 
     scope_name = f"fl-concurrent-{uuid.uuid4().hex[:8]}"
@@ -293,10 +356,10 @@ wait
         f.write(script_content)
         f.flush()
 
-        run_local(ctx, f"bash {f.name}", replace_env=False)
+        run_local(f"bash {f.name}", replace_env=False)
 
 
-def _concurrently_bash(ctx, jobs):
+def _concurrently_bash(jobs):
     """Fallback bash implementation for systems without systemd"""
     with tempfile.NamedTemporaryFile("w+", prefix="fl.", suffix=".sh") as f:
         jobs = "\n".join(f"{job} &" for job in jobs)
@@ -316,7 +379,7 @@ for job in $(jobs -p); do wait $job; done
 """
         )
         f.flush()
-        run_local(ctx, f"bash {f.name}", replace_env=False)
+        run_local(f"bash {f.name}", replace_env=False)
 
 
 def _update_dotfiles():
@@ -327,25 +390,25 @@ def _update_dotfiles():
         shutil.copy(s, t)
 
 
-@task(auto_shortflags=False, help={"force": "Overwrite existing prek files"})
-def hook(ctx, force=False):
+@task
+def hook(force: bool = False):
     """
     Add default prek configuration and install hook running coding style checks
     """
     _update_dotfiles()
-    run_local(ctx, "prek install -f")
+    run_local("prek install -f")
 
 
-@task(auto_shortflags=False)
-def debug(ctx, host="127.0.0.1", port=8000, debug_port=5678):
+@task
+def debug(host: str = "127.0.0.1", port: int = 8000, debug_port: int = 5678):
     """Run the development server with local debugpy interface"""
     run_with = f"-m debugpy --listen {debug_port} --wait-for-client"
     progress(f"Exposing debugpy interface at port {debug_port}")
-    dev(ctx, host=host, port=port, run_with=run_with)
+    dev(host=host, port=port, run_with=run_with)
 
 
-@task(auto_shortflags=False)
-def dev(ctx, host="127.0.0.1", port=8000, run_with=None):
+@task
+def dev(host: str = "127.0.0.1", port: int = 8000, run_with: str | None = None):
     """Run the development server for the frontend and backend"""
     progress(f"Starting server at http://{host}:{port}/")
     backend = random.randint(50000, 60000)
@@ -365,12 +428,11 @@ def dev(ctx, host="127.0.0.1", port=8000, run_with=None):
         jobs.append(
             f"HOST={host} PORT={port} {config.run_mise('yarn')} run rspack serve --mode=development --env backend={backend}"
         )
-    _concurrently(ctx, jobs)
+    _concurrently(jobs)
 
 
-def _old_dev(ctx, host="127.0.0.1", port=8000):
+def _old_dev(host="127.0.0.1", port=8000):
     _concurrently(
-        ctx,
         [
             f"{config._manage()} runserver 0.0.0.0:{port}",
             f'HOST="{host}" {config.run_mise("yarn")} run webpack-dev-server --host 0.0.0.0 --port 4000 --hot',
@@ -378,8 +440,8 @@ def _old_dev(ctx, host="127.0.0.1", port=8000):
     )
 
 
-@task(auto_shortflags=False)
-def pull_db(ctx, extra_dump_args=""):
+@task
+def pull_db(extra_dump_args: str = ""):
     """Pull a local copy of the remote DB and reset all passwords"""
     _local_dotenv_if_not_exists()
 
@@ -390,31 +452,29 @@ def pull_db(ctx, extra_dump_args=""):
     local_dsn = _dsn_from_database_url(_local_env()("DATABASE_URL"))
     dbname = _dbname_from_dsn(local_dsn)
 
-    run_local(ctx, f"dropdb --if-exists {dbname}", warn=True)
-    run_local(ctx, f"createdb {dbname}")
+    run_local(f"dropdb --if-exists {dbname}", warn=True)
+    run_local(f"createdb {dbname}")
     run_local(
-        ctx,
         f"ssh {config.host} -C 'pg_dump -Ox {srv_dsn} {extra_dump_args}' | psql {local_dsn}",
     )
 
-    reset_pw(ctx)
-
-
-@task(auto_shortflags=False)
-def pull_media(ctx, folder="media"):
-    """Rsync a folder from the remote to the local environment"""
-    flags = "-pthrz --stats"
-    folder = folder.strip("/")
-    run_local(ctx, f"rsync {flags} {config.host}:{config.domain}/{folder}/ {folder}/")
+    reset_pw()
 
 
 @task
-def reset_pw(ctx):
+def pull_media(folder: str = "media"):
+    """Rsync a folder from the remote to the local environment"""
+    flags = "-pthrz --stats"
+    folder = folder.strip("/")
+    run_local(f"rsync {flags} {config.host}:{config.domain}/{folder}/ {folder}/")
+
+
+@task
+def reset_pw():
     """Set all user passwords to "password" """
     # 'password' encoded with a constant salt. Does not force a login after pull_db
     pw = r"pbkdf2_sha256\$320000\$2Hz1pcncCTWtqEnr3uoBdD\$nVc9Fka1oYQHFgGRGLUC4Nw3w6+ZmdO0IDdZOow+kJ0="
     run_local(
-        ctx,
         f"{config._manage()} shell -c \"pw='{pw}';"
         f"from django.contrib.auth import get_user_model as g;"
         f'g()._base_manager.update(password=pw)"',
@@ -422,7 +482,7 @@ def reset_pw(ctx):
 
 
 @task
-def reset_sq(ctx):
+def reset_sq():
     """Reset all PostgreSQL sequences"""
 
     sql = """
@@ -449,7 +509,7 @@ ORDER BY S.relname;
     with tempfile.NamedTemporaryFile("w") as f:
         f.write(sql)
         f.seek(0)
-        run_local(ctx, f"psql -Atq -f {f.name} {dsn} | psql -a {dsn}")
+        run_local(f"psql -Atq -f {f.name} {dsn} | psql -a {dsn}")
 
 
 def _local_env(path=".env"):
@@ -473,11 +533,8 @@ def _srv_env(conn, path):
     return lambda *a, **kw: speckenv.env(*a, **kw, mapping=mapping)
 
 
-@task(
-    auto_shortflags=False,
-    help={"language": "Generate catalogs for a specific language"},
-)
-def mm(ctx, language=None):
+@task
+def mm(language: str | None = None):
     """Update the translation catalogs"""
 
     with open("conf/strings.js", "w", encoding="utf-8") as f:
@@ -485,13 +542,11 @@ def mm(ctx, language=None):
 
     language = f"-l {language}" if language else "-a"
     run_local(
-        ctx,
         f"{config._manage()} makemessages {language} --add-location file"
         " -i .venv -i htmlcov -i node_modules -i lib -i build -i dist --no-wrap",
         replace_env=False,
     )
     run_local(
-        ctx,
         f"{config._manage()} makemessages {language} --add-location file"
         " -i .venv -i htmlcov -i node_modules -i lib -i build -i dist --no-wrap"
         " -d djangojs",
@@ -503,45 +558,37 @@ def mm(ctx, language=None):
 
 
 @task
-def cm(ctx):
+def cm():
     """Compile the translation catalogs"""
     run_local(
-        ctx,
         f"{config._manage()} compilemessages"
         " -i .venv -i htmlcov -i node_modules -i lib -i build -i dist",
         replace_env=False,
     )
 
 
-@task(
-    auto_shortflags=False,
-    help={
-        "keep": "Keep the existing virtualenv",
-        "stable": "Avoid pre-release versions of packages",
-    },
-)
-def upgrade(ctx, keep=False, stable=False):
+@task
+def upgrade(keep: bool = False, stable: bool = False):
     """Re-create the virtualenv with newest versions of all libraries"""
     if config._uv_project:
-        run_local(ctx, "uv sync --upgrade")
+        run_local("uv sync --upgrade")
     else:
         venv = config.base / ".venv"
         if not venv.exists() or not keep:
-            run_local(ctx, f"rm -rf .venv && uv venv --python {config.python}")
+            run_local(f"rm -rf .venv && uv venv --python {config.python}")
         extra = "" if stable else "--pre"
-        run_local(ctx, f"uv pip install -U -r requirements-to-freeze.txt {extra}")
-        freeze(ctx)
-    run_local(ctx, "prek install -f")
+        run_local(f"uv pip install -U -r requirements-to-freeze.txt {extra}")
+        freeze()
+    run_local("prek install -f")
 
 
 @task
-def freeze(ctx):
+def freeze():
     """Freeze the virtualenv's state"""
     if config._uv_project:
         terminate("Using uv project management, freezing makes no sense.")
 
     run_local(
-        ctx,
         '(printf "# AUTOGENERATED, DO NOT EDIT\n\n";'
         "uv pip freeze"
         ' | grep -vE "(^packaging==|^pip==|^pkg.resources==|^setuptools==|^wheel==)"'
@@ -550,13 +597,12 @@ def freeze(ctx):
 
 
 @task
-def update(ctx):
+def update():
     """Update virtualenv and node_modules to match the lockfiles"""
     if not config._uv_project and not (config.base / ".venv").exists():
-        run_local(ctx, f"uv venv --python {config.python}")
+        run_local(f"uv venv --python {config.python}")
 
     _concurrently(
-        ctx,
         [
             "uv sync" if config._uv_project else "uv pip install -r requirements.txt",
             "git submodule update --init",
@@ -564,8 +610,8 @@ def update(ctx):
             config.run_mise("yarn"),
         ],
     )
-    run_local(ctx, f"{config._manage()} migrate", warn=True)
-    run_local(ctx, "prek install -f")
+    run_local(f"{config._manage()} migrate", warn=True)
+    run_local("prek install -f")
 
 
 def _local_dotenv_if_not_exists():
@@ -597,21 +643,18 @@ def _local_dbname():
     return _dbname_from_dsn(_dsn_from_database_url(_local_env()("DATABASE_URL")))
 
 
-@task(
-    auto_shortflags=False,
-    help={"clobber": "Clobber pre-existing node_modules and venv folders"},
-)
-def local(ctx, clobber=False):
+@task
+def local(clobber: bool = False):
     """Local environment setup"""
     if clobber:
-        run_local(ctx, "rm -rf node_modules .venv")
+        run_local("rm -rf node_modules .venv")
     dbname = _local_dbname()
-    run_local(ctx, f"createdb {dbname}", warn=True)
-    update(ctx)
+    run_local(f"createdb {dbname}", warn=True)
+    update()
 
 
 @task
-def nine_vhost(ctx):
+def nine_vhost():
     """Create a virtual host using nine-manage-vhosts"""
     with Connection(config.host) as conn, conn.cd(config.domain):
         run(
@@ -623,10 +666,9 @@ def nine_vhost(ctx):
         run(conn, "mkdir -p media tmp")
 
 
-@task(auto_shortflags=False, help={"include-www": "Include the www. subdomain"})
-def nine_alias_add(ctx, alias, include_www):
+@task
+def nine_alias_add(alias: str, include_www: bool = False):
     """Add aliasses to a nine-manage-vhost virtual host"""
-    include_www = _bool(include_www)
     with Connection(config.host) as conn:
         run(
             conn,
@@ -642,10 +684,9 @@ def nine_alias_add(ctx, alias, include_www):
             )
 
 
-@task(auto_shortflags=False, help={"include-www": "Include the www. subdomain"})
-def nine_alias_remove(ctx, alias, include_www):
+@task
+def nine_alias_remove(alias: str, include_www: bool = False):
     """Remove aliasses from a nine-manage-vhost virtual host"""
-    include_www = _bool(include_www)
     with Connection(config.host) as conn:
         run(
             conn,
@@ -680,7 +721,7 @@ WantedBy=default.target
 
 
 @task
-def nine_unit(ctx):
+def nine_unit():
     """Start and enable a gunicorn unit"""
     with Connection(config.host) as conn:
         conn.put(
@@ -697,11 +738,8 @@ def _nine_has_manage_databases(conn):
     return bool(run(conn, "which nine-manage-databases", warn=True).stdout.strip())
 
 
-@task(
-    auto_shortflags=False,
-    help={"recreate": "Only recreate the database"},
-)
-def nine_db_dotenv(ctx, recreate=False):
+@task
+def nine_db_dotenv(recreate: bool = False):
     """Create a database and initialize the .env"""
     with Connection(config.host) as conn:
         if recreate:
@@ -775,7 +813,7 @@ SENTRY_ENVIRONMENT=
 
 
 @task
-def nine_ssl(ctx):
+def nine_ssl():
     """Activate SSL"""
     with Connection(config.host) as conn:
         run(
@@ -795,7 +833,7 @@ def _nine_restart(conn):
 
 
 @task
-def nine_restart(ctx):
+def nine_restart():
     """Restart the application server"""
     with Connection(config.host) as conn, conn.cd(config.domain):
         if config._uv_project:
@@ -806,7 +844,7 @@ def nine_restart(ctx):
 
 
 @task
-def nine_disable(ctx):
+def nine_disable():
     """Disable a virtual host, dump and remove the DB and stop the gunicorn unit"""
     with Connection(config.host) as conn:
         run(conn, f"sudo nine-manage-vhosts virtual-host remove {config.domain}")
@@ -832,18 +870,15 @@ def nine_disable(ctx):
 
 
 @task
-def nine_checkout(ctx):
+def nine_checkout():
     """Checkout the repository on the server"""
-    repo = run(ctx, "git config remote.origin.url", hide=True).stdout.strip()
+    repo = run_local("git config remote.origin.url", hide=True).stdout.strip()
     with Connection(config.host) as conn:
         run(conn, f"git clone {repo} {config.domain} -b {config.branch}")
 
 
-@task(
-    auto_shortflags=False,
-    help={"python3": "Python executable"},
-)
-def nine_venv(ctx, python3="python3"):
+@task
+def nine_venv(python3: str = "python3"):
     """Create a venv and install packages from requirements.txt"""
     with Connection(config.host) as conn, conn.cd(config.domain):
         if config._uv_project:
@@ -857,7 +892,7 @@ def nine_venv(ctx, python3="python3"):
 
 
 @task
-def nine_reinit_from(ctx, environment):
+def nine_reinit_from(environment: str):
     """Reinitialize an environment from a different environment"""
     try:
         source = config.environments[environment]
@@ -909,21 +944,19 @@ def nine_reinit_from(ctx, environment):
 
 
 @task
-def nine(ctx):
+def nine():
     """Run all nine🌟 setup tasks in order"""
-    nine_checkout(ctx)
-    nine_venv(ctx)
-    nine_db_dotenv(ctx)
-    nine_vhost(ctx)
-    nine_unit(ctx)
+    nine_checkout()
+    nine_venv()
+    nine_db_dotenv()
+    nine_vhost()
+    nine_unit()
 
 
 @task
-def github(ctx):
+def github():
     """Create a repository on GitHub and push the code"""
-    url = run_local(
-        ctx, "git config remote.origin.url", hide=True, warn=True
-    ).stdout.strip()
+    url = run_local("git config remote.origin.url", hide=True, warn=True).stdout.strip()
     if url:
         terminate(f"The 'origin' remote already points to '{url}'")
 
@@ -937,31 +970,29 @@ def github(ctx):
     repository = input() or repository
 
     run_local(
-        ctx,
         f"gh repo create {organization}/{repository} --private --source=. --remote=origin --push",
     )
-    run_local(ctx, f"git push -u origin {config.branch}")
+    run_local(f"git push -u origin {config.branch}")
 
 
 @task
-def fetch(ctx):
+def fetch():
     """Ensure a remote exists for the server and fetch"""
     run_local(
-        ctx,
         f"git remote add env/{config.remote} {config.host}:{config.domain}",
         warn=True,
         hide=True,
     )
-    run_local(ctx, f"git fetch env/{config.remote}")
+    run_local(f"git fetch env/{config.remote}")
 
 
-def _check_branch(ctx):
-    branch = run_local(ctx, "git symbolic-ref --short HEAD", hide=True).stdout.strip()
+def _check_branch():
+    branch = run_local("git symbolic-ref --short HEAD", hide=True).stdout.strip()
     if branch != config.branch:
         terminate(f"Current branch is '{branch}', should be '{config.branch}'")
 
 
-def _check_no_uncommitted_changes(ctx):
+def _check_no_uncommitted_changes():
     with Connection(config.host) as conn, conn.cd(config.domain):
         result = run(conn, "git status --porcelain").stdout.strip()
         if result:
@@ -969,13 +1000,13 @@ def _check_no_uncommitted_changes(ctx):
 
 
 @task
-def check(ctx):
+def check():
     """Check the coding style of staged files"""
-    run_local(ctx, "prek run")
+    run_local("prek run")
 
 
-def _deploy_sync_origin_url(ctx, conn):
-    url = run_local(ctx, "git remote get-url origin").stdout.strip()
+def _deploy_sync_origin_url(conn):
+    url = run_local("git remote get-url origin").stdout.strip()
     run(conn, f"git remote set-url origin {url}")
 
 
@@ -1012,74 +1043,67 @@ def _deploy_staticfiles(conn):
         run(conn, "venv/bin/python manage.py collectstatic --noinput")
 
 
-def _rsync_static(ctx, *, delete=False):
+def _rsync_static(*, delete=False):
     flags = "-pthrz --stats"
     delete = " --delete" if delete else ""
-    run_local(
-        ctx, f"rsync {flags}{delete} static/ {config.host}:{config.domain}/static/"
-    )
+    run_local(f"rsync {flags}{delete} static/ {config.host}:{config.domain}/static/")
 
 
-@task(
-    auto_shortflags=False,
-    help={"fast": "Skip the Webpack build", "force": "Force the git push"},
-)
-def deploy(ctx, fast=False, force=False):
-    """Deploy once 🔥"""
-    _check_branch(ctx)
-    _check_no_uncommitted_changes(ctx)
-    check(ctx)
+@task
+def deploy(fast: bool = False, force: bool = False):
+    """Deploy once"""
+    _check_branch()
+    _check_no_uncommitted_changes()
+    check()
     force = "--force-with-lease " if (force or config.force) else ""
-    run_local(ctx, f"git push -u origin {force}{config.branch}")
+    run_local(f"git push -u origin {force}{config.branch}")
     if not fast and (config.base / "webpack.config.js").exists():
-        run_local(ctx, config.run_mise("yarn"))
+        run_local(config.run_mise("yarn"))
         run_local(
-            ctx,
             f"NODE_ENV=production {config.run_mise('yarn')} run webpack --mode production --bail",
         )
     if not fast and (config.base / "rspack.config.js").exists():
-        run_local(ctx, config.run_mise("yarn"))
+        run_local(config.run_mise("yarn"))
         run_local(
-            ctx,
             f"NODE_ENV=production {config.run_mise('yarn')} rspack build --mode production",
         )
 
     with Connection(config.host) as conn, conn.cd(config.domain):
-        _deploy_sync_origin_url(ctx, conn)
+        _deploy_sync_origin_url(conn)
         _deploy_django(conn)
         if not fast:
             run(
                 conn,
                 "if [ -e static ]; then find static/ -type f -mtime +60 -delete;fi",
             )
-            _rsync_static(ctx, delete=False)
+            _rsync_static(delete=False)
         _deploy_staticfiles(conn)
         _nine_restart(conn)
 
-    fetch(ctx)
+    fetch()
     progress(f"Successfully deployed the {config.environment} environment.")
 
 
 @task
-def audit(ctx):
+def audit():
     """Run various package auditing tools"""
     if config._uv_project:
         progress("Auditing backend lockfile")
-        run_local(ctx, "uv audit", warn=True)
+        run_local("uv audit", warn=True)
     else:
         progress("Auditing installed backend packages")
-        run_local(ctx, "uvx pip-audit", warn=True)
+        run_local("uvx pip-audit", warn=True)
 
     yarn_lock = config.base / "yarn.lock"
     if yarn_lock.exists():
         if "yarn lockfile v1" in yarn_lock.read_text():
             progress("Auditing yarn 1 lockfile")
             # Yarn 1
-            run_local(ctx, config.run_mise("yarn audit"), warn=True)
+            run_local(config.run_mise("yarn audit"), warn=True)
         else:
             progress("Auditing yarn>1 lockfile")
             # Newer yarn
-            run_local(ctx, config.run_mise("yarn npm audit"), warn=True)
+            run_local(config.run_mise("yarn npm audit"), warn=True)
     else:
         progress(f"yarn lockfile {yarn_lock} doesn't exist")
 

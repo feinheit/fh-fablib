@@ -18,10 +18,11 @@ classifiers = [
 dependencies = [
     "fabric>=3",
     "speckenv>=6.2",
+    "typer>=0.9",
 ]
 
 [project.scripts]
-fl = "fabric.main:program.run"
+fl = "fh_fablib:main"
 
 [project.urls]
 Homepage = "https://github.com/feinheit/fh-fablib/"
@@ -74,7 +75,7 @@ extend-ignore = [
   "B905",
   # No line length errors
   "E501",
-  # Fabric/invoke do not support keyword-only arguments unfortunately
+  # Some code uses positional bools
   "FBT002",
 ]
 
