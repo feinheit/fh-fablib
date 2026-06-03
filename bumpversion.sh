@@ -13,6 +13,6 @@ fi
 
 set -x
 sed -i -e 's/fl.require(".*")/fl.require("'$VERSION'")/' README.rst
-hatch version $VERSION
+uvx hatch version $VERSION
 git commit -a -m "fh-fablib $VERSION"
 git tag -m "fh-fablib $VERSION" "$VERSION"

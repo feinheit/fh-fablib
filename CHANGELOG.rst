@@ -5,6 +5,9 @@ Change log
 Next version
 ~~~~~~~~~~~~
 
+1.0.20260603
+~~~~~~~~~~~~
+
 - Started using trusted publishing.
 - Monkey patched the invoke library because of recurring buffer management
   problems.
