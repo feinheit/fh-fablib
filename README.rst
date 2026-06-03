@@ -192,6 +192,8 @@ Checks
   match configuration.
 - ``_check_no_uncommitted_changes(ctx)``: Terminates if there are
   uncommitted changes on the server.
+- ``_check_only_uv_venv_if_uv_project``: Terminates if using uv project
+  management but the old ``venv`` folder still exists.
 
 
 Helpers

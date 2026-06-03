@@ -799,7 +799,7 @@ def nine_restart(ctx):
     """Restart the application server"""
     with Connection(config.host) as conn, conn.cd(config.domain):
         if config._uv_project:
-            run(conn, "uv run manage.py check --deploy")
+            run(conn, "uv run --no-dev manage.py check --deploy")
         else:
             run(conn, "venv/bin/python manage.py check --deploy")
         _nine_restart(conn)
@@ -956,16 +956,29 @@ def fetch(ctx):
 
 
 def _check_branch(ctx):
+    progress("Checking current branch...")
     branch = run_local(ctx, "git symbolic-ref --short HEAD", hide=True).stdout.strip()
     if branch != config.branch:
         terminate(f"Current branch is '{branch}', should be '{config.branch}'")
 
 
 def _check_no_uncommitted_changes(ctx):
+    progress("Checking for uncommitted changes...")
     with Connection(config.host) as conn, conn.cd(config.domain):
-        result = run(conn, "git status --porcelain").stdout.strip()
+        result = run(conn, "git status --porcelain", hide=True).stdout.strip()
         if result:
             terminate("Terminating because of uncommitted changes on server")
+
+
+def _check_only_uv_venv_if_uv_project(ctx):
+    if config._uv_project:
+        progress("Checking whether an old non-uv managed venv folder exists...")
+        with Connection(config.host) as conn:
+            result = run(conn, f"test -e {config.domain}/venv", hide=True, warn=True)
+            if result.ok:
+                terminate(
+                    "The project uses uv project management but old 'venv' path still exists"
+                )
 
 
 @task
@@ -983,7 +996,7 @@ def _deploy_django(conn):
     run(conn, "git fetch origin")
     run(conn, f"git checkout {config.branch}")
 
-    result = run(conn, "git status --porcelain").stdout.strip()
+    result = run(conn, "git status --porcelain", hide=True).stdout.strip()
     if result:
         terminate("Terminating because of uncommitted changes on server")
 
@@ -996,8 +1009,8 @@ def _deploy_django(conn):
     run(conn, f'find . {skip} -name "*.pyc" -print | xargs rm -f')
     if config._uv_project:
         run(conn, "uv sync --no-dev")
-        run(conn, "uv run manage.py migrate")
-        run(conn, "uv run manage.py check --deploy", warn=True)
+        run(conn, "uv run --no-dev manage.py migrate")
+        run(conn, "uv run --no-dev manage.py check --deploy", warn=True)
     else:
         run(conn, "venv/bin/python -m pip install -U pip")
         run(conn, "venv/bin/python -m pip install -r requirements.txt")
@@ -1007,7 +1020,7 @@ def _deploy_django(conn):
 
 def _deploy_staticfiles(conn):
     if config._uv_project:
-        run(conn, "uv run manage.py collectstatic --noinput")
+        run(conn, "uv run --no-dev manage.py collectstatic --noinput")
     else:
         run(conn, "venv/bin/python manage.py collectstatic --noinput")
 
@@ -1028,6 +1041,7 @@ def deploy(ctx, fast=False, force=False):
     """Deploy once 🔥"""
     _check_branch(ctx)
     _check_no_uncommitted_changes(ctx)
+    _check_only_uv_venv_if_uv_project(ctx)
     check(ctx)
     force = "--force-with-lease " if (force or config.force) else ""
     run_local(ctx, f"git push -u origin {force}{config.branch}")

@@ -5,6 +5,12 @@ Change log
 Next version
 ~~~~~~~~~~~~
 
+- Started using trusted publishing.
+- Monkey patched the invoke library because of recurring buffer management
+  problems.
+- Added a check for old ``venv`` folders when using uv project management.
+
+
 1.0.20260423
 ~~~~~~~~~~~~
 
