@@ -5,6 +5,15 @@ Change log
 Next version
 ~~~~~~~~~~~~
 
+- Fixed the JavaScript gettext extractor used by ``fl mm``: it scanned
+  commented-out code, so a ``gettext()`` call inside a JSDoc block ended up in
+  ``conf/strings.js`` along with the comment's ``*`` markers, and it also
+  extracted TypeScript declarations such as ``declare function
+  gettext(message: string)``. Comments are now stripped before scanning, and
+  calls whose first argument isn't a literal string are skipped -- xgettext
+  couldn't extract those anyway.
+
+
 1.0.20260603
 ~~~~~~~~~~~~
 

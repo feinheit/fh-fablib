@@ -26,6 +26,54 @@ def js_files():
     return res.stdout.splitlines()
 
 
+def strip_comments(source):
+    """Remove JavaScript comments, leaving string literals alone
+
+    >>> strip_comments("a // gettext('x')\\nb")
+    'a \\nb'
+    >>> strip_comments("a /* gettext('x') */ b")
+    'a  b'
+    >>> strip_comments('const url = "https://example.com" // nope')
+    'const url = "https://example.com" '
+    >>> strip_comments("gettext('a /* not a comment */ b')")
+    "gettext('a /* not a comment */ b')"
+    >>> strip_comments("gettext('it\\\\'s') // x")
+    "gettext('it\\\\'s') "
+    """
+    out = []
+    quote = ""
+    idx = 0
+    length = len(source)
+
+    while idx < length:
+        c = source[idx]
+
+        if quote:
+            out.append(c)
+            if c == "\\" and idx + 1 < length:
+                out.append(source[idx + 1])
+                idx += 2
+                continue
+            if c == quote:
+                quote = ""
+            idx += 1
+        elif c in {"'", '"', "`"}:
+            quote = c
+            out.append(c)
+            idx += 1
+        elif c == "/" and source[idx + 1 : idx + 2] == "/":
+            while idx < length and source[idx] != "\n":
+                idx += 1
+        elif c == "/" and source[idx + 1 : idx + 2] == "*":
+            end = source.find("*/", idx + 2)
+            idx = length if end == -1 else end + 2
+        else:
+            out.append(c)
+            idx += 1
+
+    return "".join(out)
+
+
 def extract_args(part):
     parens = 0
     quote = ""
@@ -68,9 +116,35 @@ def gettext_calls(source):
     ["gettext('Blub')"]
     >>> list(gettext_calls("gettext(`Blub'`)"))
     ["gettext(`Blub'`)"]
+
+    Calls inside comments are not calls:
+
+    >>> list(gettext_calls("// gettext('nope')\\ngettext('yes')"))
+    ["gettext('yes')"]
+    >>> list(gettext_calls('''/**
+    ...  * @example
+    ...  * text: gettext(
+    ...  *     "nope",
+    ...  *   ),
+    ...  */
+    ... gettext("yes")'''))
+    ['gettext("yes")']
+
+    Neither are declarations, or calls which xgettext could not extract
+    anyway because the first argument is not a literal string:
+
+    >>> list(gettext_calls("declare function gettext(message: string): string"))
+    []
+    >>> list(gettext_calls("declare function ngettext(\\n  singular: string,\\n"
+    ...                    "  plural: string,\\n  count: number,\\n): string"))
+    []
+    >>> list(gettext_calls("gettext(someVariable)"))
+    []
     """
 
-    parts = deque(part.strip() for part in re.split(r"\b(\w*gettext)\b", source))
+    parts = deque(
+        part.strip() for part in re.split(r"\b(\w*gettext)\b", strip_comments(source))
+    )
 
     while parts:
         top = parts.popleft()
@@ -78,7 +152,11 @@ def gettext_calls(source):
             continue
 
         if parts and (args := extract_args(parts.popleft())):
-            yield f"{top}({args.strip().rstrip(',')})"
+            args = args.strip().rstrip(",")
+            # xgettext only ever sees literals, so anything else -- a variable,
+            # or the parameter list of a TypeScript declaration -- is noise.
+            if args[:1] in {"'", '"', "`"}:
+                yield f"{top}({args})"
 
 
 def generate_strings():
