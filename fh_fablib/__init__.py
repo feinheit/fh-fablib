@@ -63,7 +63,7 @@ if _sys.platform != "win32":
 from fh_fablib.extract_js_gettext_strings import generate_strings
 
 
-__version__ = "1.0.20260603"
+__version__ = "1.0.20260817"
 
 
 # I don't care, in this context.

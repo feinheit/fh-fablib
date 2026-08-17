@@ -5,6 +5,9 @@ Change log
 Next version
 ~~~~~~~~~~~~
 
+1.0.20260817
+~~~~~~~~~~~~
+
 - Fixed the JavaScript gettext extractor used by ``fl mm``: it scanned
   commented-out code, so a ``gettext()`` call inside a JSDoc block ended up in
   ``conf/strings.js`` along with the comment's ``*`` markers, and it also
