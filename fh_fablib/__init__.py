@@ -487,13 +487,13 @@ def mm(ctx, language=None):
     run_local(
         ctx,
         f"{config._manage()} makemessages {language} --add-location file"
-        " -i .venv -i htmlcov -i node_modules -i lib -i build -i dist --no-wrap",
+        " -i .venv -i htmlcov -i node_modules -i lib -i build -i dist -i tmp --no-wrap",
         replace_env=False,
     )
     run_local(
         ctx,
         f"{config._manage()} makemessages {language} --add-location file"
-        " -i .venv -i htmlcov -i node_modules -i lib -i build -i dist --no-wrap"
+        " -i .venv -i htmlcov -i node_modules -i lib -i build -i dist -i tmp --no-wrap"
         " -d djangojs",
         replace_env=False,
     )
